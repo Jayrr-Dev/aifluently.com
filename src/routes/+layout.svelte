@@ -29,7 +29,13 @@
 		<!-- App Bar -->
 		<AppBar>
 			<svelte:fragment slot="lead">
-				<strong class="text-xl uppercase">Skeleton</strong>
+				<strong class="text-xl uppercase">
+					<img
+						src="/src/assets/logo/logomark-white.svg"
+						alt="AI Fluently Logo"
+						class="inline-block w-8 h-8 mr-2"
+					/>
+				</strong>
 			</svelte:fragment>
 			<svelte:fragment slot="trail">
 				<a
