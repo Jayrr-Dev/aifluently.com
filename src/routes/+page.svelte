@@ -229,11 +229,7 @@
 
 <header class="bg-stone-500 text-center p-2">
 	<div class="flex justify-center items-center h-32">
-		<img
-			class="h-full w-auto"
-			src="/src/assets/logo/vertical-gradient.svg"
-			alt="AI FLUENTLY logo"
-		/>
+		<img class="h-full w-auto" src="/assets/logo/vertical-gradient.svg" alt="AI FLUENTLY logo" />
 	</div>
 </header>
 
