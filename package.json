@@ -53,6 +53,7 @@
     "@supabase/supabase-js": "^2.39.2",
     "highlight.js": "11.9.0",
     "iconify": "^1.4.0",
-    "supabase": "^1.131.3"
+    "supabase": "^1.131.3",
+    "tailwind-scrollbar": "^3.0.5"
   }
 }

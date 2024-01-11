@@ -1,7 +1,9 @@
 <script lang="ts">
+	import { LightSwitch } from '@skeletonlabs/skeleton';
+	import { lighttoggle } from '../stores/store';
 	import '../app.postcss';
 	import { AppShell, AppBar } from '@skeletonlabs/skeleton';
-
+	import { get } from 'svelte/store';
 	// Highlight JS
 	import hljs from 'highlight.js/lib/core';
 	import 'highlight.js/styles/github-dark.css';
@@ -10,6 +12,7 @@
 	import css from 'highlight.js/lib/languages/css';
 	import javascript from 'highlight.js/lib/languages/javascript';
 	import typescript from 'highlight.js/lib/languages/typescript';
+	//popups
 
 	hljs.registerLanguage('xml', xml); // for HTML
 	hljs.registerLanguage('css', css);
@@ -21,6 +24,13 @@
 	import { computePosition, autoUpdate, flip, shift, offset, arrow } from '@floating-ui/dom';
 	import { storePopup } from '@skeletonlabs/skeleton';
 	storePopup.set({ computePosition, autoUpdate, flip, shift, offset, arrow });
+
+	// Function to toggle the lightswitch
+	function toggleLightswitch() {
+		lighttoggle.update((value: boolean) => !value);
+	}
+
+	$: lightswitch = $lighttoggle;
 </script>
 
 <!-- App Shell -->
@@ -29,11 +39,21 @@
 		<!-- App Bar -->
 		<AppBar>
 			<svelte:fragment slot="lead">
-				<img
-					class="h-full w-10"
-					src="/assets/logo/logomark-black-circle.svg"
-					alt="AI FLUENTLY logo"
-				/>
+				<a href="/">
+					{#if lightswitch}
+						<img
+							class="h-full w-10"
+							src="/assets/logo/logomark-black-circle.svg"
+							alt="AI FLUENTLY logo"
+						/>
+					{:else}
+						<img
+							class="h-full w-10"
+							src="/assets/logo/logomark-white-circle.svg"
+							alt="AI FLUENTLY logo"
+						/>
+					{/if}
+				</a>
 			</svelte:fragment>
 			<svelte:fragment slot="trail">
 				<a
@@ -60,6 +80,8 @@
 				>
 					GitHub
 				</a>
+
+				<LightSwitch on:click={() => toggleLightswitch()} />
 			</svelte:fragment>
 		</AppBar>
 	</svelte:fragment>
