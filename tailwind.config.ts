@@ -18,6 +18,7 @@ export default {
 	plugins: [
 		forms,
 		typography,
+		// eslint-disable-next-line @typescript-eslint/no-var-requires
 		require('tailwind-scrollbar')({ nocompatible: true }),
 		skeleton({
 			themes: {
