@@ -1,4 +1,8 @@
 <script lang="ts">
+	//ui
+	import Footer from '$lib/ui/footer.svelte';
+	//
+
 	import { LightSwitch } from '@skeletonlabs/skeleton';
 	import { lighttoggle } from '../stores/store';
 	import '../app.postcss';
@@ -87,4 +91,7 @@
 	</svelte:fragment>
 	<!-- Page Route Content -->
 	<slot />
+	<svelte:fragment slot="pageFooter">
+		<Footer />
+	</svelte:fragment>
 </AppShell>
