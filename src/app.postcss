@@ -5,11 +5,24 @@
 
 * {
 	min-width: 0;
+	box-sizing: border-box;
 }
 
 html,
 body {
+	min-height: 100vh;
 	@apply h-full overflow-hidden;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	@apply font-bold;
+	text-wrap: balance;
+}
+
+p {
+	@apply leading-relaxed;
+	text-wrap: pretty;
+	
 }
 
 /* rocket theme */
