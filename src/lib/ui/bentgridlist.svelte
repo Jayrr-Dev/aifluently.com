@@ -8,7 +8,6 @@
 	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
 	import { Ratings } from '@skeletonlabs/skeleton';
-	import exp from 'constants';
 	let windowWidth = 0;
 	export let gridstart: number;
 	// Function to update the window width
