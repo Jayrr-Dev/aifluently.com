@@ -1,6 +1,14 @@
 <script lang="ts">
 	//ui
 	import Footer from '$lib/ui/footer.svelte';
+	//supabase
+	import { invalidate } from '$app/navigation';
+	import { onMount } from 'svelte';
+
+	export let data;
+
+	let { supabase, session } = data;
+	$: ({ supabase, session } = data);
 	//
 
 	import { LightSwitch } from '@skeletonlabs/skeleton';
@@ -28,6 +36,16 @@
 	import { computePosition, autoUpdate, flip, shift, offset, arrow } from '@floating-ui/dom';
 	import { storePopup } from '@skeletonlabs/skeleton';
 	storePopup.set({ computePosition, autoUpdate, flip, shift, offset, arrow });
+	//supabase
+	onMount(() => {
+		const { data } = supabase.auth.onAuthStateChange((event, _session) => {
+			if (_session?.expires_at !== session?.expires_at) {
+				invalidate('supabase:auth');
+			}
+		});
+
+		return () => data.subscription.unsubscribe();
+	});
 
 	// Function to toggle the lightswitch
 	function toggleLightswitch() {

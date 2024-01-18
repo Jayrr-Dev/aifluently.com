@@ -1,16 +1,23 @@
 <script lang="ts">
+	//database
+	import { supabase } from '$lib/supabaseClient';
+
 	import Bentogrid from '$lib/ui/bentogrid.svelte';
 	import { popup } from '@skeletonlabs/skeleton';
 	import Icon from '@iconify/svelte';
 	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
 	import { Ratings } from '@skeletonlabs/skeleton';
+	import exp from 'constants';
 	let windowWidth = 0;
-
+	export let gridstart: number;
 	// Function to update the window width
 	function updateWidth() {
 		windowWidth = window.innerWidth;
 	}
+	//list of products
+	export let productlist: [];
+
 	onMount(() => {
 		// Set initial width
 		updateWidth();
@@ -25,11 +32,11 @@
 	});
 </script>
 
-<Bentogrid gridstart={1}>
-	<h1 slot="header1">Header 1</h1>
+<Bentogrid {gridstart}>
+	<h1 slot="header1"><slot name="header1" /></h1>
 	<li slot="list1">
 		<!-- ? List of Links -->
-		{#each { length: 20 } as tool, i}
+		{#each productlist as product, i}
 			<!-- ? Tooltip Styles -->
 			<div
 				class="card p-4 variant-filled-secondary w-[80%] sm:w-[40%] lg:w-[20%] h-40 lg:h-32"
@@ -38,7 +45,7 @@
 				<div class="grid justify-center">
 					<div class="flex">
 						<span class="p-1">
-							<!-- Product Logo -->
+							<!-- !Product Logo -->
 							<img
 								class="rounded-full h-5 w-5 object-cover"
 								src="https://logowik.com/content/uploads/images/chatgpt5223.logowik.com.webp"
@@ -49,13 +56,13 @@
 							class="font-bold flex-auto [&>*]:pointer-events-none"
 							use:popup={{ event: 'hover', target: 'popupHover1-' + i, placement: 'top' }}
 						>
-							<!-- Product Name -->
+							<!-- !Product Name -->
 							{i}
 						</span>
 					</div>
 				</div>
 				<div>
-					<!-- Product Rating -->
+					<!-- !Product Rating -->
 					<Ratings value={i} max={5}>
 						<svelte:fragment slot="empty"
 							><Icon icon="line-md:star-alt-twotone" color="gray" /></svelte:fragment
@@ -69,7 +76,7 @@
 					</Ratings>
 				</div>
 				<p class="p-1 text-sm opacity-80 text-ellipsis overflow-hidden h-16">
-					<!-- Product Description -->
+					<!-- !Product Description -->
 					{i}
 				</p>
 				{#if windowWidth < 768}
@@ -89,12 +96,11 @@
 			<ol class="flex justify-between">
 				<div>
 					<span>
-						<!-- Number Order -->
-						{i}.
+						<!-- !Number Order -->
+						{i + 1}.
 					</span>
-
 					<span class="badge">
-						<!-- Logo -->
+						<!-- !Logo -->
 						-
 					</span>
 					{#if windowWidth <= 768}
@@ -106,23 +112,23 @@
 								placement: 'top'
 							}}
 						>
-							<!-- Product Mobile -->
+							<!-- !Product Name Mobile-->
 							{i}
 						</button>
 					{:else}
-						<!-- URL REFERENCE -->
+						<!-- !URL REFERENCE -->
 						<a href="/this">
 							<span
 								class="flex-auto [&>*]:pointer-events-none"
 								use:popup={{ event: 'hover', target: 'popupHover2-' + i, placement: 'top' }}
 							>
-								<!-- Product Review Link Desktop -->
-								{i}
+								<!-- !Product Name + Review Link Desktop -->
+								{product}
 							</span>
 						</a>
 					{/if}
 				</div>
-				<!-- Link to Site -->
+				<!-- !Link to Site -->
 				<a href="/elements/lists" class="flex opacity-50 hover:opacity-100 p-1">
 					<Icon icon="system-uicons:jump-up" />
 				</a>
