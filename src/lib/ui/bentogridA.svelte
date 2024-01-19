@@ -465,13 +465,13 @@
 					</div>
 				{/if}
 			</div>
-			{#if !lightswitch}
+			{#if lightswitch}
 				<div
-					class=" h-16 absolute w-full bottom-10 bg-gradient-to-t from-surface-50 to-white/0"
+					class=" h-16 absolute w-full bottom-10 bg-gradient-to-t from-surface-800 to-surface-800/0"
 				></div>
 			{:else}
 				<div
-					class=" h-16 absolute w-full bottom-10 bg-gradient-to-t from-surface-800 to-surface-800/0"
+					class=" h-16 absolute w-full bottom-10 bg-gradient-to-t from-surface-50 to-white/0"
 				></div>
 			{/if}
 			<div class="flex justify-center">
@@ -695,13 +695,13 @@
 				{/if}
 			</div>
 
-			{#if !lightswitch}
+			{#if lightswitch}
 				<div
-					class=" h-16 absolute w-full bottom-10 bg-gradient-to-t from-surface-50 to-white/0"
+					class=" h-16 absolute w-full bottom-10 bg-gradient-to-t from-surface-800 to-surface-800/0"
 				></div>
 			{:else}
 				<div
-					class=" h-16 absolute w-full bottom-10 bg-gradient-to-t from-surface-800 to-surface-800/0"
+					class=" h-16 absolute w-full bottom-10 bg-gradient-to-t from-surface-50 to-white/0"
 				></div>
 			{/if}
 
@@ -923,13 +923,13 @@
 				{/if}
 			</div>
 
-			{#if !lightswitch}
+			{#if lightswitch}
 				<div
-					class=" h-16 absolute w-full bottom-10 bg-gradient-to-t from-surface-50 to-white/0"
+					class=" h-16 absolute w-full bottom-10 bg-gradient-to-t from-surface-800 to-surface-800/0"
 				></div>
 			{:else}
 				<div
-					class=" h-16 absolute w-full bottom-10 bg-gradient-to-t from-surface-800 to-surface-800/0"
+					class=" h-16 absolute w-full bottom-10 bg-gradient-to-t from-surface-50 to-white/0"
 				></div>
 			{/if}
 
@@ -1154,13 +1154,13 @@
 				{/if}
 			</div>
 
-			{#if !lightswitch}
+			{#if lightswitch}
 				<div
-					class=" h-16 absolute w-full bottom-10 bg-gradient-to-t from-surface-50 to-white/0"
+					class=" h-16 absolute w-full bottom-10 bg-gradient-to-t from-surface-800 to-surface-800/0"
 				></div>
 			{:else}
 				<div
-					class=" h-16 absolute w-full bottom-10 bg-gradient-to-t from-surface-800 to-surface-800/0"
+					class=" h-16 absolute w-full bottom-10 bg-gradient-to-t from-surface-50 to-white/0"
 				></div>
 			{/if}
 
@@ -1381,13 +1381,13 @@
 				{/if}
 			</div>
 
-			{#if !lightswitch}
+			{#if lightswitch}
 				<div
-					class=" h-16 absolute w-full bottom-10 bg-gradient-to-t from-surface-50 to-white/0"
+					class=" h-16 absolute w-full bottom-10 bg-gradient-to-t from-surface-800 to-surface-800/0"
 				></div>
 			{:else}
 				<div
-					class=" h-16 absolute w-full bottom-10 bg-gradient-to-t from-surface-800 to-surface-800/0"
+					class=" h-16 absolute w-full bottom-10 bg-gradient-to-t from-surface-50 to-white/0"
 				></div>
 			{/if}
 
@@ -1610,13 +1610,13 @@
 					</div>
 				{/if}
 			</div>
-			{#if !lightswitch}
+			{#if lightswitch}
 				<div
-					class=" h-16 absolute w-full bottom-10 bg-gradient-to-t from-surface-50 to-white/0"
+					class=" h-16 absolute w-full bottom-10 bg-gradient-to-t from-surface-800 to-surface-800/0"
 				></div>
 			{:else}
 				<div
-					class=" h-16 absolute w-full bottom-10 bg-gradient-to-t from-surface-800 to-surface-800/0"
+					class=" h-16 absolute w-full bottom-10 bg-gradient-to-t from-surface-50 to-white/0"
 				></div>
 			{/if}
 			<div class="flex justify-center">
