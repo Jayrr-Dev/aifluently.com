@@ -6,6 +6,7 @@
 	import { fade } from 'svelte/transition';
 	import { tagsState } from '../../stores/tagsStore';
 	import { ProgressBar } from '@skeletonlabs/skeleton';
+	import { lighttoggle } from '../../stores/store';
 	type ProductDetail = {
 		name: string;
 		logo: string;
@@ -229,12 +230,23 @@
 	//Icon Mapping
 	function getIconForTag(tagId: number): string {
 		const iconMapping: { [key: number]: string } = {
-			0: 'quill:chat'
+			0: 'quill:chat',
+			1: 'akar-icons:image'
 		};
 		return iconMapping[tagId] || 'default-icon'; // 'default-icon' is a fallback
 	}
 	let isVisible = false;
 	let showTag = false;
+
+	//special
+	$: lightswitch = $lighttoggle;
+	let category0: number = 0;
+	let category1: number = 1;
+	let category2: number = 2;
+	let categoty4: number = 3;
+	let category5: number = 4;
+	let category6: number = 5;
+	let category7: number = 6;
 </script>
 
 <section
@@ -242,15 +254,15 @@
 >
 	<!-- row 1 -->
 	<div class="h-full parent-element">
-		<div class="card h-[500px] grid grid-cols-1 relative card-hover">
+		<div class="card h-[800px] grid grid-cols-1 relative card-hover">
 			<header class="card-header text-center pr-6">
-				{#if state.tags[0]}
-					<div>
+				{#if state.tags[category0] && showTag}
+					<div in:fade={{ duration: 800 }}>
 						<span class="badge text-4xl p-0 m-0 translate-y-2">
-							<Icon icon={getIconForTag(0)} />
+							<Icon icon={getIconForTag(category0)} />
 						</span>
 						<span class="text-2xl font-bold uppercase">
-							{state.tags[0]}
+							{state.tags[category0]}
 						</span>
 					</div>
 				{:else}
@@ -258,18 +270,19 @@
 				{/if}
 			</header>
 			<ProgressBar animIndeterminate="anim-progress-bar" rounded="false" height="h-1" />
-			<div class="h-[370px] overflow-auto scrollbar scrollbar-w-1 scrollbar-thumb-primary-500">
+			<div class="h-[670px] overflow-auto scrollbar scrollbar-w-1 scrollbar-thumb-primary-500">
 				{#if showTag}
 					<!-- 1 -->
-					<div in:fade={{ duration: 500 }}>
+
+					<div in:fade={{ duration: 800 }}>
 						<div class="flex justify-start">
 							<section class="p-4 w-full">
 								<ol>
-									{#each state.tagProductDetails[0] as product, i}
+									{#each state.tagProductDetails[category0] as product, i}
 										<!-- ? Tooltip Styles -->
 										<div
-											class="card p-4 variant-filled-secondary w-[90%] sm:w-[90%] lg:w-[90%] h-40 lg:h-36"
-											data-popup={'popupHover2-' + i}
+											class="card p-4 z-10 variant-filled-secondary w-[90%] sm:w-[90%] lg:w-[90%] h-40 lg:h-36"
+											data-popup={'popupHover' + category0 + '-' + i}
 										>
 											<div class="grid justify-center">
 												<div class="flex">
@@ -293,7 +306,7 @@
 														class="font-bold flex-auto [&>*]:pointer-events-none"
 														use:popup={{
 															event: 'hover',
-															target: 'popupHover1-' + i,
+															target: 'popupHover' + category0 + '-' + i,
 															placement: 'top'
 														}}
 													>
@@ -348,7 +361,7 @@
 													class="[&>*]:pointer-events-none min-w-[80%] group/item"
 													use:popup={{
 														event: 'click',
-														target: 'popupHover2-' + i,
+														target: 'popupHover' + category0 + '-' + i,
 														placement: 'top'
 													}}
 												>
@@ -398,7 +411,7 @@
 													class=" min-w-[70%] group/item"
 													use:popup={{
 														event: 'hover',
-														target: 'popupHover2-' + i,
+														target: 'popupHover' + category0 + '-' + i,
 														placement: 'top'
 													}}
 												>
@@ -452,7 +465,15 @@
 					</div>
 				{/if}
 			</div>
-			<div class=" h-16 absolute w-full bottom-10 bg-gradient-to-t from-white to-white/0"></div>
+			{#if !lightswitch}
+				<div
+					class=" h-16 absolute w-full bottom-10 bg-gradient-to-t from-surface-50 to-white/0"
+				></div>
+			{:else}
+				<div
+					class=" h-16 absolute w-full bottom-10 bg-gradient-to-t from-surface-800 to-surface-800/0"
+				></div>
+			{/if}
 			<div class="flex justify-center">
 				<button class="btn btn-sm w-[85%] h-8 bg-warning-500 border-2 border-black"> More </button>
 			</div>
@@ -461,93 +482,1145 @@
 
 	<!-- row 2 -->
 	<div class="h-full grid gap-2">
-		<div class="card h-[190px] grid grid-cols-1">
+		<div class="card h-[290px] grid grid-cols-1 relative card-hover parent-element">
 			<!-- 2 -->
-			<header class="card-header text-center p-2"></header>
-			<div class="flex justify-start">
-				<section
-					class="p-4 w-full h-[90px] overflow-auto scrollbar scrollbar-w-1 scrollbar-thumb-primary-500"
-				>
-					<ol>
-						<slot name="list2">-empty-</slot>
-					</ol>
-				</section>
+			<header class="card-header text-center pr-6">
+				{#if state.tags[category1] && showTag}
+					<div in:fade={{ duration: 800 }}>
+						<span class="badge text-4xl p-0 m-0 translate-y-2">
+							<Icon icon={getIconForTag(category1)} />
+						</span>
+						<span class="text-2xl font-bold uppercase">
+							{state.tags[category1]}
+						</span>
+					</div>
+				{:else}
+					<span class="text-4xl animate-pulse">ㅤ</span>
+				{/if}
+			</header>
+			<ProgressBar animIndeterminate="anim-progress-bar" rounded="false" height="h-1" />
+			<div class="h-[160px] overflow-auto scrollbar scrollbar-w-1 scrollbar-thumb-primary-500">
+				{#if showTag}
+					<!-- 1 -->
+
+					<div in:fade={{ duration: 800 }}>
+						<div class="flex justify-start">
+							<section class="p-4 w-full">
+								<ol>
+									{#each state.tagProductDetails[category1] as product, i}
+										<!-- ? Tooltip Styles -->
+										<div
+											class="card p-4 z-10 variant-filled-secondary w-[90%] sm:w-[90%] lg:w-[90%] h-40 lg:h-36"
+											data-popup={'popupHover' + category1 + '-' + i}
+										>
+											<div class="grid justify-center">
+												<div class="flex">
+													<span class="p-1">
+														<!-- !Product Logo -->
+														{#if product.logo}
+															<img
+																class="rounded-full h-5 w-5 object-cover"
+																src={product.logo}
+																alt="AI FLUENTLY logo"
+															/>
+														{:else}
+															<!-- <img
+													class="rounded-full h-5 w-5 object-cover"
+													src="/assets/logo/logomark-black-circle.svg"
+													alt="AI FLUENTLY logo"
+												/> -->
+														{/if}
+													</span>
+													<span
+														class="font-bold flex-auto [&>*]:pointer-events-none"
+														use:popup={{
+															event: 'hover',
+															target: 'popupHover' + category1 + '-' + i,
+															placement: 'top'
+														}}
+													>
+														<!-- !Product Name -->
+														{product.name}
+													</span>
+												</div>
+											</div>
+											<div>
+												<!-- !Product Rating -->
+
+												<Ratings value={Math.round((product.rating / 20) * 2) / 2} max={5}>
+													<svelte:fragment slot="empty"
+														><Icon icon="line-md:star-alt-twotone" color="gray" /></svelte:fragment
+													>
+													<svelte:fragment slot="half"
+														><Icon icon="line-md:star-filled-half" color="gold" />
+													</svelte:fragment>
+													<svelte:fragment slot="full"
+														><Icon icon="line-md:star-filled" color="gold" /></svelte:fragment
+													>
+												</Ratings>
+											</div>
+											<p class="p-1 text-sm opacity-80 text-ellipsis overflow-hidden h-16">
+												<!-- !Product Description -->
+												{#if product.description}
+													{product.description}
+												{:else}
+													<!--  -->
+												{/if}
+											</p>
+											{#if windowWidth < 768}
+												<!-- Product Review Button for Mobile -->
+												<!-- URL REFERENCE -->
+												<a href={product.name.replace(/\s/g, '')}>
+													<div class="flex justify-center">
+														<button
+															class="btn btn-sm w-[50%] bg-warning-500 border-2 border-black h-6"
+														>
+															Learn More
+														</button>
+													</div>
+												</a>
+											{/if}
+											<div class="arrow variant-filled-secondary" />
+										</div>
+										<!-- ? Links -->
+										{#if windowWidth <= 768}
+											<!-- !Mobile-->
+											<ol class="flex justify-between">
+												<button
+													class="[&>*]:pointer-events-none min-w-[80%] group/item"
+													use:popup={{
+														event: 'click',
+														target: 'popupHover' + category1 + '-' + i,
+														placement: 'top'
+													}}
+												>
+													<div class="flex w-full min-w-[66%]">
+														<div class="mt-1">
+															<!-- !Number Order -->
+															{i + 1}.
+														</div>
+														<div class="px-3">
+															<!-- !Logo -->
+															{#if product.logo}
+																<img
+																	class="rounded-full h-8 w-8 object-cover"
+																	src={product.logo}
+																	alt="AI FLUENTLY logo"
+																/>
+															{:else}
+																<img
+																	class="rounded-full h-8 w-8 object-cover"
+																	src="/assets/logo/logomark-black-circle.svg"
+																	alt="AI FLUENTLY logo"
+																/>
+															{/if}
+														</div>
+														<div
+															class="pt-1 group-hover/item:underline group-active/item:underline"
+														>
+															<!-- !Product Name Mobile-->
+															{product.name}
+														</div>
+													</div>
+												</button>
+												<a
+													href={product.url}
+													target="_blank"
+													class="flex opacity-50 hover:opacity-100 text-3xl p-1"
+												>
+													<Icon icon="system-uicons:jump-up" />
+												</a>
+												<!-- !Link to Site -->
+											</ol>
+										{:else}
+											<!-- !Desktop-->
+											<ol class="flex justify-between py-1">
+												<a
+													href={product.name.replace(/\s/g, '')}
+													class=" min-w-[70%] group/item"
+													use:popup={{
+														event: 'hover',
+														target: 'popupHover' + category1 + '-' + i,
+														placement: 'top'
+													}}
+												>
+													<div class="flex w-full">
+														<div class="p-1">
+															<!-- !Number Order -->
+															{i + 1}.
+														</div>
+														<div class="px-2">
+															<!-- !Logo -->
+															{#if product.logo}
+																<img
+																	class="rounded-full h-8 w-8 object-cover"
+																	src={product.logo}
+																	alt="AI FLUENTLY logo"
+																/>
+															{:else}
+																<img
+																	class="rounded-full h-8 w-8 object-cover"
+																	src="/assets/logo/logomark-black-circle.svg"
+																	alt="AI FLUENTLY logo"
+																/>
+															{/if}
+														</div>
+
+														<!-- !URL REFERENCE -->
+
+														<div
+															id="product_name"
+															class="p-1 flex-auto group-hover/item:underline [&>*]:pointer-events-none"
+														>
+															<!-- !Product Name + Review Link Desktop -->
+															{product.name}
+														</div>
+													</div>
+												</a>
+												<!-- !Link to Site -->
+												<a
+													href={product.url}
+													target="_blank"
+													class="flex opacity-50 hover:opacity-100 text-2xl p-1"
+												>
+													<Icon icon="system-uicons:jump-up" />
+												</a>
+											</ol>
+										{/if}
+									{/each}
+								</ol>
+							</section>
+						</div>
+					</div>
+				{/if}
 			</div>
+
+			{#if !lightswitch}
+				<div
+					class=" h-16 absolute w-full bottom-10 bg-gradient-to-t from-surface-50 to-white/0"
+				></div>
+			{:else}
+				<div
+					class=" h-16 absolute w-full bottom-10 bg-gradient-to-t from-surface-800 to-surface-800/0"
+				></div>
+			{/if}
+
 			<div class="flex justify-center">
-				<button class="btn btn-sm w-[85%] h-6 bg-warning-500 border-2 border-black">More</button>
+				<button class="btn btn-sm w-[85%] h-8 bg-warning-500 border-2 border-black"> More </button>
 			</div>
 		</div>
 
-		<div class="card h-[300px]">
+		<div class="card h-[500px] grid grid-cols-1 relative card-hover parent-element">
 			<!-- 3 -->
-			<header class="card-header text-center p-2"><slot name="header3">-empty-</slot></header>
-			<div class="flex justify-start">
-				<section
-					class="p-4 w-full h-[220px] overflow-auto scrollbar scrollbar-w-1 scrollbar-thumb-primary-500"
-				>
-					<ol>
-						<slot name="list3">-empty-</slot>
-					</ol>
-				</section>
+			<header class="card-header text-center pr-6">
+				{#if state.tags[category1] && showTag}
+					<div in:fade={{ duration: 800 }}>
+						<span class="badge text-4xl p-0 m-0 translate-y-2">
+							<Icon icon={getIconForTag(category1)} />
+						</span>
+						<span class="text-2xl font-bold uppercase">
+							{state.tags[category1]}
+						</span>
+					</div>
+				{:else}
+					<span class="text-4xl animate-pulse">ㅤ</span>
+				{/if}
+			</header>
+			<ProgressBar animIndeterminate="anim-progress-bar" rounded="false" height="h-1" />
+			<div class="h-[370px] overflow-auto scrollbar scrollbar-w-1 scrollbar-thumb-primary-500">
+				{#if showTag}
+					<!-- 1 -->
+
+					<div in:fade={{ duration: 800 }}>
+						<div class="flex justify-start">
+							<section class="p-4 w-full">
+								<ol>
+									{#each state.tagProductDetails[category1] as product, i}
+										<!-- ? Tooltip Styles -->
+										<div
+											class="card p-4 z-10 variant-filled-secondary w-[90%] sm:w-[90%] lg:w-[90%] h-40 lg:h-36"
+											data-popup={'popupHover' + category1 + '-' + i}
+										>
+											<div class="grid justify-center">
+												<div class="flex">
+													<span class="p-1">
+														<!-- !Product Logo -->
+														{#if product.logo}
+															<img
+																class="rounded-full h-5 w-5 object-cover"
+																src={product.logo}
+																alt="AI FLUENTLY logo"
+															/>
+														{:else}
+															<!-- <img
+													class="rounded-full h-5 w-5 object-cover"
+													src="/assets/logo/logomark-black-circle.svg"
+													alt="AI FLUENTLY logo"
+												/> -->
+														{/if}
+													</span>
+													<span
+														class="font-bold flex-auto [&>*]:pointer-events-none"
+														use:popup={{
+															event: 'hover',
+															target: 'popupHover' + category1 + '-' + i,
+															placement: 'top'
+														}}
+													>
+														<!-- !Product Name -->
+														{product.name}
+													</span>
+												</div>
+											</div>
+											<div>
+												<!-- !Product Rating -->
+
+												<Ratings value={Math.round((product.rating / 20) * 2) / 2} max={5}>
+													<svelte:fragment slot="empty"
+														><Icon icon="line-md:star-alt-twotone" color="gray" /></svelte:fragment
+													>
+													<svelte:fragment slot="half"
+														><Icon icon="line-md:star-filled-half" color="gold" />
+													</svelte:fragment>
+													<svelte:fragment slot="full"
+														><Icon icon="line-md:star-filled" color="gold" /></svelte:fragment
+													>
+												</Ratings>
+											</div>
+											<p class="p-1 text-sm opacity-80 text-ellipsis overflow-hidden h-16">
+												<!-- !Product Description -->
+												{#if product.description}
+													{product.description}
+												{:else}
+													<!--  -->
+												{/if}
+											</p>
+											{#if windowWidth < 768}
+												<!-- Product Review Button for Mobile -->
+												<!-- URL REFERENCE -->
+												<a href={product.name.replace(/\s/g, '')}>
+													<div class="flex justify-center">
+														<button
+															class="btn btn-sm w-[50%] bg-warning-500 border-2 border-black h-6"
+														>
+															Learn More
+														</button>
+													</div>
+												</a>
+											{/if}
+											<div class="arrow variant-filled-secondary" />
+										</div>
+										<!-- ? Links -->
+										{#if windowWidth <= 768}
+											<!-- !Mobile-->
+											<ol class="flex justify-between">
+												<button
+													class="[&>*]:pointer-events-none min-w-[80%] group/item"
+													use:popup={{
+														event: 'click',
+														target: 'popupHover' + category1 + '-' + i,
+														placement: 'top'
+													}}
+												>
+													<div class="flex w-full min-w-[66%]">
+														<div class="mt-1">
+															<!-- !Number Order -->
+															{i + 1}.
+														</div>
+														<div class="px-3">
+															<!-- !Logo -->
+															{#if product.logo}
+																<img
+																	class="rounded-full h-8 w-8 object-cover"
+																	src={product.logo}
+																	alt="AI FLUENTLY logo"
+																/>
+															{:else}
+																<img
+																	class="rounded-full h-8 w-8 object-cover"
+																	src="/assets/logo/logomark-black-circle.svg"
+																	alt="AI FLUENTLY logo"
+																/>
+															{/if}
+														</div>
+														<div
+															class="pt-1 group-hover/item:underline group-active/item:underline"
+														>
+															<!-- !Product Name Mobile-->
+															{product.name}
+														</div>
+													</div>
+												</button>
+												<a
+													href={product.url}
+													target="_blank"
+													class="flex opacity-50 hover:opacity-100 text-3xl p-1"
+												>
+													<Icon icon="system-uicons:jump-up" />
+												</a>
+												<!-- !Link to Site -->
+											</ol>
+										{:else}
+											<!-- !Desktop-->
+											<ol class="flex justify-between py-1">
+												<a
+													href={product.name.replace(/\s/g, '')}
+													class=" min-w-[70%] group/item"
+													use:popup={{
+														event: 'hover',
+														target: 'popupHover' + category1 + '-' + i,
+														placement: 'top'
+													}}
+												>
+													<div class="flex w-full">
+														<div class="p-1">
+															<!-- !Number Order -->
+															{i + 1}.
+														</div>
+														<div class="px-2">
+															<!-- !Logo -->
+															{#if product.logo}
+																<img
+																	class="rounded-full h-8 w-8 object-cover"
+																	src={product.logo}
+																	alt="AI FLUENTLY logo"
+																/>
+															{:else}
+																<img
+																	class="rounded-full h-8 w-8 object-cover"
+																	src="/assets/logo/logomark-black-circle.svg"
+																	alt="AI FLUENTLY logo"
+																/>
+															{/if}
+														</div>
+
+														<!-- !URL REFERENCE -->
+
+														<div
+															id="product_name"
+															class="p-1 flex-auto group-hover/item:underline [&>*]:pointer-events-none"
+														>
+															<!-- !Product Name + Review Link Desktop -->
+															{product.name}
+														</div>
+													</div>
+												</a>
+												<!-- !Link to Site -->
+												<a
+													href={product.url}
+													target="_blank"
+													class="flex opacity-50 hover:opacity-100 text-2xl p-1"
+												>
+													<Icon icon="system-uicons:jump-up" />
+												</a>
+											</ol>
+										{/if}
+									{/each}
+								</ol>
+							</section>
+						</div>
+					</div>
+				{/if}
 			</div>
+
+			{#if !lightswitch}
+				<div
+					class=" h-16 absolute w-full bottom-10 bg-gradient-to-t from-surface-50 to-white/0"
+				></div>
+			{:else}
+				<div
+					class=" h-16 absolute w-full bottom-10 bg-gradient-to-t from-surface-800 to-surface-800/0"
+				></div>
+			{/if}
+
 			<div class="flex justify-center">
-				<button class="btn btn-sm w-[85%] h-6 bg-warning-500 border-2 border-black">More</button>
+				<button class="btn btn-sm w-[85%] h-8 bg-warning-500 border-2 border-black"> More </button>
 			</div>
 		</div>
 	</div>
 
 	<!-- row 3 -->
 	<div class="h-full grid gap-2">
-		<div class="card h-[300px]">
+		<div class="card h-[500px] relative grid grid-cols-1 card-hover parent-element">
 			<!-- 4 -->
-			<header class="card-header text-center p-2"><slot name="header4">-empty-</slot></header>
-			<div class="flex justify-start">
-				<section
-					class="p-4 w-full h-[220px] overflow-auto scrollbar scrollbar-w-1 scrollbar-thumb-primary-500"
-				>
-					<ol>
-						<slot name="list4">-empty-</slot>
-					</ol>
-				</section>
+			<header class="card-header text-center pr-6">
+				{#if state.tags[category1] && showTag}
+					<div in:fade={{ duration: 800 }}>
+						<span class="badge text-4xl p-0 m-0 translate-y-2">
+							<Icon icon={getIconForTag(category1)} />
+						</span>
+						<span class="text-2xl font-bold uppercase">
+							{state.tags[category1]}
+						</span>
+					</div>
+				{:else}
+					<span class="text-4xl animate-pulse">ㅤ</span>
+				{/if}
+			</header>
+			<ProgressBar animIndeterminate="anim-progress-bar" rounded="false" height="h-1" />
+			<div class="h-[370px] overflow-auto scrollbar scrollbar-w-1 scrollbar-thumb-primary-500">
+				{#if showTag}
+					<!-- 1 -->
+
+					<div in:fade={{ duration: 800 }}>
+						<div class="flex justify-start">
+							<section class="p-4 w-full">
+								<ol>
+									{#each state.tagProductDetails[category1] as product, i}
+										<!-- ? Tooltip Styles -->
+										<div
+											class="card p-4 z-10 variant-filled-secondary w-[90%] sm:w-[90%] lg:w-[90%] h-40 lg:h-36"
+											data-popup={'popupHover' + category1 + '-' + i}
+										>
+											<div class="grid justify-center">
+												<div class="flex">
+													<span class="p-1">
+														<!-- !Product Logo -->
+														{#if product.logo}
+															<img
+																class="rounded-full h-5 w-5 object-cover"
+																src={product.logo}
+																alt="AI FLUENTLY logo"
+															/>
+														{:else}
+															<!-- <img
+													class="rounded-full h-5 w-5 object-cover"
+													src="/assets/logo/logomark-black-circle.svg"
+													alt="AI FLUENTLY logo"
+												/> -->
+														{/if}
+													</span>
+													<span
+														class="font-bold flex-auto [&>*]:pointer-events-none"
+														use:popup={{
+															event: 'hover',
+															target: 'popupHover' + category1 + '-' + i,
+															placement: 'top'
+														}}
+													>
+														<!-- !Product Name -->
+														{product.name}
+													</span>
+												</div>
+											</div>
+											<div>
+												<!-- !Product Rating -->
+
+												<Ratings value={Math.round((product.rating / 20) * 2) / 2} max={5}>
+													<svelte:fragment slot="empty"
+														><Icon icon="line-md:star-alt-twotone" color="gray" /></svelte:fragment
+													>
+													<svelte:fragment slot="half"
+														><Icon icon="line-md:star-filled-half" color="gold" />
+													</svelte:fragment>
+													<svelte:fragment slot="full"
+														><Icon icon="line-md:star-filled" color="gold" /></svelte:fragment
+													>
+												</Ratings>
+											</div>
+											<p class="p-1 text-sm opacity-80 text-ellipsis overflow-hidden h-16">
+												<!-- !Product Description -->
+												{#if product.description}
+													{product.description}
+												{:else}
+													<!--  -->
+												{/if}
+											</p>
+											{#if windowWidth < 768}
+												<!-- Product Review Button for Mobile -->
+												<!-- URL REFERENCE -->
+												<a href={product.name.replace(/\s/g, '')}>
+													<div class="flex justify-center">
+														<button
+															class="btn btn-sm w-[50%] bg-warning-500 border-2 border-black h-6"
+														>
+															Learn More
+														</button>
+													</div>
+												</a>
+											{/if}
+											<div class="arrow variant-filled-secondary" />
+										</div>
+										<!-- ? Links -->
+										{#if windowWidth <= 768}
+											<!-- !Mobile-->
+											<ol class="flex justify-between">
+												<button
+													class="[&>*]:pointer-events-none min-w-[80%] group/item"
+													use:popup={{
+														event: 'click',
+														target: 'popupHover' + category1 + '-' + i,
+														placement: 'top'
+													}}
+												>
+													<div class="flex w-full min-w-[66%]">
+														<div class="mt-1">
+															<!-- !Number Order -->
+															{i + 1}.
+														</div>
+														<div class="px-3">
+															<!-- !Logo -->
+															{#if product.logo}
+																<img
+																	class="rounded-full h-8 w-8 object-cover"
+																	src={product.logo}
+																	alt="AI FLUENTLY logo"
+																/>
+															{:else}
+																<img
+																	class="rounded-full h-8 w-8 object-cover"
+																	src="/assets/logo/logomark-black-circle.svg"
+																	alt="AI FLUENTLY logo"
+																/>
+															{/if}
+														</div>
+														<div
+															class="pt-1 group-hover/item:underline group-active/item:underline"
+														>
+															<!-- !Product Name Mobile-->
+															{product.name}
+														</div>
+													</div>
+												</button>
+												<a
+													href={product.url}
+													target="_blank"
+													class="flex opacity-50 hover:opacity-100 text-3xl p-1"
+												>
+													<Icon icon="system-uicons:jump-up" />
+												</a>
+												<!-- !Link to Site -->
+											</ol>
+										{:else}
+											<!-- !Desktop-->
+											<ol class="flex justify-between py-1">
+												<a
+													href={product.name.replace(/\s/g, '')}
+													class=" min-w-[70%] group/item"
+													use:popup={{
+														event: 'hover',
+														target: 'popupHover' + category1 + '-' + i,
+														placement: 'top'
+													}}
+												>
+													<div class="flex w-full">
+														<div class="p-1">
+															<!-- !Number Order -->
+															{i + 1}.
+														</div>
+														<div class="px-2">
+															<!-- !Logo -->
+															{#if product.logo}
+																<img
+																	class="rounded-full h-8 w-8 object-cover"
+																	src={product.logo}
+																	alt="AI FLUENTLY logo"
+																/>
+															{:else}
+																<img
+																	class="rounded-full h-8 w-8 object-cover"
+																	src="/assets/logo/logomark-black-circle.svg"
+																	alt="AI FLUENTLY logo"
+																/>
+															{/if}
+														</div>
+
+														<!-- !URL REFERENCE -->
+
+														<div
+															id="product_name"
+															class="p-1 flex-auto group-hover/item:underline [&>*]:pointer-events-none"
+														>
+															<!-- !Product Name + Review Link Desktop -->
+															{product.name}
+														</div>
+													</div>
+												</a>
+												<!-- !Link to Site -->
+												<a
+													href={product.url}
+													target="_blank"
+													class="flex opacity-50 hover:opacity-100 text-2xl p-1"
+												>
+													<Icon icon="system-uicons:jump-up" />
+												</a>
+											</ol>
+										{/if}
+									{/each}
+								</ol>
+							</section>
+						</div>
+					</div>
+				{/if}
 			</div>
+
+			{#if !lightswitch}
+				<div
+					class=" h-16 absolute w-full bottom-10 bg-gradient-to-t from-surface-50 to-white/0"
+				></div>
+			{:else}
+				<div
+					class=" h-16 absolute w-full bottom-10 bg-gradient-to-t from-surface-800 to-surface-800/0"
+				></div>
+			{/if}
+
 			<div class="flex justify-center">
-				<button class="btn btn-sm w-[85%] h-6 bg-warning-500 border-2 border-black">More</button>
+				<button class="btn btn-sm w-[85%] h-8 bg-warning-500 border-2 border-black"> More </button>
 			</div>
 		</div>
-		<div class="card h-[190px]">
+		<div class="card h-[290px] relative grid grid-cols-1 card-hover parent-element">
 			<!-- 5 -->
-			<header class="card-header text-center p-2"><slot name="header5">-empty-</slot></header>
-			<div class="flex justify-start">
-				<section
-					class="p-4 w-full h-[110px] overflow-auto scrollbar scrollbar-w-1 scrollbar-thumb-primary-500"
-				>
-					<ol>
-						<slot name="list5">-empty-</slot>
-					</ol>
-				</section>
+			<header class="card-header text-center pr-6">
+				{#if state.tags[category1] && showTag}
+					<div in:fade={{ duration: 800 }}>
+						<span class="badge text-4xl p-0 m-0 translate-y-2">
+							<Icon icon={getIconForTag(category1)} />
+						</span>
+						<span class="text-2xl font-bold uppercase">
+							{state.tags[category1]}
+						</span>
+					</div>
+				{:else}
+					<span class="text-4xl animate-pulse">ㅤ</span>
+				{/if}
+			</header>
+			<ProgressBar animIndeterminate="anim-progress-bar" rounded="false" height="h-1" />
+			<div class="h-[160px] overflow-auto scrollbar scrollbar-w-1 scrollbar-thumb-primary-500">
+				{#if showTag}
+					<!-- 1 -->
+
+					<div in:fade={{ duration: 800 }}>
+						<div class="flex justify-start">
+							<section class="p-4 w-full">
+								<ol>
+									{#each state.tagProductDetails[category1] as product, i}
+										<!-- ? Tooltip Styles -->
+										<div
+											class="card p-4 z-10 variant-filled-secondary w-[90%] sm:w-[90%] lg:w-[90%] h-40 lg:h-36"
+											data-popup={'popupHover' + category1 + '-' + i}
+										>
+											<div class="grid justify-center">
+												<div class="flex">
+													<span class="p-1">
+														<!-- !Product Logo -->
+														{#if product.logo}
+															<img
+																class="rounded-full h-5 w-5 object-cover"
+																src={product.logo}
+																alt="AI FLUENTLY logo"
+															/>
+														{:else}
+															<!-- <img
+													class="rounded-full h-5 w-5 object-cover"
+													src="/assets/logo/logomark-black-circle.svg"
+													alt="AI FLUENTLY logo"
+												/> -->
+														{/if}
+													</span>
+													<span
+														class="font-bold flex-auto [&>*]:pointer-events-none"
+														use:popup={{
+															event: 'hover',
+															target: 'popupHover' + category1 + '-' + i,
+															placement: 'top'
+														}}
+													>
+														<!-- !Product Name -->
+														{product.name}
+													</span>
+												</div>
+											</div>
+											<div>
+												<!-- !Product Rating -->
+
+												<Ratings value={Math.round((product.rating / 20) * 2) / 2} max={5}>
+													<svelte:fragment slot="empty"
+														><Icon icon="line-md:star-alt-twotone" color="gray" /></svelte:fragment
+													>
+													<svelte:fragment slot="half"
+														><Icon icon="line-md:star-filled-half" color="gold" />
+													</svelte:fragment>
+													<svelte:fragment slot="full"
+														><Icon icon="line-md:star-filled" color="gold" /></svelte:fragment
+													>
+												</Ratings>
+											</div>
+											<p class="p-1 text-sm opacity-80 text-ellipsis overflow-hidden h-16">
+												<!-- !Product Description -->
+												{#if product.description}
+													{product.description}
+												{:else}
+													<!--  -->
+												{/if}
+											</p>
+											{#if windowWidth < 768}
+												<!-- Product Review Button for Mobile -->
+												<!-- URL REFERENCE -->
+												<a href={product.name.replace(/\s/g, '')}>
+													<div class="flex justify-center">
+														<button
+															class="btn btn-sm w-[50%] bg-warning-500 border-2 border-black h-6"
+														>
+															Learn More
+														</button>
+													</div>
+												</a>
+											{/if}
+											<div class="arrow variant-filled-secondary" />
+										</div>
+										<!-- ? Links -->
+										{#if windowWidth <= 768}
+											<!-- !Mobile-->
+											<ol class="flex justify-between">
+												<button
+													class="[&>*]:pointer-events-none min-w-[80%] group/item"
+													use:popup={{
+														event: 'click',
+														target: 'popupHover' + category1 + '-' + i,
+														placement: 'top'
+													}}
+												>
+													<div class="flex w-full min-w-[66%]">
+														<div class="mt-1">
+															<!-- !Number Order -->
+															{i + 1}.
+														</div>
+														<div class="px-3">
+															<!-- !Logo -->
+															{#if product.logo}
+																<img
+																	class="rounded-full h-8 w-8 object-cover"
+																	src={product.logo}
+																	alt="AI FLUENTLY logo"
+																/>
+															{:else}
+																<img
+																	class="rounded-full h-8 w-8 object-cover"
+																	src="/assets/logo/logomark-black-circle.svg"
+																	alt="AI FLUENTLY logo"
+																/>
+															{/if}
+														</div>
+														<div
+															class="pt-1 group-hover/item:underline group-active/item:underline"
+														>
+															<!-- !Product Name Mobile-->
+															{product.name}
+														</div>
+													</div>
+												</button>
+												<a
+													href={product.url}
+													target="_blank"
+													class="flex opacity-50 hover:opacity-100 text-3xl p-1"
+												>
+													<Icon icon="system-uicons:jump-up" />
+												</a>
+												<!-- !Link to Site -->
+											</ol>
+										{:else}
+											<!-- !Desktop-->
+											<ol class="flex justify-between py-1">
+												<a
+													href={product.name.replace(/\s/g, '')}
+													class=" min-w-[70%] group/item"
+													use:popup={{
+														event: 'hover',
+														target: 'popupHover' + category1 + '-' + i,
+														placement: 'top'
+													}}
+												>
+													<div class="flex w-full">
+														<div class="p-1">
+															<!-- !Number Order -->
+															{i + 1}.
+														</div>
+														<div class="px-2">
+															<!-- !Logo -->
+															{#if product.logo}
+																<img
+																	class="rounded-full h-8 w-8 object-cover"
+																	src={product.logo}
+																	alt="AI FLUENTLY logo"
+																/>
+															{:else}
+																<img
+																	class="rounded-full h-8 w-8 object-cover"
+																	src="/assets/logo/logomark-black-circle.svg"
+																	alt="AI FLUENTLY logo"
+																/>
+															{/if}
+														</div>
+
+														<!-- !URL REFERENCE -->
+
+														<div
+															id="product_name"
+															class="p-1 flex-auto group-hover/item:underline [&>*]:pointer-events-none"
+														>
+															<!-- !Product Name + Review Link Desktop -->
+															{product.name}
+														</div>
+													</div>
+												</a>
+												<!-- !Link to Site -->
+												<a
+													href={product.url}
+													target="_blank"
+													class="flex opacity-50 hover:opacity-100 text-2xl p-1"
+												>
+													<Icon icon="system-uicons:jump-up" />
+												</a>
+											</ol>
+										{/if}
+									{/each}
+								</ol>
+							</section>
+						</div>
+					</div>
+				{/if}
 			</div>
+
+			{#if !lightswitch}
+				<div
+					class=" h-16 absolute w-full bottom-10 bg-gradient-to-t from-surface-50 to-white/0"
+				></div>
+			{:else}
+				<div
+					class=" h-16 absolute w-full bottom-10 bg-gradient-to-t from-surface-800 to-surface-800/0"
+				></div>
+			{/if}
+
 			<div class="flex justify-center">
-				<button class="btn btn-sm w-[85%] h-6 bg-warning-500 border-2 border-black">More</button>
+				<button class="btn btn-sm w-[85%] h-8 bg-warning-500 border-2 border-black"> More </button>
 			</div>
 		</div>
 	</div>
 
 	<!-- row 4 -->
-	<div class="h-full">
-		<div class="card h-[500px]">
-			<!-- 6 -->
-			<header class="card-header text-center p-2"><slot name="header6">-empty-</slot></header>
-			<div class="flex justify-start">
-				<section
-					class="p-4 w-full h-[400px] overflow-auto scrollbar scrollbar-w-1 scrollbar-thumb-primary-500"
-				>
-					<ol>
-						<slot name="list6">-empty-</slot>
-					</ol>
-				</section>
+	<div class="h-full parent-element">
+		<div class="card h-[800px] grid grid-cols-1 relative card-hover">
+			<header class="card-header text-center pr-6">
+				{#if state.tags[category0] && showTag}
+					<div in:fade={{ duration: 800 }}>
+						<span class="badge text-4xl p-0 m-0 translate-y-2">
+							<Icon icon={getIconForTag(category0)} />
+						</span>
+						<span class="text-2xl font-bold uppercase">
+							{state.tags[category0]}
+						</span>
+					</div>
+				{:else}
+					<span class="text-4xl animate-pulse">ㅤ</span>
+				{/if}
+			</header>
+			<ProgressBar animIndeterminate="anim-progress-bar" rounded="false" height="h-1" />
+			<div class="h-[670px] overflow-auto scrollbar scrollbar-w-1 scrollbar-thumb-primary-500">
+				{#if showTag}
+					<!-- 1 -->
+
+					<div in:fade={{ duration: 800 }}>
+						<div class="flex justify-start">
+							<section class="p-4 w-full">
+								<ol>
+									{#each state.tagProductDetails[category0] as product, i}
+										<!-- ? Tooltip Styles -->
+										<div
+											class="card p-4 z-10 variant-filled-secondary w-[90%] sm:w-[90%] lg:w-[90%] h-40 lg:h-36"
+											data-popup={'popupHover' + category0 + '-' + i}
+										>
+											<div class="grid justify-center">
+												<div class="flex">
+													<span class="p-1">
+														<!-- !Product Logo -->
+														{#if product.logo}
+															<img
+																class="rounded-full h-5 w-5 object-cover"
+																src={product.logo}
+																alt="AI FLUENTLY logo"
+															/>
+														{:else}
+															<!-- <img
+													class="rounded-full h-5 w-5 object-cover"
+													src="/assets/logo/logomark-black-circle.svg"
+													alt="AI FLUENTLY logo"
+												/> -->
+														{/if}
+													</span>
+													<span
+														class="font-bold flex-auto [&>*]:pointer-events-none"
+														use:popup={{
+															event: 'hover',
+															target: 'popupHover' + category0 + '-' + i,
+															placement: 'top'
+														}}
+													>
+														<!-- !Product Name -->
+														{product.name}
+													</span>
+												</div>
+											</div>
+											<div>
+												<!-- !Product Rating -->
+
+												<Ratings value={Math.round((product.rating / 20) * 2) / 2} max={5}>
+													<svelte:fragment slot="empty"
+														><Icon icon="line-md:star-alt-twotone" color="gray" /></svelte:fragment
+													>
+													<svelte:fragment slot="half"
+														><Icon icon="line-md:star-filled-half" color="gold" />
+													</svelte:fragment>
+													<svelte:fragment slot="full"
+														><Icon icon="line-md:star-filled" color="gold" /></svelte:fragment
+													>
+												</Ratings>
+											</div>
+											<p class="p-1 text-sm opacity-80 text-ellipsis overflow-hidden h-16">
+												<!-- !Product Description -->
+												{#if product.description}
+													{product.description}
+												{:else}
+													<!--  -->
+												{/if}
+											</p>
+											{#if windowWidth < 768}
+												<!-- Product Review Button for Mobile -->
+												<!-- URL REFERENCE -->
+												<a href={product.name.replace(/\s/g, '')}>
+													<div class="flex justify-center">
+														<button
+															class="btn btn-sm w-[50%] bg-warning-500 border-2 border-black h-6"
+														>
+															Learn More
+														</button>
+													</div>
+												</a>
+											{/if}
+											<div class="arrow variant-filled-secondary" />
+										</div>
+										<!-- ? Links -->
+										{#if windowWidth <= 768}
+											<!-- !Mobile-->
+											<ol class="flex justify-between">
+												<button
+													class="[&>*]:pointer-events-none min-w-[80%] group/item"
+													use:popup={{
+														event: 'click',
+														target: 'popupHover' + category0 + '-' + i,
+														placement: 'top'
+													}}
+												>
+													<div class="flex w-full min-w-[66%]">
+														<div class="mt-1">
+															<!-- !Number Order -->
+															{i + 1}.
+														</div>
+														<div class="px-3">
+															<!-- !Logo -->
+															{#if product.logo}
+																<img
+																	class="rounded-full h-8 w-8 object-cover"
+																	src={product.logo}
+																	alt="AI FLUENTLY logo"
+																/>
+															{:else}
+																<img
+																	class="rounded-full h-8 w-8 object-cover"
+																	src="/assets/logo/logomark-black-circle.svg"
+																	alt="AI FLUENTLY logo"
+																/>
+															{/if}
+														</div>
+														<div
+															class="pt-1 group-hover/item:underline group-active/item:underline"
+														>
+															<!-- !Product Name Mobile-->
+															{product.name}
+														</div>
+													</div>
+												</button>
+												<a
+													href={product.url}
+													target="_blank"
+													class="flex opacity-50 hover:opacity-100 text-3xl p-1"
+												>
+													<Icon icon="system-uicons:jump-up" />
+												</a>
+												<!-- !Link to Site -->
+											</ol>
+										{:else}
+											<!-- !Desktop-->
+											<ol class="flex justify-between py-1">
+												<a
+													href={product.name.replace(/\s/g, '')}
+													class=" min-w-[70%] group/item"
+													use:popup={{
+														event: 'hover',
+														target: 'popupHover' + category0 + '-' + i,
+														placement: 'top'
+													}}
+												>
+													<div class="flex w-full">
+														<div class="p-1">
+															<!-- !Number Order -->
+															{i + 1}.
+														</div>
+														<div class="px-2">
+															<!-- !Logo -->
+															{#if product.logo}
+																<img
+																	class="rounded-full h-8 w-8 object-cover"
+																	src={product.logo}
+																	alt="AI FLUENTLY logo"
+																/>
+															{:else}
+																<img
+																	class="rounded-full h-8 w-8 object-cover"
+																	src="/assets/logo/logomark-black-circle.svg"
+																	alt="AI FLUENTLY logo"
+																/>
+															{/if}
+														</div>
+
+														<!-- !URL REFERENCE -->
+
+														<div
+															id="product_name"
+															class="p-1 flex-auto group-hover/item:underline [&>*]:pointer-events-none"
+														>
+															<!-- !Product Name + Review Link Desktop -->
+															{product.name}
+														</div>
+													</div>
+												</a>
+												<!-- !Link to Site -->
+												<a
+													href={product.url}
+													target="_blank"
+													class="flex opacity-50 hover:opacity-100 text-2xl p-1"
+												>
+													<Icon icon="system-uicons:jump-up" />
+												</a>
+											</ol>
+										{/if}
+									{/each}
+								</ol>
+							</section>
+						</div>
+					</div>
+				{/if}
 			</div>
+			{#if !lightswitch}
+				<div
+					class=" h-16 absolute w-full bottom-10 bg-gradient-to-t from-surface-50 to-white/0"
+				></div>
+			{:else}
+				<div
+					class=" h-16 absolute w-full bottom-10 bg-gradient-to-t from-surface-800 to-surface-800/0"
+				></div>
+			{/if}
 			<div class="flex justify-center">
-				<button class="btn btn-sm w-[85%] h-6 bg-warning-500 border-2 border-black">More</button>
+				<button class="btn btn-sm w-[85%] h-8 bg-warning-500 border-2 border-black"> More </button>
 			</div>
 		</div>
 	</div>
