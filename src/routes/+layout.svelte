@@ -63,6 +63,7 @@
 
 <svelte:head>{@html '<script>(' + autoModeWatcher.toString() + ')();</script>'}</svelte:head>
 <!-- App Shell -->
+{lightswitch}
 <AppShell>
 	<svelte:fragment slot="header">
 		<!-- App Bar -->
