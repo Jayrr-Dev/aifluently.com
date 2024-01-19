@@ -34,24 +34,6 @@
 	const cache: Record<string, CacheItem<any>> = {};
 	let windowWidth = 0;
 
-	async function fetchData() {
-		let shouldFetch = false;
-
-		// Check if the data has already been fetched
-		tagsState.subscribe(($state) => {
-			shouldFetch = !$state.fetched;
-		});
-
-		if (!shouldFetch) return;
-
-		try {
-			const tagsWithProducts = await fetchAllTagsWithProducts(1);
-			updateTagData(tagsWithProducts);
-		} catch (error) {
-			console.error('Error fetching data:', error);
-		}
-	}
-
 	// Subscribe to the store
 	let state: any;
 	tagsState.subscribe(($state) => {
@@ -71,24 +53,55 @@
 		};
 	});
 
-	function updateWidth() {
-		windowWidth = window.innerWidth;
-	}
+	async function fetchData() {
+		let shouldFetch = false;
 
-	function updateTagData(tagsWithProducts: TagWithProducts[]) {
-		const newTags = tagsWithProducts.map((tag) => tag.tagName);
-		const newTagProductDetails = tagsWithProducts.map((tag) => tag.productDetails);
-
-		// Update the store
-		tagsState.update((state) => {
-			return {
-				...state,
-				tags: newTags,
-				tagProductDetails: newTagProductDetails,
-				tagsLoaded: true,
-				fetched: true // Set fetched to true
-			};
+		// Check if the data has already been fetched
+		tagsState.subscribe(($state) => {
+			shouldFetch = !$state.fetched;
 		});
+
+		if (!shouldFetch) return;
+
+		try {
+			const tagsWithProducts = await fetchAllTagsWithProducts(1);
+			updateTagData(tagsWithProducts);
+		} catch (error) {
+			console.error('Error fetching data:', error);
+		}
+	}
+	// Fetches all tags and their corresponding product names
+	async function fetchAllTagsWithProducts(categoryId: number): Promise<TagWithProducts[]> {
+		// Cache key based on category ID
+		const cacheKey = `tagsWithProducts-${categoryId}`;
+		const cachedData = getFromCache(cacheKey);
+		if (cachedData) return cachedData;
+
+		const { data: tagsData, error: tagsError } = await supabase
+			.from('tag_table')
+			.select('tag_id, tag_name')
+			.eq('category_id', categoryId);
+
+		if (tagsError) {
+			console.error(tagsError);
+			return [];
+		}
+
+		if (!tagsData || tagsData.length === 0) {
+			return [];
+		}
+
+		const tagsWithProducts = await Promise.all(
+			tagsData.map(async (tag) => {
+				const productIds = await getProduct(tag.tag_id);
+				const productNames = await getProductName(productIds);
+				const productDetails = await getProductDetails(productIds);
+				return { tagName: tag.tag_name, productNames, productDetails };
+			})
+		);
+
+		addToCache(cacheKey, tagsWithProducts, 3600000); // Cache for 1 hour
+		return tagsWithProducts;
 	}
 	// Fetch product_id using the junction_product_tag filter by tag_id
 	async function getProduct(tagId: number): Promise<number[]> {
@@ -112,23 +125,31 @@
 		return productIds;
 	}
 
-	// Function to retrieve data from cache
-	function getFromCache(key: string) {
-		const item = cache[key];
-		if (item && item.expiry > Date.now()) {
-			return item.data;
+	async function getProductName(productIds: number[]): Promise<string[]> {
+		// Cache key based on concatenated product IDs
+		const cacheKey = `productNames-${productIds.join('-')}`;
+		const cachedData = getFromCache(cacheKey);
+		if (cachedData) return cachedData;
+
+		if (productIds.length === 0) {
+			return []; // Return an empty array if there are no product IDs
 		}
-		return null; // Return null if data is not in cache or is expired
-	}
 
-	// Function to add data to cache
-	function addToCache(key: string, data: any, ttl: number) {
-		cache[key] = {
-			data,
-			expiry: Date.now() + ttl
-		};
-	}
+		const { data, error } = await supabase
+			.from('product_table')
+			.select('product_name')
+			.in('product_id', productIds)
+			.order('product_name', { ascending: true });
 
+		if (error) {
+			console.error(error);
+			return [];
+		}
+
+		const productNames = data ? data.map((product) => product.product_name) : [];
+		addToCache(cacheKey, productNames, 3600000); // Cache for 1 hour
+		return productNames;
+	}
 	async function getProductDetails(productIds: number[]): Promise<ProductDetail[]> {
 		// Cache key based on concatenated product IDs
 		const cacheKey = `productDetails-${productIds.join('-')}`;
@@ -167,64 +188,41 @@
 		return productDetails;
 	}
 
-	async function getProductName(productIds: number[]): Promise<string[]> {
-		// Cache key based on concatenated product IDs
-		const cacheKey = `productNames-${productIds.join('-')}`;
-		const cachedData = getFromCache(cacheKey);
-		if (cachedData) return cachedData;
-
-		if (productIds.length === 0) {
-			return []; // Return an empty array if there are no product IDs
-		}
-
-		const { data, error } = await supabase
-			.from('product_table')
-			.select('product_name')
-			.in('product_id', productIds)
-			.order('product_name', { ascending: true });
-
-		if (error) {
-			console.error(error);
-			return [];
-		}
-
-		const productNames = data ? data.map((product) => product.product_name) : [];
-		addToCache(cacheKey, productNames, 3600000); // Cache for 1 hour
-		return productNames;
+	function updateWidth() {
+		windowWidth = window.innerWidth;
 	}
 
-	// Fetches all tags and their corresponding product names
-	async function fetchAllTagsWithProducts(categoryId: number): Promise<TagWithProducts[]> {
-		// Cache key based on category ID
-		const cacheKey = `tagsWithProducts-${categoryId}`;
-		const cachedData = getFromCache(cacheKey);
-		if (cachedData) return cachedData;
+	function updateTagData(tagsWithProducts: TagWithProducts[]) {
+		const newTags = tagsWithProducts.map((tag) => tag.tagName);
+		const newTagProductDetails = tagsWithProducts.map((tag) => tag.productDetails);
 
-		const { data: tagsData, error: tagsError } = await supabase
-			.from('tag_table')
-			.select('tag_id, tag_name')
-			.eq('category_id', categoryId);
+		// Update the store
+		tagsState.update((state) => {
+			return {
+				...state,
+				tags: newTags,
+				tagProductDetails: newTagProductDetails,
+				tagsLoaded: true,
+				fetched: true // Set fetched to true
+			};
+		});
+	}
 
-		if (tagsError) {
-			console.error(tagsError);
-			return [];
+	// Function to retrieve data from cache
+	function getFromCache(key: string) {
+		const item = cache[key];
+		if (item && item.expiry > Date.now()) {
+			return item.data;
 		}
+		return null; // Return null if data is not in cache or is expired
+	}
 
-		if (!tagsData || tagsData.length === 0) {
-			return [];
-		}
-
-		const tagsWithProducts = await Promise.all(
-			tagsData.map(async (tag) => {
-				const productIds = await getProduct(tag.tag_id);
-				const productNames = await getProductName(productIds);
-				const productDetails = await getProductDetails(productIds);
-				return { tagName: tag.tag_name, productNames, productDetails };
-			})
-		);
-
-		addToCache(cacheKey, tagsWithProducts, 3600000); // Cache for 1 hour
-		return tagsWithProducts;
+	// Function to add data to cache
+	function addToCache(key: string, data: any, ttl: number) {
+		cache[key] = {
+			data,
+			expiry: Date.now() + ttl
+		};
 	}
 
 	//Icon Mapping
