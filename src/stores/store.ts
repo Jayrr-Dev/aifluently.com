@@ -11,13 +11,8 @@ interface aiCategory {
     tag_desc: string;
    
 }
-export const lighttoggle: Writable<boolean> = localStorageStore(
-    'lighttoggle',
-    !isMobileDevice() // true for PC, false for mobile
-);
-function isMobileDevice() {
-    return /Mobi|Android/i.test(navigator.userAgent);
-}
+export const lighttoggle: Writable<boolean> = localStorageStore('lighttoggle', false);
+
 interface tagicon {
 	tagicon: string;
 }

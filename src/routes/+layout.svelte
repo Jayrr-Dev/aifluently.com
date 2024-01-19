@@ -43,6 +43,12 @@
 				invalidate('supabase:auth');
 			}
 		});
+		function isMobileDevice() {
+			return typeof window !== 'undefined'
+				? /Mobi|Android/i.test(window.navigator.userAgent)
+				: false;
+		}
+		lighttoggle.set(isMobileDevice());
 
 		return () => data.subscription.unsubscribe();
 	});
