@@ -1,10 +1,8 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import type { Writable } from 'svelte/store';
-// import pkg from 'lodash'
-// const { shuffle } = pkg
+
 import { localStorageStore } from '@skeletonlabs/skeleton';
-// import type { Writable } from 'svelte/store'
-// import { browser } from '$app/environment'
+
 
 interface aiCategory {
     tag_id: number;
@@ -13,8 +11,13 @@ interface aiCategory {
     tag_desc: string;
    
 }
-export const lighttoggle: Writable<boolean> = localStorageStore('lighttoggle', false);
-
+export const lighttoggle: Writable<boolean> = localStorageStore(
+    'lighttoggle',
+    !isMobileDevice() // true for PC, false for mobile
+);
+function isMobileDevice() {
+    return /Mobi|Android/i.test(navigator.userAgent);
+}
 interface tagicon {
 	tagicon: string;
 }
