@@ -43,7 +43,7 @@
 				invalidate('supabase:auth');
 			}
 		});
-		lightswitch = false;
+		lightswitch = true;
 	});
 
 	// Function to toggle the lightswitch
