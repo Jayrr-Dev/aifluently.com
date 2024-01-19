@@ -55,7 +55,7 @@
 
 	// Function to toggle the lightswitch
 	function toggleLightswitch() {
-		lighttoggle.update((value: boolean) => !value);
+		lighttoggle.update((value: boolean | undefined) => !value);
 	}
 
 	$: lightswitch = $lighttoggle;

@@ -11,7 +11,7 @@ interface aiCategory {
     tag_desc: string;
    
 }
-export const lighttoggle: Writable<boolean> = localStorageStore('lighttoggle', false);
+export const lighttoggle: Writable<boolean | undefined> = localStorageStore('lighttoggle', undefined);
 
 interface tagicon {
 	tagicon: string;

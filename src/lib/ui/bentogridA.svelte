@@ -52,6 +52,8 @@
 			window.removeEventListener('resize', updateWidth);
 		};
 	});
+	//lightswitch logic
+	$: lightswitch = $lighttoggle;
 
 	async function fetchData() {
 		let shouldFetch = false;
@@ -237,7 +239,7 @@
 	let showTag = false;
 
 	//special
-	$: lightswitch = $lighttoggle;
+
 	let category0: number = 0;
 	let category1: number = 1;
 	let category2: number = 2;
