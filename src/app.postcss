@@ -14,7 +14,12 @@ body {
 	@apply h-full overflow-hidden;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
 	@apply font-bold;
 	text-wrap: balance;
 }
@@ -22,7 +27,6 @@ h1, h2, h3, h4, h5, h6 {
 p {
 	@apply leading-relaxed;
 	text-wrap: pretty;
-	
 }
 
 /* rocket theme */
@@ -31,6 +35,24 @@ p {
 	src: url('/fonts/SpaceGrotesk.ttf');
 	font-display: swap;
 }
-
 /* neo brutalist */
-.card { @apply border-[1px] border-r-[4px] border-b-[4px] border-stone-900; }
+.card {
+	@apply border-[1px] border-r-[4px] border-b-[4px] border-stone-900;
+}
+
+/*bar */
+/* Base state of .anim-progress-bar */
+.anim-progress-bar {
+	transform-origin: center;
+	transform: scaleX(0.3);
+	border-radius: 10px; /* Rounded corners in the base state */
+	transition:
+		transform 1s ease,
+		border-radius 2s ease; /* Transition for transform and border-radius */
+}
+
+/* Hover state on the parent element */
+.parent-element:hover .anim-progress-bar {
+	transform: scaleX(1); /* Full width on hover */
+	border-radius: 0; /* No rounded corners when scaled fully */
+}
