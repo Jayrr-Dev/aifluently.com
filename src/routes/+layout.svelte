@@ -42,7 +42,6 @@
 				invalidate('supabase:auth');
 			}
 		});
-		lightswitch = true;
 	});
 
 	// Function to toggle the lightswitch
