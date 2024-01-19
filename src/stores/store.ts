@@ -1,5 +1,6 @@
 
 import type { Writable } from 'svelte/store';
+import { writable } from 'svelte/store';
 
 import { localStorageStore } from '@skeletonlabs/skeleton';
 
@@ -11,7 +12,7 @@ interface aiCategory {
     tag_desc: string;
    
 }
-export const lighttoggle: Writable<boolean | undefined> = localStorageStore('lighttoggle', undefined);
+export const lighttoggle = writable<boolean | undefined>(false);
 
 interface tagicon {
 	tagicon: string;

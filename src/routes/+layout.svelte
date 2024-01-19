@@ -9,7 +9,6 @@
 
 	let { supabase, session } = data;
 	$: ({ supabase, session } = data);
-	//
 
 	import { LightSwitch } from '@skeletonlabs/skeleton';
 	import { lighttoggle } from '../stores/store';
