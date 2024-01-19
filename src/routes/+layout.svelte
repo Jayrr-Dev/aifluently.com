@@ -4,7 +4,7 @@
 	//supabase
 	import { invalidate } from '$app/navigation';
 	import { onMount } from 'svelte';
-
+	import { autoModeWatcher } from '@skeletonlabs/skeleton';
 	export let data;
 
 	let { supabase, session } = data;
@@ -55,6 +55,7 @@
 	$: lightswitch = $lighttoggle;
 </script>
 
+<svelte:head>{@html '<script>(' + autoModeWatcher.toString() + ')();</script>'}</svelte:head>
 <!-- App Shell -->
 <AppShell>
 	<svelte:fragment slot="header">
