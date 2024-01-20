@@ -1,13 +1,9 @@
 <script lang="ts">
+	export let category: number;
 	import { onMount } from 'svelte';
 	import Icon from '@iconify/svelte';
-	import { popup, Ratings } from '@skeletonlabs/skeleton';
 	import { supabase } from '$lib/supabaseClient';
-	import { fade } from 'svelte/transition';
 	import { tagsState } from '../../stores/tagsStore';
-	import { ProgressBar } from '@skeletonlabs/skeleton';
-	import { lighttoggle } from '../../stores/store';
-
 	import Card800px from '$lib/ui/card800px.svelte';
 	import Card500px from '$lib/ui/card500px.svelte';
 	import Card290px from '$lib/ui/card290px.svelte';
@@ -27,34 +23,40 @@
 		productDetails: ProductDetail[];
 	};
 
+	type CategoryData = {
+		tagsLoaded: boolean;
+		tags: string[];
+		tagProductDetails: ProductDetail[][];
+		fetched: boolean;
+	};
+
+	type TagsState = {
+		[categoryId: number]: CategoryData;
+	};
+
 	interface CacheItem<T> {
 		data: T;
 		expiry: number;
 	}
-	// let tagsLoaded = false;
-	// let tags: string[] = [];
-	// let tagProductDetails: ProductDetail[][] = [
-	// 	[{ name: '', logo: '', rating: 0, description: '', url: '', logoAlt: '' }]
-	// ];
-	const cache: Record<string, CacheItem<any>> = {};
+	const initialState: CategoryData = {
+		tags: [],
+		tagProductDetails: [],
+		tagsLoaded: false,
+		fetched: false
+	};
+	let cache: Record<string, CacheItem<any>> = {};
 	let windowWidth = 0;
 
 	// Subscribe to the store
 	let state: any;
-
-	tagsState.subscribe(($state) => {
-		state = $state;
-	});
-
 	onMount(() => {
 		tagsState.subscribe(($state) => {
-			state = $state;
+			state = $state[category] || initialState;
 			fetchData(); // Call the async function after state is updated
 		});
-		// Call the async function
-		setTimeout(() => {
-			showTag = true;
-		}, 100);
+
+		console.log('tagsState', tagsState);
+		console.log('state', state);
 
 		//windowidth
 		updateWidth();
@@ -63,22 +65,20 @@
 			window.removeEventListener('resize', updateWidth);
 		};
 	});
-	//lightswitch logic
-	$: lightswitch = $lighttoggle;
-
 	async function fetchData() {
 		let shouldFetch = false;
 
-		// Check if the data has already been fetched
+		// Check if the data for this category has already been fetched
 		tagsState.subscribe(($state) => {
-			shouldFetch = !$state.fetched;
+			const categoryData = $state[category];
+			shouldFetch = !categoryData?.fetched;
 		});
 
 		if (!shouldFetch) return;
 
 		try {
-			const tagsWithProducts = await fetchAllTagsWithProducts(1);
-			updateTagData(tagsWithProducts);
+			const tagsWithProducts = await fetchAllTagsWithProducts(category);
+			updateTagData(category, tagsWithProducts);
 		} catch (error) {
 			console.error('Error fetching data:', error);
 		}
@@ -115,9 +115,11 @@
 			})
 		);
 
+		console.log('tagsWithProducts', tagsWithProducts);
 		addToCache(cacheKey, tagsWithProducts, 3600000); // Cache for 1 hour
 		return tagsWithProducts;
 	}
+
 	// Fetch product_id using the junction_product_tag filter by tag_id
 	async function getProduct(tagId: number): Promise<number[]> {
 		const cacheKey = `productIds-${tagId}`;
@@ -203,32 +205,13 @@
 		return productDetails;
 	}
 
-	function updateWidth() {
-		windowWidth = window.innerWidth;
-	}
-
-	function updateTagData(tagsWithProducts: TagWithProducts[]) {
-		const newTags = tagsWithProducts.map((tag) => tag.tagName);
-		const newTagProductDetails = tagsWithProducts.map((tag) => tag.productDetails);
-
-		// Update the store
-		tagsState.update((state) => {
-			return {
-				...state,
-				tags: newTags,
-				tagProductDetails: newTagProductDetails,
-				tagsLoaded: true,
-				fetched: true // Set fetched to true
-			};
-		});
-	}
-
 	// Function to retrieve data from cache
 	function getFromCache(key: string) {
 		const item = cache[key];
 		if (item && item.expiry > Date.now()) {
 			return item.data;
 		}
+
 		return null; // Return null if data is not in cache or is expired
 	}
 
@@ -240,50 +223,84 @@
 		};
 	}
 
-	//Icon Mapping
-	function getIconForTag(tagId: number): string {
-		const iconMapping: { [key: number]: string } = {
-			0: 'quill:chat',
-			1: 'akar-icons:image'
-		};
-		return iconMapping[tagId] || 'default-icon'; // 'default-icon' is a fallback
+	function updateWidth() {
+		windowWidth = window.innerWidth;
 	}
-	let isVisible = false;
-	let showTag = false;
 
-	//Maybe a better way to do this?
-	let category0: number = 0;
-	let category1: number = 1;
-	let category2: number = 2;
-	let category3: number = 3;
-	let category4: number = 4;
-	let category5: number = 5;
-	let category6: number = 6;
-	let category7: number = 7;
+	function updateTagData(categoryId: number, tagsWithProducts: TagWithProducts[]) {
+		tagsState.update(($state) => {
+			const categoryData = $state[categoryId] || initialState;
+			return {
+				...$state,
+				[categoryId]: {
+					...categoryData,
+					tags: tagsWithProducts.map((tag) => tag.tagName),
+					tagProductDetails: tagsWithProducts.map((tag) => tag.productDetails),
+					tagsLoaded: true,
+					fetched: true
+				}
+			};
+		});
+	}
+
+	//testing
+
+	async function testfetchData() {
+		console.log('testfetchData');
+		try {
+			const tagsWithProducts = await fetchAllTagsWithProducts(category);
+			updateTagData(category, tagsWithProducts); // Pass the categoryId here
+			console.log('tagsWithProducts', 'test');
+			console.log('tagsWithProducts', tagsWithProducts);
+		} catch (error) {
+			console.error('Error fetching data:', error);
+		}
+	}
+
+	function resetTagsState() {
+		tagsState.set(initialState);
+		console.log('tagsState has been reset');
+	}
+	function clearCacheAndResetStore() {
+		// Clear the cache
+		cache = {};
+		console.log('Cache has been cleared');
+
+		// Reset the store
+		resetTagsState();
+	}
 </script>
+
+<!-- TESTING -->
+<!-- <button on:click={testfetchData} class="card"> Fetch</button>
+<button on:click={clearCacheAndResetStore} class="card"> Reset</button> -->
 
 <section
 	class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-2 lg:gap-2 m-10 lg:mx-32 xl:mx-32"
 >
 	<!-- row 1 -->
 	<div class="h-full parent-element">
-		<Card800px tag={0} />
+		<Card800px tag={0} icon="quill:chat" {category} />
 	</div>
 
 	<!-- row 2 -->
 	<div class="h-full grid gap-2">
-		<Card290px tag={0} />
-		<Card500px tag={0} />
+		<div class="parent-element">
+			<Card290px tag={1} icon="quill:chat" {category} />
+		</div>
+		<div class="parent-element">
+			<Card500px tag={2} icon="quill:chat" {category} />
+		</div>
 	</div>
 
 	<!-- row 3 -->
 	<div class="h-full grid gap-2">
-		<Card500px tag={0} />
-		<Card290px tag={0} />
+		<Card500px tag={3} icon="quill:chat" {category} />
+		<Card290px tag={4} icon="quill:chat" {category} />
 	</div>
 
 	<!-- row 4 -->
 	<div class="h-full parent-element">
-		<Card800px tag={0} />
+		<Card800px tag={5} icon="quill:chat" {category} />
 	</div>
 </section>

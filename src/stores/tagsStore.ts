@@ -10,20 +10,18 @@ type ProductDetail = {
     logoAlt: string;
 };
 
-// Define the structure of your store's state
-interface TagsState {
+
+// Exporting the store as is should be sufficient, as localStorageStore handles synchronization with local storage.
+interface CategoryData {
     tagsLoaded: boolean;
     tags: string[];
     tagProductDetails: ProductDetail[][];
-    fetched: boolean; // Flag to indicate if data has been fetched
+    fetched: boolean;
 }
 
-// Initialize your store with default values using localStorageStore
-export const tagsState = localStorageStore<TagsState>('tagsState', {
-    tagsLoaded: false,
-    tags: [],
-    tagProductDetails: [[]],
-    fetched: false,
-});
+interface TagsState {
+    [categoryId: number]: CategoryData;
+}
 
-// Exporting the store as is should be sufficient, as localStorageStore handles synchronization with local storage.
+// Initialize your store with default values
+export const tagsState = localStorageStore<TagsState>('tagsState', {});

@@ -1,5 +1,7 @@
 <script lang="ts">
 	import BentogridA from '$lib/ui/bentogridA.svelte';
+	import BentogridB from '$lib/ui/bentogridB.svelte';
+	import BentogridB2 from '$lib/ui/bentogridB2.svelte';
 </script>
 
 <!-- Check if data is not null or undefined -->
@@ -11,4 +13,5 @@
 </header>
 
 <!-- if i = 6 then  -->
-<BentogridA />
+<BentogridA category={1} />
+<BentogridB category={1} />
