@@ -34,7 +34,7 @@
 </script>
 
 {#if state && state[category] && showTag}
-	<div class="card h-[800px] grid grid-cols-1 relative card-hover">
+	<div class="card h-[810px] grid grid-cols-1 relative card-hover">
 		<header class="card-header text-center pr-6">
 			{#if state[category].tags[tag] && showTag}
 				<div in:fade={{ duration: 800 }}>

@@ -1,5 +1,6 @@
 <script lang="ts">
 	export let category: number;
+	export let intersecting: boolean;
 	import { onMount } from 'svelte';
 	import Icon from '@iconify/svelte';
 	import { supabase } from '$lib/supabaseClient';
@@ -274,33 +275,38 @@
 <!-- TESTING -->
 <!-- <button on:click={testfetchData} class="card"> Fetch</button>
 <button on:click={clearCacheAndResetStore} class="card"> Reset</button> -->
-
-<section
-	class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-2 lg:gap-2 m-10 lg:mx-32 xl:mx-32"
->
-	<!-- row 1 -->
-	<div class="h-full parent-element">
-		<Card800px tag={0} icon="quill:chat" {category} />
-	</div>
-
-	<!-- row 2 -->
-	<div class="h-full grid gap-2">
-		<div class="parent-element">
-			<Card290px tag={1} icon="quill:chat" {category} />
+{#if state}
+	<section
+		class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-5 mb-5 mx-10 lg:mx-32 xl:mx-32"
+	>
+		<!-- row 1 -->
+		<div class="h-full parent-element">
+			<Card800px tag={0} icon="quill:chat" {category} />
 		</div>
-		<div class="parent-element">
-			<Card500px tag={2} icon="quill:chat" {category} />
+
+		<!-- row 2 -->
+		<div class="h-full grid gap-5">
+			<div class="parent-element">
+				<Card290px tag={1} icon="quill:chat" {category} />
+			</div>
+			<div class="parent-element">
+				<Card500px tag={2} icon="quill:chat" {category} />
+			</div>
 		</div>
-	</div>
 
-	<!-- row 3 -->
-	<div class="h-full grid gap-2">
-		<Card500px tag={3} icon="quill:chat" {category} />
-		<Card290px tag={4} icon="quill:chat" {category} />
-	</div>
+		<!-- row 3 -->
+		<div class="h-full grid gap-5">
+			<div class="parent-element">
+				<Card500px tag={3} icon="quill:chat" {category} />
+			</div>
+			<div class="parent-element">
+				<Card290px tag={4} icon="quill:chat" {category} />
+			</div>
+		</div>
 
-	<!-- row 4 -->
-	<div class="h-full parent-element">
-		<Card800px tag={5} icon="quill:chat" {category} />
-	</div>
-</section>
+		<!-- row 4 -->
+		<div class="h-full parent-element">
+			<Card800px tag={5} icon="quill:chat" {category} />
+		</div>
+	</section>
+{/if}

@@ -275,47 +275,47 @@
 <!-- TESTING -->
 <!-- <button on:click={testfetchData} class="card"> Fetch</button>
 <button on:click={clearCacheAndResetStore} class="card"> Reset</button> -->
-{#if category}
+{#if state}
 	<section
 		class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-5 mb-5 mx-10 lg:gap-5 lg:mx-32 xl:mx-32"
 	>
 		<!-- row 1 -->
 		<div class="h-full grid gap-5">
 			<div class="parent-element">
-				<Card500px tag={6} icon="quill:chat" {category} />
+				<Card500px tag={22} icon="quill:chat" {category} />
 			</div>
 			<div class="parent-element">
-				<Card290px tag={7} icon="quill:chat" {category} />
+				<Card290px tag={23} icon="quill:chat" {category} />
 			</div>
 		</div>
 
 		<!-- row 2 -->
 		<div class="h-full grid gap-5">
 			<div class="parent-element">
-				<Card290px tag={8} icon="quill:chat" {category} />
+				<Card290px tag={24} icon="quill:chat" {category} />
 			</div>
 			<div class="parent-element">
-				<Card500px tag={9} icon="quill:chat" {category} />
+				<Card500px tag={25} icon="quill:chat" {category} />
 			</div>
 		</div>
 
 		<!-- row 3 -->
 		<div class="h-full grid gap-5">
 			<div class="parent-element">
-				<Card500px tag={10} icon="quill:chat" {category} />
+				<Card500px tag={26} icon="quill:chat" {category} />
 			</div>
 			<div class="parent-element">
-				<Card290px tag={11} icon="quill:chat" {category} />
+				<Card290px tag={27} icon="quill:chat" {category} />
 			</div>
 		</div>
 
 		<!-- row 4 -->
 		<div class="h-full grid gap-5">
 			<div class="parent-element">
-				<Card290px tag={12} icon="quill:chat" {category} />
+				<Card290px tag={28} icon="quill:chat" {category} />
 			</div>
 			<div class="parent-element">
-				<Card500px tag={13} icon="quill:chat" {category} />
+				<Card500px tag={29} icon="quill:chat" {category} />
 			</div>
 		</div>
 	</section>
