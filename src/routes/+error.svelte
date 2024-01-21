@@ -12,7 +12,7 @@
 {#if $page.status === 404}
 	<div class="card variant-glass-warning m-10 flex justify-center p-10 lg:mx-32">
 		<div class="my-10">
-			<Icon icon="line-md:construction" width="300" />
+			<Icon icon="line-md:construction" width="200" />
 			<div class="animate-pulse text-center">Page Under Construction...</div>
 		</div>
 	</div>
