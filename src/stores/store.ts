@@ -1,9 +1,7 @@
 
 import type { Writable } from 'svelte/store';
 import { writable } from 'svelte/store';
-
 import { localStorageStore } from '@skeletonlabs/skeleton';
-
 
 interface aiCategory {
     tag_id: number;
@@ -1192,3 +1190,5 @@ export const aiCategories: Writable<aiCategory[]> = localStorageStore('aiCategor
 	   tag_desc:"Ai Systems Mimicking Traditional Divination Methods For Predictions."
 	}
   ]);
+
+  

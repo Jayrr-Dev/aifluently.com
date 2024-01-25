@@ -6,6 +6,10 @@
 	import IntersectionObserver from '$lib/tools/IntersectionObserver.svelte';
 	import { fade } from 'svelte/transition';
 	import { onMount } from 'svelte';
+	interface Category {
+		id: number;
+		name: string;
+	}
 
 	let nativeLoading = false;
 	// Determine whether to bypass our intersecting check
@@ -17,6 +21,21 @@
 	let category: number = 1;
 	let fadeOptions = { duration: 1000 };
 	let intersecting: any = false;
+
+	const categories: Category[] = [
+		{ id: 1, name: 'Main' },
+		{ id: 2, name: 'Business' },
+		{ id: 3, name: 'Education' },
+		{ id: 4, name: 'Entertainment' },
+		{ id: 5, name: 'Technology' },
+		{ id: 6, name: 'Creative' },
+		{ id: 7, name: 'Lifestyle' }
+	];
+
+	// Function to change category
+	function changeCategory(newCategory: number): void {
+		category = newCategory;
+	}
 </script>
 
 <!-- Todo: lazy loading intergration -->
@@ -31,56 +50,18 @@
 	<div
 		class="snap-x scroll-px-4 snap-mandatory no-scrollbar scroll-smooth flex gap-4 overflow-x-auto px-4 py-10"
 	>
-		<button
-			class="snap-start shrink-0 card py-2 w-32 md:w-32 text-center"
-			on:click={() => (category = 1)}>Main</button
-		>
-		<button
-			class="snap-start shrink-0 card py-2 w-32 md:w-32 text-center"
-			on:click={() => (category = 2)}>Business</button
-		>
-		<button
-			class="snap-start shrink-0 card py-2 w-32 md:w-32 text-center"
-			on:click={() => (category = 3)}>Education</button
-		>
-		<button
-			class="snap-start shrink-0 card py-2 w-32 md:w-32 text-center"
-			on:click={() => (category = 4)}>Entertainment</button
-		>
-		<button
-			class="snap-start shrink-0 card py-2 w-32 md:w-32 text-center"
-			on:click={() => (category = 5)}>Technology</button
-		>
-		<button
-			class="snap-start shrink-0 card py-2 w-32 md:w-32 text-center"
-			on:click={() => (category = 6)}>Creative</button
-		>
-		<button
-			class="snap-start shrink-0 card py-2 w-32 md:w-32 text-center"
-			on:click={() => (category = 7)}>Lifestyle</button
-		>
+		{#each categories as cat}
+			<button
+				class="snap-start shrink-0 card py-2 w-32 md:w-32 text-center {category === cat.id
+					? 'bg-[#00A8B1] '
+					: ' text-black'}"
+				on:click={() => changeCategory(cat.id)}
+			>
+				{cat.name}
+			</button>
+		{/each}
 	</div>
 </div>
-
-<!-- if i = 6 then  -->
-<!-- {#if category === 1}
-	<div in:fade={fadeOptions}>
-		<IntersectionObserver let:intersecting once={true}>
-			{#if intersecting || nativeLoading}
-				<div>
-					<BentogridA {category} {intersecting} />
-				</div>
-			{/if}
-		</IntersectionObserver>
-		<IntersectionObserver let:intersecting once={true}>
-			{#if intersecting || nativeLoading}
-				<div>
-					<BentogridB {category} {intersecting} />
-				</div>
-			{/if}
-		</IntersectionObserver>
-	</div>
-{/if} -->
 
 {#if category === 1}
 	<div in:fade={fadeOptions}>

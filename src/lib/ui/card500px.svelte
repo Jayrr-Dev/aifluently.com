@@ -255,7 +255,7 @@
 
 		<div class="btn btn-sm w-full h-8 opacity-0 bg-warning-500 border-2 border-black z-[5]"></div>
 		<button
-			class="btn btn-sm w-[85%] h-8 bg-warning-500 border-2 border-black z-[5] absolute bottom-2 left-0 right-0 mx-auto"
+			class="btn btn-sm w-[85%] h-8 bg-warning-500 border-2 border-black z-[0] absolute bottom-2 left-0 right-0 mx-auto"
 		>
 			More
 		</button>
