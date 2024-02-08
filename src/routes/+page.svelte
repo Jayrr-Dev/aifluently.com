@@ -194,7 +194,7 @@
 	{category}
 	{product_data}
 	outer_height="500px"
-	inner_height="320px"
+	inner_height="500px"
 	icon="quill:chat"
 /> -->
 {#if category >= 1}
@@ -232,7 +232,7 @@
 						{category}
 						{product_data}
 						outer_height="500px"
-						inner_height="320px"
+						inner_height="500px"
 						icon="quill:chat"
 					/>
 				</div>
@@ -246,7 +246,7 @@
 						{category}
 						{product_data}
 						outer_height="500px"
-						inner_height="320px"
+						inner_height="500px"
 						icon="quill:chat"
 					/>
 				</div>
@@ -286,7 +286,7 @@
 						{category}
 						{product_data}
 						outer_height="500px"
-						inner_height="320px"
+						inner_height="500px"
 						icon="quill:chat"
 					/>
 				</div>
@@ -320,7 +320,7 @@
 						{category}
 						{product_data}
 						outer_height="500px"
-						inner_height="320px"
+						inner_height="500px"
 						icon="quill:chat"
 					/>
 				</div>
@@ -334,7 +334,7 @@
 						{category}
 						{product_data}
 						outer_height="500px"
-						inner_height="320px"
+						inner_height="500px"
 						icon="quill:chat"
 					/>
 				</div>
@@ -367,7 +367,7 @@
 						{category}
 						{product_data}
 						outer_height="500px"
-						inner_height="320px"
+						inner_height="500px"
 						icon="quill:chat"
 					/>
 				</div>
@@ -387,7 +387,7 @@
 							{category}
 							{product_data}
 							outer_height="500px"
-							inner_height="320px"
+							inner_height="500px"
 							icon="quill:chat"
 						/>
 					</div>
@@ -421,7 +421,7 @@
 							{category}
 							{product_data}
 							outer_height="500px"
-							inner_height="320px"
+							inner_height="500px"
 							icon="quill:chat"
 						/>
 					</div>
@@ -435,7 +435,7 @@
 							{category}
 							{product_data}
 							outer_height="500px"
-							inner_height="320px"
+							inner_height="500px"
 							icon="quill:chat"
 						/>
 					</div>
@@ -468,7 +468,7 @@
 							{category}
 							{product_data}
 							outer_height="500px"
-							inner_height="320px"
+							inner_height="500px"
 							icon="quill:chat"
 						/>
 					</div>
@@ -486,7 +486,7 @@
 							{category}
 							{product_data}
 							outer_height="500px"
-							inner_height="320px"
+							inner_height="500px"
 							icon="quill:chat"
 						/>
 					</div>
@@ -520,7 +520,7 @@
 							{category}
 							{product_data}
 							outer_height="500px"
-							inner_height="320px"
+							inner_height="500px"
 							icon="quill:chat"
 						/>
 					</div>
@@ -534,7 +534,7 @@
 							{category}
 							{product_data}
 							outer_height="500px"
-							inner_height="320px"
+							inner_height="500px"
 							icon="quill:chat"
 						/>
 					</div>
@@ -567,7 +567,7 @@
 							{category}
 							{product_data}
 							outer_height="500px"
-							inner_height="320px"
+							inner_height="500px"
 							icon="quill:chat"
 						/>
 					</div>

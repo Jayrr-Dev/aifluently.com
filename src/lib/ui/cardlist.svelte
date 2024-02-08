@@ -51,7 +51,7 @@
 		</header>
 		<ProgressBar animIndeterminate="anim-progress-bar" rounded="false" height="h-1" />
 		<div
-			class="h-[{outer_height}] overflow-auto scrollbar scrollbar-w-1 scrollbar-thumb-primary-500"
+			class="h-[{inner_height}] overflow-auto scrollbar scrollbar-w-1 scrollbar-thumb-primary-500"
 		>
 			{#if showTag}
 				<!-- 1 -->
