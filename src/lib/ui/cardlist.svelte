@@ -3,8 +3,8 @@
 	export let icon: string;
 	export let category: number;
 	export let product_data: any;
-	export let outer_height: string;
-	export let inner_height: string;
+	export let outer_height: string = '200px';
+	export let inner_height: string = '150px';
 	import { onMount } from 'svelte';
 	import { tagsState } from '../../stores/tagsStore';
 	import { fade } from 'svelte/transition';
@@ -40,7 +40,7 @@
 </pre> -->
 
 {#if product_data}
-	<div class="card h-[{outer_height}] grid grid-cols-1 relative card-hover">
+	<div class="card grid grid-cols-1 relative card-hover" style={`height: ${outer_height};`}>
 		<header class="card-header text-center pr-6">
 			<div in:fade={{ duration: 800 }}>
 				<span class="badge text-4xl p-0 m-0 translate-y-2">
@@ -51,7 +51,8 @@
 		</header>
 		<ProgressBar animIndeterminate="anim-progress-bar" rounded="false" height="h-1" />
 		<div
-			class="h-[{inner_height}] overflow-auto scrollbar scrollbar-w-1 scrollbar-thumb-primary-500"
+			class=" overflow-auto scrollbar scrollbar-w-1 scrollbar-thumb-primary-500"
+			style={`height: ${inner_height};`}
 		>
 			{#if showTag}
 				<!-- 1 -->
