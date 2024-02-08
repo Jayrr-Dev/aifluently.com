@@ -1,27 +1,42 @@
 <script lang="ts">
-	import BentogridA from '$lib/ui/bentogridA.svelte';
-	import BentogridB from '$lib/ui/bentogridB.svelte';
-	import BentogridB2 from '$lib/ui/bentogridB2.svelte';
-	import BentogridB3 from '$lib/ui/bentogridB3.svelte';
-	import IntersectionObserver from '$lib/tools/IntersectionObserver.svelte';
+	import Cardlist from '$lib/ui/cardlist.svelte';
 	import { fade } from 'svelte/transition';
 	import { onMount } from 'svelte';
-	interface Category {
-		id: number;
-		name: string;
-	}
-
-	let nativeLoading = false;
-	// Determine whether to bypass our intersecting check
-	onMount(() => {
-		if ('loading' in HTMLImageElement.prototype) {
-			nativeLoading = true;
-		}
-	});
-	let category: number = 1;
+	import { get } from 'svelte/store';
+	import type { Writable } from 'svelte/store';
+	import {
+		main,
+		business,
+		education,
+		entertainment,
+		technology,
+		creative,
+		lifestyle
+	} from '../stores/tagsStore';
+	import { supabase } from '$lib/supabaseClient';
+	import type {
+		TagWithProducts,
+		ProductDetail,
+		CategoryData,
+		CacheItem,
+		Category,
+		TagsState
+	} from '$lib/types';
 	let fadeOptions = { duration: 1000 };
 	let intersecting: any = false;
+	const initialState: CategoryData = {
+		tags: [],
+		tagProductDetails: [],
+		tagsLoaded: false,
+		fetched: false
+	};
+	let cache: Record<string, CacheItem<any>> = {};
+	let windowWidth = 0;
 
+	// Subscribe to the store
+	let state: any;
+	let nativeLoading = false;
+	let category: number = 1;
 	const categories: Category[] = [
 		{ id: 1, name: 'Main' },
 		{ id: 2, name: 'Business' },
@@ -31,14 +46,102 @@
 		{ id: 6, name: 'Creative' },
 		{ id: 7, name: 'Lifestyle' }
 	];
+	const categoryStores = new Map<number, Writable<TagsState>>([
+		[1, main],
+		[2, business],
+		[3, education],
+		[4, entertainment],
+		[5, technology],
+		[6, creative],
+		[7, lifestyle]
+	]);
+	// Determine whether to bypass our intersecting check
+	onMount(() => {
+		if ('loading' in HTMLImageElement.prototype) {
+			nativeLoading = true;
+		}
+	});
 
 	// Function to change category
 	function changeCategory(newCategory: number): void {
 		category = newCategory;
+		getCategoryData(category);
 	}
+
+	type CategoryId = 1 | 2 | 3 | 4 | 5 | 6 | 7;
+	function isValidCategoryId(category_id: number): category_id is CategoryId {
+		return [1, 2, 3, 4, 5, 6, 7].includes(category_id);
+	}
+
+	async function getCategoryData(category_id: number): Promise<any> {
+		// Validate category_id is valid
+		if (!isValidCategoryId(category_id)) {
+			console.error('Invalid category ID');
+			return null;
+		}
+
+		const currentStore = categoryStores.get(category_id);
+
+		if (!currentStore) {
+			console.error('Store not found for category ID:', category_id);
+			return null;
+		}
+
+		// Attempt to retrieve cached data from the local storage store
+		let cachedData = get(currentStore);
+
+		// If cached data exists, return it without fetching
+		if (cachedData && Object.keys(cachedData).length !== 0) {
+			return cachedData;
+		}
+
+		// Fetch new data if not cached
+		const { data, error } = await supabase
+			.from('aggregated_category_info')
+			.select('*')
+			.eq('category_id', category_id)
+			.order('category_id', { ascending: true })
+			.single();
+
+		if (error) {
+			console.error(error);
+			return null;
+		}
+
+		// Update the correct store with fetched data
+		currentStore.set(data);
+
+		return data;
+	}
+
+	$: {
+		if (isValidCategoryId(category)) {
+			getCategoryData(category).then((data) => {
+				state = data; // Assuming 'state' holds the current category data for the UI
+			});
+		}
+	}
+
+	// TODO testing -
+	function clearCategoryData(): void {
+		const currentStore = categoryStores.get(category);
+		if (!currentStore) {
+			console.error('Invalid category ID for clearing data');
+			return;
+		}
+
+		// Clear the data in the current store
+		currentStore.set({});
+
+		// Optionally reset the local component state
+		state = initialState; // Assuming you have an initialState defined
+	}
+
+	let product_data: string = 'test';
+	$: product_data = state;
 </script>
 
-<!-- Todo: lazy loading intergration -->
+<button on:click={clearCategoryData}>Clear Category Data</button>
 
 <header class=" text-center p-2">
 	<div class="flex justify-center items-center h-32">
@@ -63,180 +166,490 @@
 	</div>
 </div>
 
-{#if category === 1}
+<!-- .aggregated_data[0].product_table[0].product_name -->
+<!-- {#if state}
+	<pre>
+	{JSON.stringify(tag_list, null, 2)}
+	</pre>
+{/if} -->
+<!-- 
+<Cardlist
+	tag={0}
+	{category}
+	{product_data}
+	outer_height="810px"
+	inner_height="670px"
+	icon="quill:chat"
+/>
+<Cardlist
+	tag={1}
+	{category}
+	{product_data}
+	outer_height="290px"
+	inner_height="160px"
+	icon="quill:chat"
+/>
+<Cardlist
+	tag={2}
+	{category}
+	{product_data}
+	outer_height="500px"
+	inner_height="320px"
+	icon="quill:chat"
+/> -->
+{#if category >= 1}
 	<div in:fade={fadeOptions}>
-		<BentogridA {category} {intersecting} />
-		<BentogridB {category} {intersecting} />
+		<section
+			class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-5 mb-5 mx-10 lg:mx-32 xl:mx-32"
+		>
+			<!-- row 1 -->
+			<div class="h-full parent-element">
+				<Cardlist
+					tag={0}
+					{category}
+					{product_data}
+					outer_height="810px"
+					inner_height="670px"
+					icon="quill:chat"
+				/>
+			</div>
+
+			<!-- row 2 -->
+			<div class="h-full grid gap-5">
+				<div class="parent-element">
+					<Cardlist
+						tag={1}
+						{category}
+						{product_data}
+						outer_height="290px"
+						inner_height="160px"
+						icon="quill:chat"
+					/>
+				</div>
+				<div class="parent-element">
+					<Cardlist
+						tag={2}
+						{category}
+						{product_data}
+						outer_height="500px"
+						inner_height="320px"
+						icon="quill:chat"
+					/>
+				</div>
+			</div>
+
+			<!-- row 3 -->
+			<div class="h-full grid gap-5">
+				<div class="parent-element">
+					<Cardlist
+						tag={3}
+						{category}
+						{product_data}
+						outer_height="500px"
+						inner_height="320px"
+						icon="quill:chat"
+					/>
+				</div>
+				<div class="parent-element">
+					<Cardlist
+						tag={4}
+						{category}
+						{product_data}
+						outer_height="290px"
+						inner_height="160px"
+						icon="quill:chat"
+					/>
+				</div>
+			</div>
+
+			<!-- row 4 -->
+			<div class="h-full parent-element">
+				<Cardlist
+					tag={5}
+					{category}
+					{product_data}
+					outer_height="810px"
+					inner_height="670px"
+					icon="quill:chat"
+				/>
+			</div>
+		</section>
+
+		<section
+			class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-5 mb-5 mx-10 lg:gap-5 lg:mx-32 xl:mx-32"
+		>
+			<!-- row 1 -->
+			<div class="h-full grid gap-5">
+				<div class="parent-element">
+					<Cardlist
+						tag={6}
+						{category}
+						{product_data}
+						outer_height="500px"
+						inner_height="320px"
+						icon="quill:chat"
+					/>
+				</div>
+				<div class="parent-element">
+					<Cardlist
+						tag={7}
+						{category}
+						{product_data}
+						outer_height="290px"
+						inner_height="160px"
+						icon="quill:chat"
+					/>
+				</div>
+			</div>
+
+			<!-- row 2 -->
+			<div class="h-full grid gap-5">
+				<div class="parent-element">
+					<Cardlist
+						tag={8}
+						{category}
+						{product_data}
+						outer_height="290px"
+						inner_height="160px"
+						icon="quill:chat"
+					/>
+				</div>
+				<div class="parent-element">
+					<Cardlist
+						tag={9}
+						{category}
+						{product_data}
+						outer_height="500px"
+						inner_height="320px"
+						icon="quill:chat"
+					/>
+				</div>
+			</div>
+
+			<!-- row 3 -->
+			<div class="h-full grid gap-5">
+				<div class="parent-element">
+					<Cardlist
+						tag={10}
+						{category}
+						{product_data}
+						outer_height="500px"
+						inner_height="320px"
+						icon="quill:chat"
+					/>
+				</div>
+				<div class="parent-element">
+					<Cardlist
+						tag={11}
+						{category}
+						{product_data}
+						outer_height="290px"
+						inner_height="160px"
+						icon="quill:chat"
+					/>
+				</div>
+			</div>
+			<!-- row 4 -->
+			<div class="h-full grid gap-5">
+				<div class="parent-element">
+					<Cardlist
+						tag={12}
+						{category}
+						{product_data}
+						outer_height="290px"
+						inner_height="160px"
+						icon="quill:chat"
+					/>
+				</div>
+				<div class="parent-element">
+					<Cardlist
+						tag={12}
+						{category}
+						{product_data}
+						outer_height="500px"
+						inner_height="320px"
+						icon="quill:chat"
+					/>
+				</div>
+			</div>
+		</section>
 	</div>
+	{#if category >= 2}
+		<div in:fade={fadeOptions}>
+			<section
+				class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-5 mb-5 mx-10 lg:gap-5 lg:mx-32 xl:mx-32"
+			>
+				<!-- row 1 -->
+				<div class="h-full grid gap-5">
+					<div class="parent-element">
+						<Cardlist
+							tag={6}
+							{category}
+							{product_data}
+							outer_height="500px"
+							inner_height="320px"
+							icon="quill:chat"
+						/>
+					</div>
+					<div class="parent-element">
+						<Cardlist
+							tag={7}
+							{category}
+							{product_data}
+							outer_height="290px"
+							inner_height="160px"
+							icon="quill:chat"
+						/>
+					</div>
+				</div>
+
+				<!-- row 2 -->
+				<div class="h-full grid gap-5">
+					<div class="parent-element">
+						<Cardlist
+							tag={8}
+							{category}
+							{product_data}
+							outer_height="290px"
+							inner_height="160px"
+							icon="quill:chat"
+						/>
+					</div>
+					<div class="parent-element">
+						<Cardlist
+							tag={9}
+							{category}
+							{product_data}
+							outer_height="500px"
+							inner_height="320px"
+							icon="quill:chat"
+						/>
+					</div>
+				</div>
+
+				<!-- row 3 -->
+				<div class="h-full grid gap-5">
+					<div class="parent-element">
+						<Cardlist
+							tag={10}
+							{category}
+							{product_data}
+							outer_height="500px"
+							inner_height="320px"
+							icon="quill:chat"
+						/>
+					</div>
+					<div class="parent-element">
+						<Cardlist
+							tag={11}
+							{category}
+							{product_data}
+							outer_height="290px"
+							inner_height="160px"
+							icon="quill:chat"
+						/>
+					</div>
+				</div>
+				<!-- row 4 -->
+				<div class="h-full grid gap-5">
+					<div class="parent-element">
+						<Cardlist
+							tag={12}
+							{category}
+							{product_data}
+							outer_height="290px"
+							inner_height="160px"
+							icon="quill:chat"
+						/>
+					</div>
+					<div class="parent-element">
+						<Cardlist
+							tag={12}
+							{category}
+							{product_data}
+							outer_height="500px"
+							inner_height="320px"
+							icon="quill:chat"
+						/>
+					</div>
+				</div>
+			</section>
+
+			<section
+				class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-5 mb-5 mx-10 lg:gap-5 lg:mx-32 xl:mx-32"
+			>
+				<!-- row 1 -->
+				<div class="h-full grid gap-5">
+					<div class="parent-element">
+						<Cardlist
+							tag={6}
+							{category}
+							{product_data}
+							outer_height="500px"
+							inner_height="320px"
+							icon="quill:chat"
+						/>
+					</div>
+					<div class="parent-element">
+						<Cardlist
+							tag={7}
+							{category}
+							{product_data}
+							outer_height="290px"
+							inner_height="160px"
+							icon="quill:chat"
+						/>
+					</div>
+				</div>
+
+				<!-- row 2 -->
+				<div class="h-full grid gap-5">
+					<div class="parent-element">
+						<Cardlist
+							tag={8}
+							{category}
+							{product_data}
+							outer_height="290px"
+							inner_height="160px"
+							icon="quill:chat"
+						/>
+					</div>
+					<div class="parent-element">
+						<Cardlist
+							tag={9}
+							{category}
+							{product_data}
+							outer_height="500px"
+							inner_height="320px"
+							icon="quill:chat"
+						/>
+					</div>
+				</div>
+
+				<!-- row 3 -->
+				<div class="h-full grid gap-5">
+					<div class="parent-element">
+						<Cardlist
+							tag={10}
+							{category}
+							{product_data}
+							outer_height="500px"
+							inner_height="320px"
+							icon="quill:chat"
+						/>
+					</div>
+					<div class="parent-element">
+						<Cardlist
+							tag={11}
+							{category}
+							{product_data}
+							outer_height="290px"
+							inner_height="160px"
+							icon="quill:chat"
+						/>
+					</div>
+				</div>
+				<!-- row 4 -->
+				<div class="h-full grid gap-5">
+					<div class="parent-element">
+						<Cardlist
+							tag={12}
+							{category}
+							{product_data}
+							outer_height="290px"
+							inner_height="160px"
+							icon="quill:chat"
+						/>
+					</div>
+					<div class="parent-element">
+						<Cardlist
+							tag={12}
+							{category}
+							{product_data}
+							outer_height="500px"
+							inner_height="320px"
+							icon="quill:chat"
+						/>
+					</div>
+				</div>
+			</section>
+		</div>
+	{/if}
 {/if}
 
+<!-- <BentogridB {category} /> -->
+<!--
 {#if category === 2}
 	<div in:fade={fadeOptions}>
-		<BentogridA {category} {intersecting} />
+		<BentogridA {category} />
 
-		<IntersectionObserver let:intersecting once={true}>
-			{#if intersecting || nativeLoading}
-				<div>
-					<BentogridB {category} {intersecting} />
-				</div>
-			{/if}
-		</IntersectionObserver>
-		<IntersectionObserver let:intersecting once={true}>
-			{#if intersecting || nativeLoading}
-				<div>
-					<BentogridB2 {category} {intersecting} />
-				</div>
-			{/if}
-		</IntersectionObserver>
-		<IntersectionObserver let:intersecting once={true}>
-			{#if intersecting || nativeLoading}
-				<div>
-					<BentogridB3 {category} {intersecting} />
-				</div>
-			{/if}
-		</IntersectionObserver>
+		<BentogridB {category} />
+
+		<BentogridB2 {category} />
+
+		<BentogridB3 {category} />
 	</div>
 {/if}
 
 {#if category === 3}
 	<div in:fade={fadeOptions}>
-		<BentogridA {category} {intersecting} />
+		<BentogridA {category} />
 
-		<IntersectionObserver let:intersecting once={true}>
-			{#if intersecting || nativeLoading}
-				<div>
-					<BentogridB {category} {intersecting} />
-				</div>
-			{/if}
-		</IntersectionObserver>
-		<IntersectionObserver let:intersecting once={true}>
-			{#if intersecting || nativeLoading}
-				<div>
-					<BentogridB2 {category} {intersecting} />
-				</div>
-			{/if}
-		</IntersectionObserver>
-		<IntersectionObserver let:intersecting once={true}>
-			{#if intersecting || nativeLoading}
-				<div>
-					<BentogridB3 {category} {intersecting} />
-				</div>
-			{/if}
-		</IntersectionObserver>
+		<BentogridB {category} />
+
+		<BentogridB2 {category} />
+
+		<BentogridB3 {category} />
 	</div>
 {/if}
 
 {#if category === 4}
 	<div in:fade={fadeOptions}>
-		<BentogridA {category} {intersecting} />
+		<BentogridA {category} />
 
-		<IntersectionObserver let:intersecting once={true}>
-			{#if intersecting || nativeLoading}
-				<div>
-					<BentogridB {category} {intersecting} />
-				</div>
-			{/if}
-		</IntersectionObserver>
-		<IntersectionObserver let:intersecting once={true}>
-			{#if intersecting || nativeLoading}
-				<div>
-					<BentogridB2 {category} {intersecting} />
-				</div>
-			{/if}
-		</IntersectionObserver>
-		<IntersectionObserver let:intersecting once={true}>
-			{#if intersecting || nativeLoading}
-				<div>
-					<BentogridB3 {category} {intersecting} />
-				</div>
-			{/if}
-		</IntersectionObserver>
+		<BentogridB {category} />
+
+		<BentogridB2 {category} />
+
+		<BentogridB3 {category} />
 	</div>
 {/if}
 
 {#if category === 5}
 	<div in:fade={fadeOptions}>
-		<BentogridA {category} {intersecting} />
+		<BentogridA {category} />
 
-		<IntersectionObserver let:intersecting once={true}>
-			{#if intersecting || nativeLoading}
-				<div>
-					<BentogridB {category} {intersecting} />
-				</div>
-			{/if}
-		</IntersectionObserver>
-		<IntersectionObserver let:intersecting once={true}>
-			{#if intersecting || nativeLoading}
-				<div>
-					<BentogridB2 {category} {intersecting} />
-				</div>
-			{/if}
-		</IntersectionObserver>
-		<IntersectionObserver let:intersecting once={true}>
-			{#if intersecting || nativeLoading}
-				<div>
-					<BentogridB3 {category} {intersecting} />
-				</div>
-			{/if}
-		</IntersectionObserver>
+		<BentogridB {category} />
+
+		<BentogridB2 {category} />
+
+		<BentogridB3 {category} />
 	</div>
 {/if}
 
 {#if category === 6}
 	<div in:fade={fadeOptions}>
-		<BentogridA {category} {intersecting} />
+		<BentogridA {category} />
 
-		<IntersectionObserver let:intersecting once={true}>
-			{#if intersecting || nativeLoading}
-				<div>
-					<BentogridB {category} {intersecting} />
-				</div>
-			{/if}
-		</IntersectionObserver>
-		<IntersectionObserver let:intersecting once={true}>
-			{#if intersecting || nativeLoading}
-				<div>
-					<BentogridB2 {category} {intersecting} />
-				</div>
-			{/if}
-		</IntersectionObserver>
-		<IntersectionObserver let:intersecting once={true}>
-			{#if intersecting || nativeLoading}
-				<div>
-					<BentogridB3 {category} {intersecting} />
-				</div>
-			{/if}
-		</IntersectionObserver>
+		<BentogridB {category} />
+
+		<BentogridB2 {category} />
+
+		<BentogridB3 {category} />
 	</div>
 {/if}
 
 {#if category === 7}
 	<div in:fade={fadeOptions}>
-		<BentogridA {category} {intersecting} />
+		<BentogridA {category} />
 
-		<IntersectionObserver let:intersecting once={true}>
-			{#if intersecting || nativeLoading}
-				<div>
-					<BentogridB {category} {intersecting} />
-				</div>
-			{/if}
-		</IntersectionObserver>
-		<IntersectionObserver let:intersecting once={true}>
-			{#if intersecting || nativeLoading}
-				<div>
-					<BentogridB2 {category} {intersecting} />
-				</div>
-			{/if}
-		</IntersectionObserver>
-		<IntersectionObserver let:intersecting once={true}>
-			{#if intersecting || nativeLoading}
-				<div>
-					<BentogridB3 {category} {intersecting} />
-				</div>
-			{/if}
-		</IntersectionObserver>
+		<BentogridB {category} />
+
+		<BentogridB2 {category} />
+
+		<BentogridB3 {category} />
 	</div>
-{/if}
+{/if} -->
 
 <style>
 	/* Custom styles for removing scrollbar visibility */

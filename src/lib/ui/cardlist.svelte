@@ -2,55 +2,57 @@
 	export let tag: number;
 	export let icon: string;
 	export let category: number;
+	export let product_data: any;
+	export let outer_height: string;
+	export let inner_height: string;
 	import { onMount } from 'svelte';
 	import { tagsState } from '../../stores/tagsStore';
 	import { fade } from 'svelte/transition';
 	import { ProgressBar } from '@skeletonlabs/skeleton';
 	import { popup, Ratings } from '@skeletonlabs/skeleton';
 	import { lighttoggle } from '../../stores/store';
-
 	import Icon from '@iconify/svelte';
 	let showTag = true;
 	let state: any;
 	let windowWidth = 0;
 
-	onMount(() => {
-		//windowidth
-		updateWidth();
-		window.addEventListener('resize', updateWidth);
-		return () => {
-			window.removeEventListener('resize', updateWidth);
-		};
-	});
-	function updateWidth() {
-		windowWidth = window.innerWidth;
-	}
+	let tag_name: string = '';
+	onMount(() => {});
 
-	tagsState.subscribe(($state) => {
-		state = $state;
-		console.log('state', state);
-	});
+	//variables
+	$: tag_name = product_data?.aggregated_data[tag].tag_name;
+	$: aggregated_data = product_data?.aggregated_data[tag];
+
+	$: product_data;
 	$: lightswitch = $lighttoggle;
 </script>
 
-{#if state && state[category] && showTag}
-	<div class="card h-[290px] grid grid-cols-1 relative card-hover">
+<!-- {#if product_data}
+	{#each product_data?.aggregated_data[tag].product_table || [] as _, i}
+		{i}
+		{aggregated_data.product_table[i].product_logo}
+		{aggregated_data.product_table[i].product_rating}
+		{aggregated_data.product_table[i].product_name}
+	{/each}
+{/if}
+<pre>
+	{JSON.stringify(product_data?.aggregated_data[tag], null, 2)}
+</pre> -->
+
+{#if product_data}
+	<div class="card h-[{outer_height}] grid grid-cols-1 relative card-hover">
 		<header class="card-header text-center pr-6">
-			{#if state[category].tags[tag] && showTag}
-				<div in:fade={{ duration: 800 }}>
-					<span class="badge text-4xl p-0 m-0 translate-y-2">
-						<Icon {icon} />
-					</span>
-					<span class="text-2xl font-bold uppercase">
-						{state[category].tags[tag]}
-					</span>
-				</div>
-			{:else}
-				<span class="text-4xl animate-pulse">ㅤ</span>
-			{/if}
+			<div in:fade={{ duration: 800 }}>
+				<span class="badge text-4xl p-0 m-0 translate-y-2">
+					<Icon {icon} />
+				</span>
+				<span class="text-2xl font-bold uppercase">{tag_name}</span>
+			</div>
 		</header>
 		<ProgressBar animIndeterminate="anim-progress-bar" rounded="false" height="h-1" />
-		<div class="h-[160px] overflow-auto scrollbar scrollbar-w-1 scrollbar-thumb-primary-500">
+		<div
+			class="h-[{outer_height}] overflow-auto scrollbar scrollbar-w-1 scrollbar-thumb-primary-500"
+		>
 			{#if showTag}
 				<!-- 1 -->
 
@@ -58,20 +60,20 @@
 					<div class="flex justify-start">
 						<section class="p-4 w-full">
 							<ol>
-								{#each state[category].tagProductDetails[tag] as product, i}
+								{#each product_data?.aggregated_data[tag].product_table || [] as _, i}
 									<!-- ? Tooltip Styles -->
 									<div
-										class="card p-4 z-10 variant-filled-secondary w-[90%] sm:w-[90%] lg:w-[90%] h-40 lg:h-36"
+										class="card p-4 z-10 variant-filled-secondary w-[90%] sm:w-[90%] lg:w-[90%] h-40 lg:h-40"
 										data-popup={'popupHover' + tag + '-' + i}
 									>
 										<div class="grid justify-center">
 											<div class="flex">
 												<span class="p-1">
 													<!-- !Product Logo -->
-													{#if product.logo}
+													{#if aggregated_data.product_table[i].product_logo}
 														<img
 															class="rounded-full h-5 w-5 object-cover"
-															src={product.logo}
+															src={aggregated_data.product_table[i].product_logo}
 															alt="AI FLUENTLY logo"
 														/>
 													{:else}
@@ -91,14 +93,19 @@
 													}}
 												>
 													<!-- !Product Name -->
-													{product.name}
+													{aggregated_data.product_table[i].product_name}
 												</span>
 											</div>
 										</div>
 										<div>
 											<!-- !Product Rating -->
 
-											<Ratings value={Math.round((product.rating / 20) * 2) / 2} max={5}>
+											<Ratings
+												value={Math.round(
+													(aggregated_data.product_table[i].product_rating / 20) * 2
+												) / 2}
+												max={5}
+											>
 												<svelte:fragment slot="empty"
 													><Icon icon="line-md:star-alt-twotone" color="gray" /></svelte:fragment
 												>
@@ -112,8 +119,8 @@
 										</div>
 										<p class="p-1 text-sm opacity-80 text-ellipsis overflow-hidden h-16">
 											<!-- !Product Description -->
-											{#if product.description}
-												{product.description}
+											{#if aggregated_data.product_table[i].product_description}
+												{aggregated_data.product_table[i].product_description}
 											{:else}
 												<!--  -->
 											{/if}
@@ -121,10 +128,10 @@
 										{#if windowWidth < 768}
 											<!-- Product Review Button for Mobile -->
 											<!-- URL REFERENCE -->
-											<a href={product.name.replace(/\s/g, '')}>
+											<a href={aggregated_data.product_table[i].product_name.replace(/\s/g, '')}>
 												<div class="flex justify-center">
 													<button
-														class="btn btn-sm w-[50%] bg-warning-500 border-2 border-black h-6"
+														class="btn btn-sm w-[50%] bg-warning-500 border-2 border-black h-6 absolute bottom-2 left-0 right-0 mx-auto"
 													>
 														Learn More
 													</button>
@@ -152,10 +159,10 @@
 													</div>
 													<div class="px-3">
 														<!-- !Logo -->
-														{#if product.logo}
+														{#if aggregated_data.product_table[i].product_logo}
 															<img
 																class="rounded-full h-8 w-8 object-cover"
-																src={product.logo}
+																src={aggregated_data.product_table[i].product_logo}
 																alt="AI FLUENTLY logo"
 															/>
 														{:else}
@@ -168,12 +175,12 @@
 													</div>
 													<div class="pt-1 group-hover/item:underline group-active/item:underline">
 														<!-- !Product Name Mobile-->
-														{product.name}
+														{aggregated_data.product_table[i].product_name}
 													</div>
 												</div>
 											</button>
 											<a
-												href={product.url}
+												href={aggregated_data.product_table[i].product_url}
 												target="_blank"
 												class="flex opacity-50 hover:opacity-100 text-3xl p-1"
 											>
@@ -185,7 +192,7 @@
 										<!-- !Desktop-->
 										<ol class="flex justify-between py-1">
 											<a
-												href={product.name.replace(/\s/g, '')}
+												href={aggregated_data.product_table[i].product_name.replace(/\s/g, '')}
 												class=" min-w-[70%] group/item"
 												use:popup={{
 													event: 'hover',
@@ -200,10 +207,10 @@
 													</div>
 													<div class="px-2">
 														<!-- !Logo -->
-														{#if product.logo}
+														{#if aggregated_data.product_table[i].product_logo}
 															<img
 																class="rounded-full h-8 w-8 object-cover"
-																src={product.logo}
+																src={aggregated_data.product_table[i].product_logo}
 																alt="AI FLUENTLY logo"
 															/>
 														{:else}
@@ -222,13 +229,13 @@
 														class="p-1 flex-auto group-hover/item:underline [&>*]:pointer-events-none"
 													>
 														<!-- !Product Name + Review Link Desktop -->
-														{product.name}
+														{aggregated_data.product_table[i].product_name}
 													</div>
 												</div>
 											</a>
 											<!-- !Link to Site -->
 											<a
-												href={product.url}
+												href={aggregated_data.product_table[i].product_url}
 												target="_blank"
 												class="flex opacity-50 hover:opacity-100 text-2xl p-1"
 											>
@@ -259,5 +266,22 @@
 		>
 			More
 		</button>
+	</div>
+{:else}
+	<div class="card h-[{outer_height}] grid grid-cols-1 relative card-hover">
+		<div class="p-4 space-y-4">
+			<div class="placeholder animate-pulse" />
+			<div class="grid grid-cols-3 gap-8">
+				<div class="placeholder animate-pulse" />
+				<div class="placeholder animate-pulse" />
+				<div class="placeholder animate-pulse" />
+			</div>
+			<div class="grid grid-cols-4 gap-4">
+				<div class="placeholder animate-pulse" />
+				<div class="placeholder animate-pulse" />
+				<div class="placeholder animate-pulse" />
+				<div class="placeholder animate-pulse" />
+			</div>
+		</div>
 	</div>
 {/if}

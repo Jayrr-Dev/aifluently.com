@@ -25,3 +25,11 @@ interface TagsState {
 
 // Initialize your store with default values
 export const tagsState = localStorageStore<TagsState>('tagsState', {});
+
+export const main = localStorageStore<TagsState>('main', {});
+export const business = localStorageStore<TagsState>('business', {});
+export const education = localStorageStore<TagsState>('education', {});
+export const entertainment = localStorageStore<TagsState>('entertainment', {});
+export const technology = localStorageStore<TagsState>('technology', {});
+export const creative = localStorageStore<TagsState>('creative', {});
+export const lifestyle = localStorageStore<TagsState>('lifestyle', {});
