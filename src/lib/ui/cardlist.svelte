@@ -269,5 +269,5 @@
 		</button>
 	</div>
 {:else}
-	<div class="card h-[{outer_height}] grid grid-cols-1 relative card-hover"></div>
+	<div class="card grid grid-cols-1 relative card-hover" style={`height: ${outer_height};`}></div>
 {/if}

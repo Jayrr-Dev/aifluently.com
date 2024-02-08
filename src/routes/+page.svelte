@@ -141,7 +141,7 @@
 	$: product_data = state;
 </script>
 
-<button on:click={clearCategoryData}>Clear Category Data</button>
+<button on:click={clearCategoryData}>1.1</button>
 
 <header class=" text-center p-2">
 	<div class="flex justify-center items-center h-32">
