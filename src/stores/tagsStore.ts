@@ -1,6 +1,7 @@
 // tagsStore.ts
 import { localStorageStore } from '@skeletonlabs/skeleton';
 // import { writable } from 'svelte/store';
+//
 type ProductDetail = {
     name: string;
     logo: string;
@@ -25,7 +26,7 @@ interface TagsState {
 
 // Initialize your store with default values
 export const tagsState = localStorageStore<TagsState>('tagsState', {});
-
+export const categoryDataStore = localStorageStore<TagsState>('categoryDataStore', {});
 export const main = localStorageStore<TagsState>('main', {});
 export const business = localStorageStore<TagsState>('business', {});
 export const education = localStorageStore<TagsState>('education', {});

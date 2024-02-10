@@ -2,8 +2,9 @@
 	import Cardlist from '$lib/ui/cardlist.svelte';
 	import { fade } from 'svelte/transition';
 	import { onMount } from 'svelte';
-	import { get } from 'svelte/store';
+
 	import type { Writable } from 'svelte/store';
+	import { writable, get } from 'svelte/store';
 	import {
 		main,
 		business,
@@ -14,28 +15,22 @@
 		lifestyle
 	} from '../stores/tagsStore';
 	import { supabase } from '$lib/supabaseClient';
-	import type {
-		TagWithProducts,
-		ProductDetail,
-		CategoryData,
-		CacheItem,
-		Category,
-		TagsState
-	} from '$lib/types';
+	import type { CategoryData, Category, TagsState } from '$lib/types';
+	export let data;
+	export let categoryData: any;
+	let categoriesData: any = data.props.categoriesData;
+	let categoryStore = writable(categoryData);
+	let currentCategoryId = categoryData?.category_id || 1; // Default or fetched category ID
 	let fadeOptions = { duration: 1000 };
-	let intersecting: any = false;
 	const initialState: CategoryData = {
 		tags: [],
 		tagProductDetails: [],
 		tagsLoaded: false,
 		fetched: false
 	};
-	let cache: Record<string, CacheItem<any>> = {};
-	let windowWidth = 0;
 
 	// Subscribe to the store
 	let state: any;
-	let nativeLoading = false;
 	let category: number = 1;
 	const categories: Category[] = [
 		{ id: 1, name: 'Main' },
@@ -46,6 +41,7 @@
 		{ id: 6, name: 'Creative' },
 		{ id: 7, name: 'Lifestyle' }
 	];
+
 	const categoryStores = new Map<number, Writable<TagsState>>([
 		[1, main],
 		[2, business],
@@ -55,24 +51,30 @@
 		[6, creative],
 		[7, lifestyle]
 	]);
+
 	// Determine whether to bypass our intersecting check
 	onMount(() => {
-		if ('loading' in HTMLImageElement.prototype) {
-			nativeLoading = true;
-		}
+		populateStores(categoriesData);
 	});
 
 	// Function to change category
-	function changeCategory(newCategory: number): void {
+	async function changeCategory(newCategory: number) {
 		category = newCategory;
-		getCategoryData(category);
 	}
 
 	type CategoryId = 1 | 2 | 3 | 4 | 5 | 6 | 7;
 	function isValidCategoryId(category_id: number): category_id is CategoryId {
 		return [1, 2, 3, 4, 5, 6, 7].includes(category_id);
 	}
-
+	// Function to populate stores
+	function populateStores(categoriesData: any[]) {
+		const stores = [main, business, education, entertainment, technology, creative, lifestyle];
+		categoriesData.forEach((data, index) => {
+			if (data) {
+				stores[index].set(data);
+			}
+		});
+	}
 	async function getCategoryData(category_id: number): Promise<any> {
 		// Validate category_id is valid
 		if (!isValidCategoryId(category_id)) {
@@ -138,8 +140,12 @@
 	}
 
 	let product_data: string = 'test';
-	$: product_data = state;
+	$: product_data = categoriesData[category - 1]; // Reactive declaration to update product_data when categoryStore changes
 </script>
+
+<!-- {#if data}
+	<pre>{JSON.stringify(categoriesData[0], null, 2)}</pre>
+{/if} -->
 
 <button on:click={clearCategoryData}>1.1</button>
 
@@ -167,10 +173,8 @@
 </div>
 
 <!-- .aggregated_data[0].product_table[0].product_name -->
-<!-- {#if state}
-	<pre>
-	{JSON.stringify(tag_list, null, 2)}
-	</pre>
+<!-- {#if $categoryStore}
+	<pre>{JSON.stringify($categoryStore, null, 2)}</pre>
 {/if} -->
 <!-- 
 <Cardlist
@@ -197,217 +201,29 @@
 	inner_height="500px"
 	icon="quill:chat"
 /> -->
-{#if category >= 1}
-	<div in:fade={fadeOptions}>
-		<section
-			class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-5 mb-5 mx-10 lg:mx-32 xl:mx-32"
-		>
-			<!-- row 1 -->
-			<div class="h-full parent-element">
-				<Cardlist
-					tag={0}
-					{category}
-					{product_data}
-					outer_height="810px"
-					inner_height="670px"
-					icon="quill:chat"
-				/>
-			</div>
-
-			<!-- row 2 -->
-			<div class="h-full grid gap-5">
-				<div class="parent-element">
-					<Cardlist
-						tag={1}
-						{category}
-						{product_data}
-						outer_height="290px"
-						inner_height="160px"
-						icon="quill:chat"
-					/>
-				</div>
-				<div class="parent-element">
-					<Cardlist
-						tag={2}
-						{category}
-						{product_data}
-						outer_height="500px"
-						inner_height="500px"
-						icon="quill:chat"
-					/>
-				</div>
-			</div>
-
-			<!-- row 3 -->
-			<div class="h-full grid gap-5">
-				<div class="parent-element">
-					<Cardlist
-						tag={3}
-						{category}
-						{product_data}
-						outer_height="500px"
-						inner_height="500px"
-						icon="quill:chat"
-					/>
-				</div>
-				<div class="parent-element">
-					<Cardlist
-						tag={4}
-						{category}
-						{product_data}
-						outer_height="290px"
-						inner_height="160px"
-						icon="quill:chat"
-					/>
-				</div>
-			</div>
-
-			<!-- row 4 -->
-			<div class="h-full parent-element">
-				<Cardlist
-					tag={5}
-					{category}
-					{product_data}
-					outer_height="810px"
-					inner_height="670px"
-					icon="quill:chat"
-				/>
-			</div>
-		</section>
-
-		<section
-			class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-5 mb-5 mx-10 lg:gap-5 lg:mx-32 xl:mx-32"
-		>
-			<!-- row 1 -->
-			<div class="h-full grid gap-5">
-				<div class="parent-element">
-					<Cardlist
-						tag={6}
-						{category}
-						{product_data}
-						outer_height="500px"
-						inner_height="500px"
-						icon="quill:chat"
-					/>
-				</div>
-				<div class="parent-element">
-					<Cardlist
-						tag={7}
-						{category}
-						{product_data}
-						outer_height="290px"
-						inner_height="160px"
-						icon="quill:chat"
-					/>
-				</div>
-			</div>
-
-			<!-- row 2 -->
-			<div class="h-full grid gap-5">
-				<div class="parent-element">
-					<Cardlist
-						tag={8}
-						{category}
-						{product_data}
-						outer_height="290px"
-						inner_height="160px"
-						icon="quill:chat"
-					/>
-				</div>
-				<div class="parent-element">
-					<Cardlist
-						tag={9}
-						{category}
-						{product_data}
-						outer_height="500px"
-						inner_height="500px"
-						icon="quill:chat"
-					/>
-				</div>
-			</div>
-
-			<!-- row 3 -->
-			<div class="h-full grid gap-5">
-				<div class="parent-element">
-					<Cardlist
-						tag={10}
-						{category}
-						{product_data}
-						outer_height="500px"
-						inner_height="500px"
-						icon="quill:chat"
-					/>
-				</div>
-				<div class="parent-element">
-					<Cardlist
-						tag={11}
-						{category}
-						{product_data}
-						outer_height="290px"
-						inner_height="160px"
-						icon="quill:chat"
-					/>
-				</div>
-			</div>
-			<!-- row 4 -->
-			<div class="h-full grid gap-5">
-				<div class="parent-element">
-					<Cardlist
-						tag={12}
-						{category}
-						{product_data}
-						outer_height="290px"
-						inner_height="160px"
-						icon="quill:chat"
-					/>
-				</div>
-				<div class="parent-element">
-					<Cardlist
-						tag={12}
-						{category}
-						{product_data}
-						outer_height="500px"
-						inner_height="500px"
-						icon="quill:chat"
-					/>
-				</div>
-			</div>
-		</section>
-	</div>
-	{#if category >= 2}
+{#if data}
+	{#if category >= 1}
 		<div in:fade={fadeOptions}>
 			<section
-				class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-5 mb-5 mx-10 lg:gap-5 lg:mx-32 xl:mx-32"
+				class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-5 mb-5 mx-10 lg:mx-32 xl:mx-32"
 			>
 				<!-- row 1 -->
-				<div class="h-full grid gap-5">
-					<div class="parent-element">
-						<Cardlist
-							tag={6}
-							{category}
-							{product_data}
-							outer_height="500px"
-							inner_height="500px"
-							icon="quill:chat"
-						/>
-					</div>
-					<div class="parent-element">
-						<Cardlist
-							tag={7}
-							{category}
-							{product_data}
-							outer_height="290px"
-							inner_height="160px"
-							icon="quill:chat"
-						/>
-					</div>
+				<div class="h-full parent-element">
+					<Cardlist
+						tag={0}
+						{category}
+						{product_data}
+						outer_height="810px"
+						inner_height="670px"
+						icon="quill:chat"
+					/>
 				</div>
 
 				<!-- row 2 -->
 				<div class="h-full grid gap-5">
 					<div class="parent-element">
 						<Cardlist
-							tag={8}
+							tag={1}
 							{category}
 							{product_data}
 							outer_height="290px"
@@ -417,7 +233,7 @@
 					</div>
 					<div class="parent-element">
 						<Cardlist
-							tag={9}
+							tag={2}
 							{category}
 							{product_data}
 							outer_height="500px"
@@ -431,7 +247,7 @@
 				<div class="h-full grid gap-5">
 					<div class="parent-element">
 						<Cardlist
-							tag={10}
+							tag={3}
 							{category}
 							{product_data}
 							outer_height="500px"
@@ -441,7 +257,7 @@
 					</div>
 					<div class="parent-element">
 						<Cardlist
-							tag={11}
+							tag={4}
 							{category}
 							{product_data}
 							outer_height="290px"
@@ -450,28 +266,17 @@
 						/>
 					</div>
 				</div>
+
 				<!-- row 4 -->
-				<div class="h-full grid gap-5">
-					<div class="parent-element">
-						<Cardlist
-							tag={12}
-							{category}
-							{product_data}
-							outer_height="290px"
-							inner_height="160px"
-							icon="quill:chat"
-						/>
-					</div>
-					<div class="parent-element">
-						<Cardlist
-							tag={12}
-							{category}
-							{product_data}
-							outer_height="500px"
-							inner_height="500px"
-							icon="quill:chat"
-						/>
-					</div>
+				<div class="h-full parent-element">
+					<Cardlist
+						tag={5}
+						{category}
+						{product_data}
+						outer_height="810px"
+						inner_height="670px"
+						icon="quill:chat"
+					/>
 				</div>
 			</section>
 
@@ -574,82 +379,209 @@
 				</div>
 			</section>
 		</div>
+		{#if category >= 2}
+			<div in:fade={fadeOptions}>
+				<section
+					class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-5 mb-5 mx-10 lg:gap-5 lg:mx-32 xl:mx-32"
+				>
+					<!-- row 1 -->
+					<div class="h-full grid gap-5">
+						<div class="parent-element">
+							<Cardlist
+								tag={6}
+								{category}
+								{product_data}
+								outer_height="500px"
+								inner_height="500px"
+								icon="quill:chat"
+							/>
+						</div>
+						<div class="parent-element">
+							<Cardlist
+								tag={7}
+								{category}
+								{product_data}
+								outer_height="290px"
+								inner_height="160px"
+								icon="quill:chat"
+							/>
+						</div>
+					</div>
+
+					<!-- row 2 -->
+					<div class="h-full grid gap-5">
+						<div class="parent-element">
+							<Cardlist
+								tag={8}
+								{category}
+								{product_data}
+								outer_height="290px"
+								inner_height="160px"
+								icon="quill:chat"
+							/>
+						</div>
+						<div class="parent-element">
+							<Cardlist
+								tag={9}
+								{category}
+								{product_data}
+								outer_height="500px"
+								inner_height="500px"
+								icon="quill:chat"
+							/>
+						</div>
+					</div>
+
+					<!-- row 3 -->
+					<div class="h-full grid gap-5">
+						<div class="parent-element">
+							<Cardlist
+								tag={10}
+								{category}
+								{product_data}
+								outer_height="500px"
+								inner_height="500px"
+								icon="quill:chat"
+							/>
+						</div>
+						<div class="parent-element">
+							<Cardlist
+								tag={11}
+								{category}
+								{product_data}
+								outer_height="290px"
+								inner_height="160px"
+								icon="quill:chat"
+							/>
+						</div>
+					</div>
+					<!-- row 4 -->
+					<div class="h-full grid gap-5">
+						<div class="parent-element">
+							<Cardlist
+								tag={12}
+								{category}
+								{product_data}
+								outer_height="290px"
+								inner_height="160px"
+								icon="quill:chat"
+							/>
+						</div>
+						<div class="parent-element">
+							<Cardlist
+								tag={12}
+								{category}
+								{product_data}
+								outer_height="500px"
+								inner_height="500px"
+								icon="quill:chat"
+							/>
+						</div>
+					</div>
+				</section>
+
+				<section
+					class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-5 mb-5 mx-10 lg:gap-5 lg:mx-32 xl:mx-32"
+				>
+					<!-- row 1 -->
+					<div class="h-full grid gap-5">
+						<div class="parent-element">
+							<Cardlist
+								tag={6}
+								{category}
+								{product_data}
+								outer_height="500px"
+								inner_height="500px"
+								icon="quill:chat"
+							/>
+						</div>
+						<div class="parent-element">
+							<Cardlist
+								tag={7}
+								{category}
+								{product_data}
+								outer_height="290px"
+								inner_height="160px"
+								icon="quill:chat"
+							/>
+						</div>
+					</div>
+
+					<!-- row 2 -->
+					<div class="h-full grid gap-5">
+						<div class="parent-element">
+							<Cardlist
+								tag={8}
+								{category}
+								{product_data}
+								outer_height="290px"
+								inner_height="160px"
+								icon="quill:chat"
+							/>
+						</div>
+						<div class="parent-element">
+							<Cardlist
+								tag={9}
+								{category}
+								{product_data}
+								outer_height="500px"
+								inner_height="500px"
+								icon="quill:chat"
+							/>
+						</div>
+					</div>
+
+					<!-- row 3 -->
+					<div class="h-full grid gap-5">
+						<div class="parent-element">
+							<Cardlist
+								tag={10}
+								{category}
+								{product_data}
+								outer_height="500px"
+								inner_height="500px"
+								icon="quill:chat"
+							/>
+						</div>
+						<div class="parent-element">
+							<Cardlist
+								tag={11}
+								{category}
+								{product_data}
+								outer_height="290px"
+								inner_height="160px"
+								icon="quill:chat"
+							/>
+						</div>
+					</div>
+					<!-- row 4 -->
+					<div class="h-full grid gap-5">
+						<div class="parent-element">
+							<Cardlist
+								tag={12}
+								{category}
+								{product_data}
+								outer_height="290px"
+								inner_height="160px"
+								icon="quill:chat"
+							/>
+						</div>
+						<div class="parent-element">
+							<Cardlist
+								tag={12}
+								{category}
+								{product_data}
+								outer_height="500px"
+								inner_height="500px"
+								icon="quill:chat"
+							/>
+						</div>
+					</div>
+				</section>
+			</div>
+		{/if}
 	{/if}
 {/if}
-
-<!-- <BentogridB {category} /> -->
-<!--
-{#if category === 2}
-	<div in:fade={fadeOptions}>
-		<BentogridA {category} />
-
-		<BentogridB {category} />
-
-		<BentogridB2 {category} />
-
-		<BentogridB3 {category} />
-	</div>
-{/if}
-
-{#if category === 3}
-	<div in:fade={fadeOptions}>
-		<BentogridA {category} />
-
-		<BentogridB {category} />
-
-		<BentogridB2 {category} />
-
-		<BentogridB3 {category} />
-	</div>
-{/if}
-
-{#if category === 4}
-	<div in:fade={fadeOptions}>
-		<BentogridA {category} />
-
-		<BentogridB {category} />
-
-		<BentogridB2 {category} />
-
-		<BentogridB3 {category} />
-	</div>
-{/if}
-
-{#if category === 5}
-	<div in:fade={fadeOptions}>
-		<BentogridA {category} />
-
-		<BentogridB {category} />
-
-		<BentogridB2 {category} />
-
-		<BentogridB3 {category} />
-	</div>
-{/if}
-
-{#if category === 6}
-	<div in:fade={fadeOptions}>
-		<BentogridA {category} />
-
-		<BentogridB {category} />
-
-		<BentogridB2 {category} />
-
-		<BentogridB3 {category} />
-	</div>
-{/if}
-
-{#if category === 7}
-	<div in:fade={fadeOptions}>
-		<BentogridA {category} />
-
-		<BentogridB {category} />
-
-		<BentogridB2 {category} />
-
-		<BentogridB3 {category} />
-	</div>
-{/if} -->
 
 <style>
 	/* Custom styles for removing scrollbar visibility */

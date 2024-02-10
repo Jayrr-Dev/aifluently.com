@@ -29,7 +29,7 @@ export async function load() {
         // Cache the newly fetched data
         cache.set('categoriesData', categoriesData);
     }
-
+    
     return {
         props: { categoriesData: categoriesData || [] }
     };

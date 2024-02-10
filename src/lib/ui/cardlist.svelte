@@ -12,17 +12,20 @@
 	import { popup, Ratings } from '@skeletonlabs/skeleton';
 	import { lighttoggle } from '../../stores/store';
 	import Icon from '@iconify/svelte';
+	import { writable } from 'svelte/store';
+	let isMounted = writable(false);
 	let showTag = true;
 	let state: any;
 	let windowWidth = 0;
 
 	let tag_name: string = '';
-	onMount(() => {});
+	onMount(() => {
+		isMounted.set(true); // Set to true when the component is mounted
+	});
 
 	//variables
 	$: tag_name = product_data?.aggregated_data[tag].tag_name;
 	$: aggregated_data = product_data?.aggregated_data[tag];
-
 	$: product_data;
 	$: lightswitch = $lighttoggle;
 </script>
@@ -39,7 +42,7 @@
 	{JSON.stringify(product_data?.aggregated_data[tag], null, 2)}
 </pre> -->
 
-{#if product_data}
+{#if product_data && $isMounted}
 	<div class="card grid grid-cols-1 relative card-hover" style={`height: ${outer_height};`}>
 		<header class="card-header text-center pr-6">
 			<div in:fade={{ duration: 800 }}>
