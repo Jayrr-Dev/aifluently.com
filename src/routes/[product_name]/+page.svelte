@@ -1,8 +1,5 @@
 <script lang="ts">
 	import { get, writable } from 'svelte/store';
-	import { page } from '$app/stores';
-	import { browser } from '$app/environment';
-	import { supabase } from '$lib/supabaseClient';
 	import { marked } from 'marked';
 
 	type ProductReviewData = {
