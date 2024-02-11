@@ -1,7 +1,7 @@
 <script lang="ts">
 	export let tag: number;
 	export let icon: string;
-	export let category: number;
+	//export let category: number;
 	export let product_data: any;
 	export let outer_height: string = '200px';
 	export let inner_height: string = '150px';

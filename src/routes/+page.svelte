@@ -179,7 +179,7 @@
 <!-- 
 <Cardlist
 	tag={0}
-	{category}
+
 	{product_data}
 	outer_height="810px"
 	inner_height="670px"
@@ -187,7 +187,7 @@
 />
 <Cardlist
 	tag={1}
-	{category}
+	
 	{product_data}
 	outer_height="290px"
 	inner_height="160px"
@@ -195,7 +195,7 @@
 />
 <Cardlist
 	tag={2}
-	{category}
+	
 	{product_data}
 	outer_height="500px"
 	inner_height="500px"
@@ -211,7 +211,6 @@
 				<div class="h-full parent-element">
 					<Cardlist
 						tag={0}
-						{category}
 						{product_data}
 						outer_height="810px"
 						inner_height="670px"
@@ -224,7 +223,6 @@
 					<div class="parent-element">
 						<Cardlist
 							tag={1}
-							{category}
 							{product_data}
 							outer_height="290px"
 							inner_height="160px"
@@ -234,7 +232,6 @@
 					<div class="parent-element">
 						<Cardlist
 							tag={2}
-							{category}
 							{product_data}
 							outer_height="500px"
 							inner_height="500px"
@@ -248,7 +245,6 @@
 					<div class="parent-element">
 						<Cardlist
 							tag={3}
-							{category}
 							{product_data}
 							outer_height="500px"
 							inner_height="500px"
@@ -258,7 +254,6 @@
 					<div class="parent-element">
 						<Cardlist
 							tag={4}
-							{category}
 							{product_data}
 							outer_height="290px"
 							inner_height="160px"
@@ -271,7 +266,6 @@
 				<div class="h-full parent-element">
 					<Cardlist
 						tag={5}
-						{category}
 						{product_data}
 						outer_height="810px"
 						inner_height="670px"
@@ -288,7 +282,6 @@
 					<div class="parent-element">
 						<Cardlist
 							tag={6}
-							{category}
 							{product_data}
 							outer_height="500px"
 							inner_height="500px"
@@ -298,7 +291,6 @@
 					<div class="parent-element">
 						<Cardlist
 							tag={7}
-							{category}
 							{product_data}
 							outer_height="290px"
 							inner_height="160px"
@@ -312,7 +304,6 @@
 					<div class="parent-element">
 						<Cardlist
 							tag={8}
-							{category}
 							{product_data}
 							outer_height="290px"
 							inner_height="160px"
@@ -322,7 +313,6 @@
 					<div class="parent-element">
 						<Cardlist
 							tag={9}
-							{category}
 							{product_data}
 							outer_height="500px"
 							inner_height="500px"
@@ -336,7 +326,6 @@
 					<div class="parent-element">
 						<Cardlist
 							tag={10}
-							{category}
 							{product_data}
 							outer_height="500px"
 							inner_height="500px"
@@ -346,7 +335,6 @@
 					<div class="parent-element">
 						<Cardlist
 							tag={11}
-							{category}
 							{product_data}
 							outer_height="290px"
 							inner_height="160px"
@@ -359,7 +347,6 @@
 					<div class="parent-element">
 						<Cardlist
 							tag={12}
-							{category}
 							{product_data}
 							outer_height="290px"
 							inner_height="160px"
@@ -369,7 +356,6 @@
 					<div class="parent-element">
 						<Cardlist
 							tag={12}
-							{category}
 							{product_data}
 							outer_height="500px"
 							inner_height="500px"
@@ -389,7 +375,6 @@
 						<div class="parent-element">
 							<Cardlist
 								tag={6}
-								{category}
 								{product_data}
 								outer_height="500px"
 								inner_height="500px"
@@ -399,7 +384,6 @@
 						<div class="parent-element">
 							<Cardlist
 								tag={7}
-								{category}
 								{product_data}
 								outer_height="290px"
 								inner_height="160px"
@@ -413,7 +397,6 @@
 						<div class="parent-element">
 							<Cardlist
 								tag={8}
-								{category}
 								{product_data}
 								outer_height="290px"
 								inner_height="160px"
@@ -423,7 +406,6 @@
 						<div class="parent-element">
 							<Cardlist
 								tag={9}
-								{category}
 								{product_data}
 								outer_height="500px"
 								inner_height="500px"
@@ -437,7 +419,6 @@
 						<div class="parent-element">
 							<Cardlist
 								tag={10}
-								{category}
 								{product_data}
 								outer_height="500px"
 								inner_height="500px"
@@ -447,7 +428,6 @@
 						<div class="parent-element">
 							<Cardlist
 								tag={11}
-								{category}
 								{product_data}
 								outer_height="290px"
 								inner_height="160px"
@@ -460,7 +440,6 @@
 						<div class="parent-element">
 							<Cardlist
 								tag={12}
-								{category}
 								{product_data}
 								outer_height="290px"
 								inner_height="160px"
@@ -470,7 +449,6 @@
 						<div class="parent-element">
 							<Cardlist
 								tag={12}
-								{category}
 								{product_data}
 								outer_height="500px"
 								inner_height="500px"
@@ -488,7 +466,6 @@
 						<div class="parent-element">
 							<Cardlist
 								tag={6}
-								{category}
 								{product_data}
 								outer_height="500px"
 								inner_height="500px"
@@ -498,7 +475,6 @@
 						<div class="parent-element">
 							<Cardlist
 								tag={7}
-								{category}
 								{product_data}
 								outer_height="290px"
 								inner_height="160px"
@@ -512,7 +488,6 @@
 						<div class="parent-element">
 							<Cardlist
 								tag={8}
-								{category}
 								{product_data}
 								outer_height="290px"
 								inner_height="160px"
@@ -522,7 +497,6 @@
 						<div class="parent-element">
 							<Cardlist
 								tag={9}
-								{category}
 								{product_data}
 								outer_height="500px"
 								inner_height="500px"
@@ -536,7 +510,6 @@
 						<div class="parent-element">
 							<Cardlist
 								tag={10}
-								{category}
 								{product_data}
 								outer_height="500px"
 								inner_height="500px"
@@ -546,7 +519,6 @@
 						<div class="parent-element">
 							<Cardlist
 								tag={11}
-								{category}
 								{product_data}
 								outer_height="290px"
 								inner_height="160px"
@@ -559,7 +531,6 @@
 						<div class="parent-element">
 							<Cardlist
 								tag={12}
-								{category}
 								{product_data}
 								outer_height="290px"
 								inner_height="160px"
@@ -569,7 +540,6 @@
 						<div class="parent-element">
 							<Cardlist
 								tag={12}
-								{category}
 								{product_data}
 								outer_height="500px"
 								inner_height="500px"

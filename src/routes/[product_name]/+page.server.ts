@@ -16,17 +16,23 @@ export const load: PageLoad = async ({ params }) => {
     const cacheKey = `productData_${productSlug}`;
     const relatedCacheKey = `relatedProducts_${productSlug}`;
   
+
     // Check cache for current product data
     productReviewData = cache.get(cacheKey);
-  
+
+    // Fetch current product data if not in cache
     if (!productReviewData) {
       // Fetch current product data if not in cache
-      const { data, error } = await supabase
-          .from('product_review')
-          .select('*, tag_array')
-          .ilike('product_slug', productSlug)
-          .maybeSingle();
-  
+     const { data, error } = await supabase
+      .from('product_review')
+      .select(`
+      *,
+      product_table!product_review_product_slug_fkey(product_url, product_logo)
+    `)
+      .ilike('product_slug', productSlug)
+      .maybeSingle();
+      //console.log(data);
+      
       if (error || !data) {
         console.error('Failed to fetch product review data for:', productSlug, error);
         return {
@@ -47,7 +53,7 @@ export const load: PageLoad = async ({ params }) => {
       // Fetch and filter related products if not in cache
       const { data: allProductsData, error: allProductsError } = await supabase
           .from('product_review')
-          .select( "product_name, product_rating, product_review_image, product_review_alt, tag_array", ); // Consider optimizing this query
+          .select( "product_name, product_rating, product_review_image, product_review_alt, tag_array, product_video, product_pro, product_con, product_pricing, product_input_price, product_output_price", ); // Consider optimizing this query
   
       if (allProductsError) {
         console.error('Failed to fetch related products:', allProductsError);
