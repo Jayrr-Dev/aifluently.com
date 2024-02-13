@@ -8,7 +8,7 @@
 	const placeholder = blurhashToCssGradientString('L48W{f-p00E0~pWBs.s:?cNGRjWB');
 	import Linkicon from '$lib/svg/linkicon.svelte';
 	import Stars from '$lib/svg/stars.svelte';
-
+	import { goto } from '$app/navigation';
 	$: relatedProducts = relatedProductsData.props?.relatedProducts;
 </script>
 
@@ -17,10 +17,10 @@
 </pre> -->
 
 {#if relatedProductsData?.props?.relatedProducts}
-	<div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+	<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-1">
 		{#each relatedProducts as _, i}
-			<div id="product-image" class="h-auto max-w-full rounded-lg card parent-hover mb-4">
-				<div id="images" class="flex justify-center fade-in relative">
+			<div id="product-image" class=" max-w-full rounded-lg relative card parent-hover mb-4">
+				<div id="images" class="flex h-full justify-center fade-in">
 					<Image
 						class="fade-in rounded-t-md rounded-b-sm"
 						src={relatedProducts[i].product_review_image}
@@ -41,9 +41,9 @@
 						class=" w-full absolute h-full parent-hover overlay-fade rounded-t-lg top-0 z-10 blur-lg bg-slate-300/40"
 					></div>
 
-					<div class="absolute w-full h-full top-[35%]">
-						<div id="name-comp" class=" parent-hover overlay-fade w-full absolute z-10">
-							<h1 class="lg:text-3xl md:text-xl text-center sm:text-center">
+					<div class="absolute w-full h-full top-[30%] z-10">
+						<div id="name-comp" class=" parent-hover overlay-fade">
+							<h1 class="text-3xl sm:text-xl md:text-2xl lg:text-3xl text-center sm:text-center">
 								<div class="flex justify-center">
 									{relatedProducts[i].product_name}
 									{#if relatedProducts[i].product_logo}
@@ -78,15 +78,25 @@
 						</div>
 					</div>
 
-					<div class="absolute w-full h-full">
-						<button
-							on:click={() => {
-								window.open(relatedProducts[i].product_url, '_blank');
-							}}
-							class="parent-hover overlay-show btn variant-ghost-primary w-1/2 text-white text-base md:text-xl lg:text-2xl absolute top-[40%] left-[25%] z-30 opacity-0"
-						>
-							<span>Visit</span><Linkicon />
-						</button>
+					<div class="absolute w-full top-1/2 left-1/2 ml-[-150px] mt-[-40px] h-full">
+						<div class="grid grid-cols-1 gap-1">
+							<button
+								on:click={() => {
+									goto(`/${relatedProducts[i].product_slug}`);
+								}}
+								class="parent-hover overlay-show btn variant-ghost-primary w-[300px] h-[40px] text-white text-base md:text-xl lg:text-2xl z-30 opacity-0"
+							>
+								<span>Review</span><Linkicon />
+							</button>
+							<button
+								on:click={() => {
+									window.open(relatedProducts[i].product_url, '_self');
+								}}
+								class="parent-hover overlay-show btn variant-ghost-primary w-[300px] h-[40px] text-white text-base md:text-xl lg:text-2xl z-30 opacity-0"
+							>
+								<span>Visit</span><Linkicon />
+							</button>
+						</div>
 					</div>
 				</div>
 			</div>

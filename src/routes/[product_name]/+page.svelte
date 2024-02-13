@@ -20,7 +20,7 @@
 	import type { Product } from '$lib/types';
 	export let data: any;
 	const placeholder = blurhashToCssGradientString('L48W{f-p00E0~pWBs.s:?cNGRjWB');
-
+	let element;
 	//const productReviewCache = writable<Record<string, ProductReviewData | null>>;({});
 
 	// productReviewCache.subscribe((cache) => {
@@ -33,7 +33,6 @@
 
 	let productReviewData = get(productReviewCache).props?.productReviewData;
 	let relatedProductsData = get(productReviewCache).props?.relatedProducts;
-
 	$: $page.params.product_name,
 		(productReviewData = get(productReviewCache).props?.productReviewData);
 	$: $page.params.product_name,
@@ -62,8 +61,6 @@
 		productReviewCache.update((cache) => ({ ...cache, ...data }));
 	}
 </script>
-
-{$page.params.product_name}
 
 {#if productReviewData && image}
 	<section class="grid grid-col-1 md:grid-col-1 lg:grid-cols- xl:grid-cols-2 md:mx-10 xl:mx-32">

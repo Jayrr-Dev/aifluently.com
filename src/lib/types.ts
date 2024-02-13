@@ -99,6 +99,7 @@ export interface Product {
   product_audio: string | null;
   product_video: string
   product_rating: number
+  product_slug?: string; 
   product_logo_alt: string | null;
   product_screenshot: string | null;
   product_description: string | null;

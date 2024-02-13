@@ -37,7 +37,7 @@ export const load: PageLoad = async ({ params }) => {
   const { data: allProductsData, error: allProductsError } = await supabase
     .from('product_review')
     .select(`
-      product_name, product_rating, product_review_image, product_review_alt, 
+      product_name, product_slug, product_rating, product_review_image, product_review_alt, 
       tag_array, product_video, product_pro, product_con, product_pricing, 
       product_input_price, product_output_price,product_description,product_url
     `);

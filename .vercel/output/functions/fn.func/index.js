@@ -15877,8 +15877,8 @@ var init__ = __esm({
     component = async () => component_cache ?? (component_cache = (await Promise.resolve().then(() => (init_layout_svelte(), layout_svelte_exports))).default);
     universal_id = "src/routes/+layout.ts";
     server_id = "src/routes/+layout.server.ts";
-    imports = ["_app/immutable/nodes/0.11mdWbTp.js", "_app/immutable/chunks/public.03yuBydq.js", "_app/immutable/chunks/scheduler.qoUjChkd.js", "_app/immutable/chunks/index.HRC4UyyR.js", "_app/immutable/chunks/Icon.m_HsgSM1.js", "_app/immutable/chunks/store.xV9Yk6LI.js", "_app/immutable/chunks/index.xMhwf18p.js", "_app/immutable/chunks/navigation.wgBFGclu.js", "_app/immutable/chunks/singletons.uTW47gd3.js", "_app/immutable/chunks/popup.ApYA23B2.js"];
-    stylesheets = ["_app/immutable/assets/0.2PmGbyLj.css", "_app/immutable/assets/store.oq5aOWfL.css"];
+    imports = ["_app/immutable/nodes/0.tT3xOBpk.js", "_app/immutable/chunks/public.03yuBydq.js", "_app/immutable/chunks/scheduler.qoUjChkd.js", "_app/immutable/chunks/index.HRC4UyyR.js", "_app/immutable/chunks/Icon.m_HsgSM1.js", "_app/immutable/chunks/store.xV9Yk6LI.js", "_app/immutable/chunks/index.xMhwf18p.js", "_app/immutable/chunks/navigation.FSAbujlm.js", "_app/immutable/chunks/singletons.ikxw4e4w.js", "_app/immutable/chunks/popup.ApYA23B2.js"];
+    stylesheets = ["_app/immutable/assets/0.__fHi0ex.css", "_app/immutable/assets/store.oq5aOWfL.css"];
     fonts = [];
   }
 });
@@ -15958,7 +15958,7 @@ var init__2 = __esm({
   ".svelte-kit/output/server/nodes/1.js"() {
     index2 = 1;
     component2 = async () => component_cache2 ?? (component_cache2 = (await Promise.resolve().then(() => (init_error_svelte(), error_svelte_exports))).default);
-    imports2 = ["_app/immutable/nodes/1.zQAv5gU_.js", "_app/immutable/chunks/scheduler.qoUjChkd.js", "_app/immutable/chunks/index.HRC4UyyR.js", "_app/immutable/chunks/Icon.m_HsgSM1.js", "_app/immutable/chunks/store.xV9Yk6LI.js", "_app/immutable/chunks/index.xMhwf18p.js", "_app/immutable/chunks/stores.bjN9DhPh.js", "_app/immutable/chunks/singletons.uTW47gd3.js"];
+    imports2 = ["_app/immutable/nodes/1.Tyvhb-fN.js", "_app/immutable/chunks/scheduler.qoUjChkd.js", "_app/immutable/chunks/index.HRC4UyyR.js", "_app/immutable/chunks/Icon.m_HsgSM1.js", "_app/immutable/chunks/store.xV9Yk6LI.js", "_app/immutable/chunks/index.xMhwf18p.js", "_app/immutable/chunks/stores.yr-DxOwW.js", "_app/immutable/chunks/singletons.ikxw4e4w.js"];
     stylesheets2 = ["_app/immutable/assets/store.oq5aOWfL.css"];
     fonts2 = [];
   }
@@ -18092,8 +18092,8 @@ var init_imagecard = __esm({
       let relatedProductsData = get_store_value(productReviewCache);
       const placeholder = blurhashToCssGradientString("L48W{f-p00E0~pWBs.s:?cNGRjWB");
       relatedProducts = relatedProductsData.props?.relatedProducts;
-      return ` ${relatedProductsData?.props?.relatedProducts ? `<div class="grid grid-cols-2 md:grid-cols-3 gap-4">${each(relatedProducts, (_, i) => {
-        return `<div id="product-image" class="h-auto max-w-full rounded-lg card parent-hover mb-4"><div id="images" class="flex justify-center fade-in relative">${validate_component(Image, "Image").$$render(
+      return ` ${relatedProductsData?.props?.relatedProducts ? `<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-1">${each(relatedProducts, (_, i) => {
+        return `<div id="product-image" class="max-w-full rounded-lg relative card parent-hover mb-4"><div id="images" class="flex h-full justify-center fade-in">${validate_component(Image, "Image").$$render(
           $$result,
           {
             class: "fade-in rounded-t-md rounded-b-sm",
@@ -18107,7 +18107,7 @@ var init_imagecard = __esm({
           },
           {},
           {}
-        )}  <div id="overlay-hover" class="w-full absolute h-full parent-hover overlay-fade rounded-t-lg top-0 z-10 blur-lg bg-slate-300/40"></div> <div class="absolute w-full h-full top-[35%]"><div id="name-comp" class="parent-hover overlay-fade w-full absolute z-10"><h1 class="lg:text-3xl md:text-xl text-center sm:text-center"><div class="flex justify-center">${escape(relatedProducts[i].product_name)} ${relatedProducts[i].product_logo ? `${validate_component(Image, "Image").$$render(
+        )}  <div id="overlay-hover" class="w-full absolute h-full parent-hover overlay-fade rounded-t-lg top-0 z-10 blur-lg bg-slate-300/40"></div> <div class="absolute w-full h-full top-[30%] z-10"><div id="name-comp" class="parent-hover overlay-fade"><h1 class="text-3xl sm:text-xl md:text-2xl lg:text-3xl text-center sm:text-center"><div class="flex justify-center">${escape(relatedProducts[i].product_name)} ${relatedProducts[i].product_logo ? `${validate_component(Image, "Image").$$render(
           $$result,
           {
             class: "ml-4 fade-in rounded-full ",
@@ -18138,7 +18138,7 @@ var init_imagecard = __esm({
               return `${validate_component(Stars, "Stars").$$render($$result, { type: "empty" }, {}, {})}`;
             }
           }
-        )} <p class="text-center text-sm opacity-80 text-ellipsis overflow-hidden">${escape(relatedProducts[i].product_description)}</p> </div></div> <div class="absolute w-full h-full"><button class="parent-hover overlay-show btn variant-ghost-primary w-1/2 text-white text-base md:text-xl lg:text-2xl absolute top-[40%] left-[25%] z-30 opacity-0"><span data-svelte-h="svelte-11bf9kr">Visit</span>${validate_component(Linkicon, "Linkicon").$$render($$result, {}, {}, {})}</button> </div></div> </div>`;
+        )} <p class="text-center text-sm opacity-80 text-ellipsis overflow-hidden">${escape(relatedProducts[i].product_description)}</p> </div></div> <div class="absolute w-full top-1/2 left-1/2 ml-[-150px] mt-[-40px] h-full"><div class="grid grid-cols-1 gap-1"><button class="parent-hover overlay-show btn variant-ghost-primary w-[300px] h-[40px] text-white text-base md:text-xl lg:text-2xl z-30 opacity-0"><span data-svelte-h="svelte-ytzi6a">Review</span>${validate_component(Linkicon, "Linkicon").$$render($$result, {}, {}, {})}</button> <button class="parent-hover overlay-show btn variant-ghost-primary w-[300px] h-[40px] text-white text-base md:text-xl lg:text-2xl z-30 opacity-0"><span data-svelte-h="svelte-11bf9kr">Visit</span>${validate_component(Linkicon, "Linkicon").$$render($$result, {}, {}, {})} </button></div> </div></div> </div>`;
       })}</div>` : ``}`;
     });
   }
@@ -18176,7 +18176,7 @@ var init__4 = __esm({
   ".svelte-kit/output/server/nodes/3.js"() {
     index4 = 3;
     component4 = async () => component_cache4 ?? (component_cache4 = (await Promise.resolve().then(() => (init_page_svelte2(), page_svelte_exports2))).default);
-    imports4 = ["_app/immutable/nodes/3.7zdtCBNk.js", "_app/immutable/chunks/scheduler.qoUjChkd.js", "_app/immutable/chunks/index.HRC4UyyR.js", "_app/immutable/chunks/productStore.1ET5QMgR.js", "_app/immutable/chunks/store.xV9Yk6LI.js", "_app/immutable/chunks/index.xMhwf18p.js", "_app/immutable/chunks/imagecard.y8eM8LGS.js"];
+    imports4 = ["_app/immutable/nodes/3.HG_9Hai_.js", "_app/immutable/chunks/scheduler.qoUjChkd.js", "_app/immutable/chunks/index.HRC4UyyR.js", "_app/immutable/chunks/productStore.1ET5QMgR.js", "_app/immutable/chunks/store.xV9Yk6LI.js", "_app/immutable/chunks/index.xMhwf18p.js", "_app/immutable/chunks/imagecard.jaoHzBT9.js", "_app/immutable/chunks/navigation.FSAbujlm.js", "_app/immutable/chunks/singletons.ikxw4e4w.js"];
     stylesheets4 = ["_app/immutable/assets/store.oq5aOWfL.css"];
     fonts4 = [];
   }
@@ -18208,7 +18208,7 @@ var init_page_server_ts2 = __esm({
       }
       const typedProductReviewData = productReviewData;
       const { data: allProductsData, error: allProductsError } = await supabase.from("product_review").select(`
-      product_name, product_rating, product_review_image, product_review_alt, 
+      product_name, product_slug, product_rating, product_review_image, product_review_alt, 
       tag_array, product_video, product_pro, product_con, product_pricing, 
       product_input_price, product_output_price,product_description,product_url
     `);
@@ -20273,7 +20273,7 @@ var init_page_svelte3 = __esm({
       let product_data = category_data[category];
       if ($$props.category === void 0 && $$bindings.category && category !== void 0)
         $$bindings.category(category);
-      return ` ${product_data ? `<section class="grid grid-cols-2 md:grid-cols-3 gap-4">${each(product_data.aggregated_data || [], (_, i) => {
+      return ` ${product_data ? `<section class="grid grid-cols-1 md:grid-cols-3 gap-4">${each(product_data.aggregated_data || [], (_, i) => {
         return `<div class="parent-element">${validate_component(Cardlist, "Cardlist").$$render(
           $$result,
           {
@@ -20418,7 +20418,7 @@ var init_page_svelte3 = __esm({
       }
       $$unsubscribe_page();
       $$unsubscribe_lighttoggle();
-      return `${escape($page.params.product_name)} ${productReviewData && image ? `<section class="grid grid-col-1 md:grid-col-1 lg:grid-cols- xl:grid-cols-2 md:mx-10 xl:mx-32"><div id="hero" class="h-full flex flex-col"><div id="product-image" class="flex-grow grid card mb-4"><div id="images" class="flex justify-center relative fade-in svelte-p4xbsw">${validate_component(Image, "Image").$$render(
+      return `${productReviewData && image ? `<section class="grid grid-col-1 md:grid-col-1 lg:grid-cols- xl:grid-cols-2 md:mx-10 xl:mx-32"><div id="hero" class="h-full flex flex-col"><div id="product-image" class="flex-grow grid card mb-4"><div id="images" class="flex justify-center relative fade-in svelte-p4xbsw">${validate_component(Image, "Image").$$render(
         $$result,
         {
           class: "fade-in rounded-t-md rounded-b-sm ",
@@ -20501,7 +20501,7 @@ var init__5 = __esm({
     index5 = 4;
     component5 = async () => component_cache5 ?? (component_cache5 = (await Promise.resolve().then(() => (init_page_svelte3(), page_svelte_exports3))).default);
     server_id3 = "src/routes/[product_name]/+page.server.ts";
-    imports5 = ["_app/immutable/nodes/4.X2XGF3ef.js", "_app/immutable/chunks/scheduler.qoUjChkd.js", "_app/immutable/chunks/index.HRC4UyyR.js", "_app/immutable/chunks/productStore.1ET5QMgR.js", "_app/immutable/chunks/store.xV9Yk6LI.js", "_app/immutable/chunks/index.xMhwf18p.js", "_app/immutable/chunks/imagecard.y8eM8LGS.js", "_app/immutable/chunks/cardlist.mMBOxlWg.js", "_app/immutable/chunks/popup.ApYA23B2.js", "_app/immutable/chunks/Icon.m_HsgSM1.js", "_app/immutable/chunks/navigation.wgBFGclu.js", "_app/immutable/chunks/singletons.uTW47gd3.js", "_app/immutable/chunks/stores.bjN9DhPh.js", "_app/immutable/chunks/supabaseClient.V3wEEveg.js", "_app/immutable/chunks/public.03yuBydq.js"];
+    imports5 = ["_app/immutable/nodes/4.EyjGPRLJ.js", "_app/immutable/chunks/scheduler.qoUjChkd.js", "_app/immutable/chunks/index.HRC4UyyR.js", "_app/immutable/chunks/productStore.1ET5QMgR.js", "_app/immutable/chunks/store.xV9Yk6LI.js", "_app/immutable/chunks/index.xMhwf18p.js", "_app/immutable/chunks/imagecard.jaoHzBT9.js", "_app/immutable/chunks/navigation.FSAbujlm.js", "_app/immutable/chunks/singletons.ikxw4e4w.js", "_app/immutable/chunks/cardlist.mMBOxlWg.js", "_app/immutable/chunks/popup.ApYA23B2.js", "_app/immutable/chunks/Icon.m_HsgSM1.js", "_app/immutable/chunks/stores.yr-DxOwW.js", "_app/immutable/chunks/supabaseClient.V3wEEveg.js", "_app/immutable/chunks/public.03yuBydq.js"];
     stylesheets5 = ["_app/immutable/assets/4.UzcHbuZU.css", "_app/immutable/assets/store.oq5aOWfL.css"];
     fonts5 = [];
   }
@@ -20620,7 +20620,7 @@ var options = {
   root: Root,
   service_worker: false,
   templates: {
-    app: ({ head, body: body2, assets: assets2, nonce, env }) => '<!DOCTYPE html>\n<html lang="en" class="light">\n	<head>\n		<meta charset="utf-8" />\n		<link rel="icon" href="' + assets2 + '/favicon.png" />\n		<meta name="viewport" content="width=device-width" />\n		' + head + '\n	</head>\n	<body data-sveltekit-preload-data="hover" data-theme="neobrutalist">\n		<div style="display: contents" class="h-full overflow-hidden">' + body2 + "</div>\n	</body>\n</html>\n",
+    app: ({ head, body: body2, assets: assets2, nonce, env }) => '<!doctype html>\n<html lang="en" class="light">\n	<head>\n		<meta charset="utf-8" />\n		<link rel="icon" href="' + assets2 + '/favicon.png" />\n		<meta name="viewport" content="width=device-width" />\n		' + head + '\n	</head>\n	<body data-sveltekit-preload-data="hover" data-theme="neobrutalist">\n		<div style="display: contents" class="h-full overflow-hidden">' + body2 + "</div>\n	</body>\n</html>\n",
     error: ({ status, message }) => '<!doctype html>\n<html lang="en">\n	<head>\n		<meta charset="utf-8" />\n		<title>' + message + `</title>
 
 		<style>
@@ -20692,7 +20692,7 @@ var options = {
 		<div class="error">
 			<span class="status">` + status + '</span>\n			<div class="message">\n				<h1>' + message + "</h1>\n			</div>\n		</div>\n	</body>\n</html>\n"
   },
-  version_hash: "1gz0fa7"
+  version_hash: "d5o721"
 };
 function get_hooks() {
   return Promise.resolve().then(() => (init_hooks_server(), hooks_server_exports));
@@ -24524,7 +24524,7 @@ var manifest = (() => {
     assets: /* @__PURE__ */ new Set(["assets/logo/horizontal-black.svg", "assets/logo/horizontal-gradient.svg", "assets/logo/horizontal-white.svg", "assets/logo/logomark-black-circle.svg", "assets/logo/logomark-black.svg", "assets/logo/logomark-white-circle.svg", "assets/logo/logomark-white.svg", "assets/logo/vertical-black.svg", "assets/logo/vertical-gradient.svg", "assets/logo/vertical-white.svg", "favicon.png", "fonts/SpaceGrotesk.ttf"]),
     mimeTypes: { ".svg": "image/svg+xml", ".png": "image/png", ".ttf": "font/ttf" },
     _: {
-      client: { "start": "_app/immutable/entry/start.QloF9H3o.js", "app": "_app/immutable/entry/app.N4i5r7Zg.js", "imports": ["_app/immutable/entry/start.QloF9H3o.js", "_app/immutable/chunks/scheduler.qoUjChkd.js", "_app/immutable/chunks/singletons.uTW47gd3.js", "_app/immutable/chunks/index.xMhwf18p.js", "_app/immutable/entry/app.N4i5r7Zg.js", "_app/immutable/chunks/public.03yuBydq.js", "_app/immutable/chunks/supabaseClient.V3wEEveg.js", "_app/immutable/chunks/scheduler.qoUjChkd.js", "_app/immutable/chunks/index.HRC4UyyR.js"], "stylesheets": [], "fonts": [], "uses_env_dynamic_public": false },
+      client: { "start": "_app/immutable/entry/start.1tKQFdQY.js", "app": "_app/immutable/entry/app.EhWjz22b.js", "imports": ["_app/immutable/entry/start.1tKQFdQY.js", "_app/immutable/chunks/scheduler.qoUjChkd.js", "_app/immutable/chunks/singletons.ikxw4e4w.js", "_app/immutable/chunks/index.xMhwf18p.js", "_app/immutable/entry/app.EhWjz22b.js", "_app/immutable/chunks/public.03yuBydq.js", "_app/immutable/chunks/supabaseClient.V3wEEveg.js", "_app/immutable/chunks/scheduler.qoUjChkd.js", "_app/immutable/chunks/index.HRC4UyyR.js"], "stylesheets": [], "fonts": [], "uses_env_dynamic_public": false },
       nodes: [
         __memo(() => Promise.resolve().then(() => (init__(), __exports))),
         __memo(() => Promise.resolve().then(() => (init__2(), __exports2))),
