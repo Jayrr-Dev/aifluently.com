@@ -71,8 +71,8 @@ function blank_object() {
 function run_all(fns) {
   fns.forEach(run);
 }
-function safe_not_equal(a, b) {
-  return a != a ? b == b : a !== b || a && typeof a === "object" || typeof a === "function";
+function safe_not_equal(a2, b) {
+  return a2 != a2 ? b == b : a2 !== b || a2 && typeof a2 === "object" || typeof a2 === "function";
 }
 function subscribe(store, ...callbacks) {
   if (store == null) {
@@ -266,7 +266,7 @@ function create_ssr_component(fn) {
       return {
         html: html2,
         css: {
-          code: Array.from(result.css).map((css3) => css3.code).join("\n"),
+          code: Array.from(result.css).map((css5) => css5.code).join("\n"),
           map: null
           // TODO
         },
@@ -1501,14 +1501,14 @@ var init_PostgrestTransformBuilder = __esm({
        */
       select(columns) {
         let quoted2 = false;
-        const cleanedColumns = (columns !== null && columns !== void 0 ? columns : "*").split("").map((c) => {
-          if (/\s/.test(c) && !quoted2) {
+        const cleanedColumns = (columns !== null && columns !== void 0 ? columns : "*").split("").map((c2) => {
+          if (/\s/.test(c2) && !quoted2) {
             return "";
           }
-          if (c === '"') {
+          if (c2 === '"') {
             quoted2 = !quoted2;
           }
-          return c;
+          return c2;
         }).join("");
         this.url.searchParams.set("select", cleanedColumns);
         if (this.headers["Prefer"]) {
@@ -2090,14 +2090,14 @@ var init_PostgrestQueryBuilder = __esm({
       select(columns, { head = false, count } = {}) {
         const method = head ? "HEAD" : "GET";
         let quoted2 = false;
-        const cleanedColumns = (columns !== null && columns !== void 0 ? columns : "*").split("").map((c) => {
-          if (/\s/.test(c) && !quoted2) {
+        const cleanedColumns = (columns !== null && columns !== void 0 ? columns : "*").split("").map((c2) => {
+          if (/\s/.test(c2) && !quoted2) {
             return "";
           }
-          if (c === '"') {
+          if (c2 === '"') {
             quoted2 = !quoted2;
           }
-          return c;
+          return c2;
         }).join("");
         this.url.searchParams.set("select", cleanedColumns);
         if (count) {
@@ -2152,7 +2152,7 @@ var init_PostgrestQueryBuilder = __esm({
         }
         this.headers["Prefer"] = prefersHeaders.join(",");
         if (Array.isArray(values)) {
-          const columns = values.reduce((acc, x) => acc.concat(Object.keys(x)), []);
+          const columns = values.reduce((acc, x2) => acc.concat(Object.keys(x2)), []);
           if (columns.length > 0) {
             const uniqueColumns = [...new Set(columns)].map((column) => `"${column}"`);
             this.url.searchParams.set("columns", uniqueColumns.join(","));
@@ -2222,7 +2222,7 @@ var init_PostgrestQueryBuilder = __esm({
         }
         this.headers["Prefer"] = prefersHeaders.join(",");
         if (Array.isArray(values)) {
-          const columns = values.reduce((acc, x) => acc.concat(Object.keys(x)), []);
+          const columns = values.reduce((acc, x2) => acc.concat(Object.keys(x2)), []);
           if (columns.length > 0) {
             const uniqueColumns = [...new Set(columns)].map((column) => `"${column}"`);
             this.url.searchParams.set("columns", uniqueColumns.join(","));
@@ -2664,7 +2664,7 @@ var init_push = __esm({
         this.timeoutTimer = void 0;
       }
       _matchReceive({ status, response }) {
-        this.recHooks.filter((h) => h.status === status).forEach((h) => h.callback(response));
+        this.recHooks.filter((h2) => h2.status === status).forEach((h2) => h2.callback(response));
       }
       _hasReceived(status) {
         return this.receivedResp && this.receivedResp.status === status;
@@ -2939,7 +2939,7 @@ var init_transformers = __esm({
       }, {});
     };
     convertColumn = (columnName, columns, record, skipTypes) => {
-      const column = columns.find((x) => x.name === columnName);
+      const column = columns.find((x2) => x2.name === columnName);
       const colType = column === null || column === void 0 ? void 0 : column.type;
       const value = record[columnName];
       if (colType && !skipTypes.includes(colType)) {
@@ -3140,7 +3140,7 @@ var init_RealtimeChannel = __esm({
           const config2 = {
             broadcast,
             presence,
-            postgres_changes: (_b = (_a = this.bindings.postgres_changes) === null || _a === void 0 ? void 0 : _a.map((r) => r.filter)) !== null && _b !== void 0 ? _b : []
+            postgres_changes: (_b = (_a = this.bindings.postgres_changes) === null || _a === void 0 ? void 0 : _a.map((r2) => r2.filter)) !== null && _b !== void 0 ? _b : []
           };
           if (this.socket.accessToken) {
             accessTokenPayload.access_token = this.socket.accessToken;
@@ -3770,7 +3770,7 @@ var init_RealtimeClient = __esm({
        * @internal
        */
       _leaveOpenTopic(topic) {
-        let dupChannel = this.channels.find((c) => c.topic === topic && (c._isJoined() || c._isJoining()));
+        let dupChannel = this.channels.find((c2) => c2.topic === topic && (c2._isJoined() || c2._isJoining()));
         if (dupChannel) {
           this.log("transport", `leaving duplicate topic "${topic}"`);
           dupChannel.unsubscribe();
@@ -3784,7 +3784,7 @@ var init_RealtimeClient = __esm({
        * @internal
        */
       _remove(channel) {
-        this.channels = this.channels.filter((c) => c._joinRef() !== channel._joinRef());
+        this.channels = this.channels.filter((c2) => c2._joinRef() !== channel._joinRef());
       }
       /**
        * Sets up connection handlers.
@@ -4364,10 +4364,10 @@ var init_StorageFileApi = __esm({
        * @param expiresIn The number of seconds until the signed URLs expire. For example, `60` for URLs which are valid for one minute.
        * @param options.download triggers the file as a download if set to true. Set this parameter as the name of the file if you want to trigger the download with a different filename.
        */
-      createSignedUrls(paths, expiresIn, options3) {
+      createSignedUrls(paths2, expiresIn, options3) {
         return __awaiter4(this, void 0, void 0, function* () {
           try {
-            const data = yield post(this.fetch, `${this.url}/object/sign/${this.bucketId}`, { expiresIn, paths }, { headers: this.headers });
+            const data = yield post(this.fetch, `${this.url}/object/sign/${this.bucketId}`, { expiresIn, paths: paths2 }, { headers: this.headers });
             const downloadQueryParam = (options3 === null || options3 === void 0 ? void 0 : options3.download) ? `&download=${options3.download === true ? "" : options3.download}` : "";
             return {
               data: data.map((datum) => Object.assign(Object.assign({}, datum), { signedUrl: datum.signedURL ? encodeURI(`${this.url}${datum.signedURL}${downloadQueryParam}`) : null })),
@@ -4443,10 +4443,10 @@ var init_StorageFileApi = __esm({
        *
        * @param paths An array of files to delete, including the path and file name. For example [`'folder/image.png'`].
        */
-      remove(paths) {
+      remove(paths2) {
         return __awaiter4(this, void 0, void 0, function* () {
           try {
-            const data = yield remove(this.fetch, `${this.url}/object/${this.bucketId}`, { prefixes: paths }, { headers: this.headers });
+            const data = yield remove(this.fetch, `${this.url}/object/${this.bucketId}`, { prefixes: paths2 }, { headers: this.headers });
             return { data, error: null };
           } catch (error) {
             if (isStorageError(error)) {
@@ -4539,22 +4539,22 @@ var init_StorageFileApi = __esm({
       _removeEmptyFolders(path) {
         return path.replace(/^\/|\/$/g, "").replace(/\/+/g, "/");
       }
-      transformOptsToQueryString(transform) {
+      transformOptsToQueryString(transform2) {
         const params = [];
-        if (transform.width) {
-          params.push(`width=${transform.width}`);
+        if (transform2.width) {
+          params.push(`width=${transform2.width}`);
         }
-        if (transform.height) {
-          params.push(`height=${transform.height}`);
+        if (transform2.height) {
+          params.push(`height=${transform2.height}`);
         }
-        if (transform.resize) {
-          params.push(`resize=${transform.resize}`);
+        if (transform2.resize) {
+          params.push(`resize=${transform2.resize}`);
         }
-        if (transform.format) {
-          params.push(`format=${transform.format}`);
+        if (transform2.format) {
+          params.push(`format=${transform2.format}`);
         }
-        if (transform.quality) {
-          params.push(`quality=${transform.quality}`);
+        if (transform2.quality) {
+          params.push(`quality=${transform2.quality}`);
         }
         return params.join("&");
       }
@@ -4917,8 +4917,8 @@ function expiresAt(expiresIn) {
   return timeNow + expiresIn;
 }
 function uuid() {
-  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(c) {
-    const r = Math.random() * 16 | 0, v = c == "x" ? r : r & 3 | 8;
+  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(c2) {
+    const r2 = Math.random() * 16 | 0, v = c2 == "x" ? r2 : r2 & 3 | 8;
     return v.toString(16);
   });
 }
@@ -5026,7 +5026,7 @@ async function sha256(randomString) {
   const encodedData = encoder3.encode(randomString);
   const hash2 = await crypto.subtle.digest("SHA-256", encodedData);
   const bytes = new Uint8Array(hash2);
-  return Array.from(bytes).map((c) => String.fromCharCode(c)).join("");
+  return Array.from(bytes).map((c2) => String.fromCharCode(c2)).join("");
 }
 function base64urlencode(str) {
   return btoa(str).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
@@ -5248,7 +5248,7 @@ async function handleError2(error) {
   } catch (e) {
     throw new AuthUnknownError(_getErrorMessage2(e), e);
   }
-  if (typeof data === "object" && data && typeof data.weak_password === "object" && data.weak_password && Array.isArray(data.weak_password.reasons) && data.weak_password.reasons.length && data.weak_password.reasons.reduce((a, i) => a && typeof i === "string", true)) {
+  if (typeof data === "object" && data && typeof data.weak_password === "object" && data.weak_password && Array.isArray(data.weak_password.reasons) && data.weak_password.reasons.length && data.weak_password.reasons.reduce((a2, i) => a2 && typeof i === "string", true)) {
     throw new AuthWeakPasswordError(_getErrorMessage2(data), error.status, data.weak_password.reasons);
   }
   throw new AuthApiError(_getErrorMessage2(data), error.status || 500);
@@ -5302,7 +5302,7 @@ function _sessionResponse(data) {
 }
 function _sessionResponsePassword(data) {
   const response = _sessionResponse(data);
-  if (!response.error && data.weak_password && typeof data.weak_password === "object" && Array.isArray(data.weak_password.reasons) && data.weak_password.reasons.length && data.weak_password.message && typeof data.weak_password.message === "string" && data.weak_password.reasons.reduce((a, i) => a && typeof i === "string", true)) {
+  if (!response.error && data.weak_password && typeof data.weak_password === "object" && Array.isArray(data.weak_password.reasons) && data.weak_password.reasons.length && data.weak_password.message && typeof data.weak_password.message === "string" && data.weak_password.reasons.reduce((a2, i) => a2 && typeof i === "string", true)) {
     response.data.weak_password = data.weak_password;
   }
   return response;
@@ -7130,9 +7130,9 @@ var init_GoTrueClient = __esm({
             this.broadcastChannel.postMessage({ event, session });
           }
           const errors = [];
-          const promises = Array.from(this.stateChangeEmitters.values()).map(async (x) => {
+          const promises = Array.from(this.stateChangeEmitters.values()).map(async (x2) => {
             try {
-              await x.callback(event, session);
+              await x2.callback(event, session);
             } catch (e) {
               errors.push(e);
             }
@@ -8491,14 +8491,14 @@ function internalGetIconData(data, name, tree) {
   const icons = data.icons;
   const aliases = data.aliases || /* @__PURE__ */ Object.create(null);
   let currentProps = {};
-  function parse2(name2) {
+  function parse3(name2) {
     currentProps = mergeIconData(
       icons[name2] || aliases[name2],
       currentProps
     );
   }
-  parse2(name);
-  tree.forEach(parse2);
+  parse3(name);
+  tree.forEach(parse3);
   return mergeIconData(data, currentProps);
 }
 function parseIconSet(data, callback) {
@@ -8933,14 +8933,14 @@ function sortIcons(icons) {
     pending: []
   };
   const storage2 = /* @__PURE__ */ Object.create(null);
-  icons.sort((a, b) => {
-    if (a.provider !== b.provider) {
-      return a.provider.localeCompare(b.provider);
+  icons.sort((a2, b) => {
+    if (a2.provider !== b.provider) {
+      return a2.provider.localeCompare(b.provider);
     }
-    if (a.prefix !== b.prefix) {
-      return a.prefix.localeCompare(b.prefix);
+    if (a2.prefix !== b.prefix) {
+      return a2.prefix.localeCompare(b.prefix);
     }
-    return a.name.localeCompare(b.name);
+    return a2.name.localeCompare(b.name);
   });
   let lastIcon = {
     provider: "",
@@ -9818,11 +9818,11 @@ function autoModeWatcher() {
 function prefersReducedMotion() {
   return false;
 }
-var matchIconName, stringToIcon, validateIconName, defaultIconDimensions, defaultIconTransformations, defaultIconProps, defaultExtendedIconProps, optionalPropertyDefaults, dataStorage, simpleNames, defaultIconSizeCustomisations, defaultIconCustomisations, unitsSplit, unitsTest, isUnsetKeyword, regex, randomPrefix, counter, storage, configStorage, fallBackAPISources, fallBackAPI, detectFetch, fetchModule, prepare, send, fetchAPIModule, idCounter, defaultConfig, redundancyCache, browserCacheVersion, browserCachePrefix, browserCacheCountKey, browserCacheVersionKey, browserStorageHour, browserStorageCacheExpiration, browserStorageLimit, browserStorageConfig, browserStorageEmptyItems, browserStorageStatus, _window, loadIcons, separator, defaultExtendedIconCustomisations, svgDefaults, commonProps, monotoneProps, coloredProps, propsToAdd, propsToAddTo, Icon, stores, modeCurrent, lighttoggle;
+var matchIconName, stringToIcon, validateIconName, defaultIconDimensions, defaultIconTransformations, defaultIconProps, defaultExtendedIconProps, optionalPropertyDefaults, dataStorage, simpleNames, defaultIconSizeCustomisations, defaultIconCustomisations, unitsSplit, unitsTest, isUnsetKeyword, regex, randomPrefix, counter, storage, configStorage, fallBackAPISources, fallBackAPI, detectFetch, fetchModule, prepare, send, fetchAPIModule, idCounter, defaultConfig, redundancyCache, browserCacheVersion, browserCachePrefix, browserCacheCountKey, browserCacheVersionKey, browserStorageHour, browserStorageCacheExpiration, browserStorageLimit, browserStorageConfig, browserStorageEmptyItems, browserStorageStatus, _window, loadIcons, separator, defaultExtendedIconCustomisations, svgDefaults, commonProps, monotoneProps, coloredProps, propsToAdd, propsToAddTo, stores, modeCurrent, lighttoggle;
 var init_store = __esm({
   ".svelte-kit/output/server/chunks/store.js"() {
-    init_ssr();
     init_chunks();
+    init_ssr();
     matchIconName = /^[a-z0-9]+(-[a-z0-9]+)*$/;
     stringToIcon = (value, validate, allowSimpleName, provider = "") => {
       const colonSeparated = value.split(":");
@@ -10199,6 +10199,29 @@ var init_store = __esm({
         }
       }
     }
+    stores = {};
+    localStorageStore("modeOsPrefers", false);
+    localStorageStore("modeUserPrefers", void 0);
+    modeCurrent = localStorageStore("modeCurrent", false);
+    readable(prefersReducedMotion(), (set) => {
+    });
+    lighttoggle = writable(false);
+    localStorageStore(
+      "tagicon",
+      [
+        "https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js",
+        "https://www.aitoolslist.com/icons/ai-image-generators.svg"
+      ]
+    );
+  }
+});
+
+// .svelte-kit/output/server/chunks/Icon.js
+var Icon;
+var init_Icon = __esm({
+  ".svelte-kit/output/server/chunks/Icon.js"() {
+    init_ssr();
+    init_store();
     Icon = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       const state = {
         // Last icon name
@@ -10237,20 +10260,6 @@ var init_store = __esm({
       }
       return `${data ? `${data.svg ? `<svg${spread([escape_object(data.attributes)], {})}><!-- HTML_TAG_START -->${data.body}<!-- HTML_TAG_END --></svg>` : `<span${spread([escape_object(data.attributes)], {})}></span>`}` : ``}`;
     });
-    stores = {};
-    localStorageStore("modeOsPrefers", false);
-    localStorageStore("modeUserPrefers", void 0);
-    modeCurrent = localStorageStore("modeCurrent", false);
-    readable(prefersReducedMotion(), (set) => {
-    });
-    lighttoggle = writable(false);
-    localStorageStore(
-      "tagicon",
-      [
-        "https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js",
-        "https://www.aitoolslist.com/icons/ai-image-generators.svg"
-      ]
-    );
   }
 });
 
@@ -10321,7 +10330,7 @@ var require_core = __commonJS({
         const pieces = name.split(".");
         return [
           `${prefix}${pieces.shift()}`,
-          ...pieces.map((x, i) => `${x}${"_".repeat(i + 1)}`)
+          ...pieces.map((x2, i) => `${x2}${"_".repeat(i + 1)}`)
         ].join(" ");
       }
       return `${prefix}${name}`;
@@ -10519,7 +10528,7 @@ var require_core = __commonJS({
       return concat2("(?:", re, ")?");
     }
     function concat2(...args) {
-      const joined = args.map((x) => source(x)).join("");
+      const joined = args.map((x2) => source(x2)).join("");
       return joined;
     }
     function stripOptionsFromArgs(args) {
@@ -10533,7 +10542,7 @@ var require_core = __commonJS({
     }
     function either(...args) {
       const opts = stripOptionsFromArgs(args);
-      const joined = "(" + (opts.capture ? "" : "?:") + args.map((x) => source(x)).join("|") + ")";
+      const joined = "(" + (opts.capture ? "" : "?:") + args.map((x2) => source(x2)).join("|") + ")";
       return joined;
     }
     function countMatchGroups(re) {
@@ -10874,7 +10883,7 @@ var require_core = __commonJS({
       return compiledKeywords;
       function compileList(scopeName2, keywordList) {
         if (caseInsensitive) {
-          keywordList = keywordList.map((x) => x.toLowerCase());
+          keywordList = keywordList.map((x2) => x2.toLowerCase());
         }
         keywordList.forEach(function(keyword) {
           const pair = keyword.split("|");
@@ -11127,13 +11136,13 @@ var require_core = __commonJS({
           );
         if (!mode.contains)
           mode.contains = [];
-        mode.contains = [].concat(...mode.contains.map(function(c) {
-          return expandOrCloneMode(c === "self" ? mode : c);
+        mode.contains = [].concat(...mode.contains.map(function(c2) {
+          return expandOrCloneMode(c2 === "self" ? mode : c2);
         }));
-        mode.contains.forEach(function(c) {
+        mode.contains.forEach(function(c2) {
           compileMode(
             /** @type Mode */
-            c,
+            c2,
             cmode
           );
         });
@@ -11602,13 +11611,13 @@ var require_core = __commonJS({
           (name) => _highlight(name, code, false)
         );
         results.unshift(plaintext);
-        const sorted = results.sort((a, b) => {
-          if (a.relevance !== b.relevance)
-            return b.relevance - a.relevance;
-          if (a.language && b.language) {
-            if (getLanguage(a.language).supersetOf === b.language) {
+        const sorted = results.sort((a2, b) => {
+          if (a2.relevance !== b.relevance)
+            return b.relevance - a2.relevance;
+          if (a2.language && b.language) {
+            if (getLanguage(a2.language).supersetOf === b.language) {
               return 1;
-            } else if (getLanguage(b.language).supersetOf === a.language) {
+            } else if (getLanguage(b.language).supersetOf === a2.language) {
               return -1;
             }
           }
@@ -14494,7 +14503,7 @@ async function detectOverflow(state, options3) {
     options3 = {};
   }
   const {
-    x,
+    x: x2,
     y,
     platform: platform2,
     rects,
@@ -14519,7 +14528,7 @@ async function detectOverflow(state, options3) {
   }));
   const rect = elementContext === "floating" ? {
     ...rects.floating,
-    x,
+    x: x2,
     y
   } : rects.reference;
   const offsetParent = await (platform2.getOffsetParent == null ? void 0 : platform2.getOffsetParent(elements.floating));
@@ -14600,7 +14609,7 @@ var init_floating_ui_core = __esm({
         strategy
       });
       let {
-        x,
+        x: x2,
         y
       } = computeCoordsFromPlacement(rects, placement, rtl);
       let statefulPlacement = placement;
@@ -14617,7 +14626,7 @@ var init_floating_ui_core = __esm({
           data,
           reset: reset2
         } = await fn({
-          x,
+          x: x2,
           y,
           initialPlacement: placement,
           placement: statefulPlacement,
@@ -14630,7 +14639,7 @@ var init_floating_ui_core = __esm({
             floating
           }
         });
-        x = nextX != null ? nextX : x;
+        x2 = nextX != null ? nextX : x2;
         y = nextY != null ? nextY : y;
         middlewareData = {
           ...middlewareData,
@@ -14653,7 +14662,7 @@ var init_floating_ui_core = __esm({
               }) : reset2.rects;
             }
             ({
-              x,
+              x: x2,
               y
             } = computeCoordsFromPlacement(rects, statefulPlacement, rtl));
           }
@@ -14662,7 +14671,7 @@ var init_floating_ui_core = __esm({
         }
       }
       return {
-        x,
+        x: x2,
         y,
         placement: statefulPlacement,
         strategy,
@@ -14674,7 +14683,7 @@ var init_floating_ui_core = __esm({
       options: options3,
       async fn(state) {
         const {
-          x,
+          x: x2,
           y,
           placement,
           rects,
@@ -14691,7 +14700,7 @@ var init_floating_ui_core = __esm({
         }
         const paddingObject = getPaddingObject(padding);
         const coords = {
-          x,
+          x: x2,
           y
         };
         const axis = getAlignmentAxis(placement);
@@ -14797,12 +14806,12 @@ var init_floating_ui_core = __esm({
                 }
               };
             }
-            let resetPlacement = (_overflowsData$filter = overflowsData.filter((d) => d.overflows[0] <= 0).sort((a, b) => a.overflows[1] - b.overflows[1])[0]) == null ? void 0 : _overflowsData$filter.placement;
+            let resetPlacement = (_overflowsData$filter = overflowsData.filter((d2) => d2.overflows[0] <= 0).sort((a2, b) => a2.overflows[1] - b.overflows[1])[0]) == null ? void 0 : _overflowsData$filter.placement;
             if (!resetPlacement) {
               switch (fallbackStrategy) {
                 case "bestFit": {
                   var _overflowsData$map$so;
-                  const placement2 = (_overflowsData$map$so = overflowsData.map((d) => [d.placement, d.overflows.filter((overflow2) => overflow2 > 0).reduce((acc, overflow2) => acc + overflow2, 0)]).sort((a, b) => a[1] - b[1])[0]) == null ? void 0 : _overflowsData$map$so[0];
+                  const placement2 = (_overflowsData$map$so = overflowsData.map((d2) => [d2.placement, d2.overflows.filter((overflow2) => overflow2 > 0).reduce((acc, overflow2) => acc + overflow2, 0)]).sort((a2, b) => a2[1] - b[1])[0]) == null ? void 0 : _overflowsData$map$so[0];
                   if (placement2) {
                     resetPlacement = placement2;
                   }
@@ -14835,7 +14844,7 @@ var init_floating_ui_core = __esm({
         async fn(state) {
           var _middlewareData$offse, _middlewareData$arrow;
           const {
-            x,
+            x: x2,
             y,
             placement,
             middlewareData
@@ -14845,7 +14854,7 @@ var init_floating_ui_core = __esm({
             return {};
           }
           return {
-            x: x + diffCoords.x,
+            x: x2 + diffCoords.x,
             y: y + diffCoords.y,
             data: {
               ...diffCoords,
@@ -14864,7 +14873,7 @@ var init_floating_ui_core = __esm({
         options: options3,
         async fn(state) {
           const {
-            x,
+            x: x2,
             y,
             placement
           } = state;
@@ -14874,11 +14883,11 @@ var init_floating_ui_core = __esm({
             limiter = {
               fn: (_ref) => {
                 let {
-                  x: x2,
+                  x: x3,
                   y: y2
                 } = _ref;
                 return {
-                  x: x2,
+                  x: x3,
                   y: y2
                 };
               }
@@ -14886,7 +14895,7 @@ var init_floating_ui_core = __esm({
             ...detectOverflowOptions
           } = evaluate(options3, state);
           const coords = {
-            x,
+            x: x2,
             y
           };
           const overflow = await detectOverflow(state, detectOverflowOptions);
@@ -14916,7 +14925,7 @@ var init_floating_ui_core = __esm({
           return {
             ...limitedCoords,
             data: {
-              x: limitedCoords.x - x,
+              x: limitedCoords.x - x2,
               y: limitedCoords.y - y
             }
           };
@@ -14970,8 +14979,8 @@ function isTableElement(element) {
 }
 function isContainingBlock(element) {
   const webkit = isWebKit();
-  const css3 = getComputedStyle(element);
-  return css3.transform !== "none" || css3.perspective !== "none" || (css3.containerType ? css3.containerType !== "normal" : false) || !webkit && (css3.backdropFilter ? css3.backdropFilter !== "none" : false) || !webkit && (css3.filter ? css3.filter !== "none" : false) || ["transform", "perspective", "filter"].some((value) => (css3.willChange || "").includes(value)) || ["paint", "layout", "strict", "content"].some((value) => (css3.contain || "").includes(value));
+  const css5 = getComputedStyle(element);
+  return css5.transform !== "none" || css5.perspective !== "none" || (css5.containerType ? css5.containerType !== "normal" : false) || !webkit && (css5.backdropFilter ? css5.backdropFilter !== "none" : false) || !webkit && (css5.filter ? css5.filter !== "none" : false) || ["transform", "perspective", "filter"].some((value) => (css5.willChange || "").includes(value)) || ["paint", "layout", "strict", "content"].some((value) => (css5.contain || "").includes(value));
 }
 function getContainingBlock(element) {
   let currentNode = getParentNode(element);
@@ -15053,9 +15062,9 @@ var init_floating_ui_utils_dom = __esm({
 
 // node_modules/.pnpm/@floating-ui+dom@1.5.4/node_modules/@floating-ui/dom/dist/floating-ui.dom.mjs
 function getCssDimensions(element) {
-  const css3 = getComputedStyle(element);
-  let width = parseFloat(css3.width) || 0;
-  let height = parseFloat(css3.height) || 0;
+  const css5 = getComputedStyle(element);
+  let width = parseFloat(css5.width) || 0;
+  let height = parseFloat(css5.height) || 0;
   const hasOffset = isHTMLElement(element);
   const offsetWidth = hasOffset ? element.offsetWidth : width;
   const offsetHeight = hasOffset ? element.offsetHeight : height;
@@ -15084,16 +15093,16 @@ function getScale(element) {
     height,
     $
   } = getCssDimensions(domElement);
-  let x = ($ ? round(rect.width) : rect.width) / width;
+  let x2 = ($ ? round(rect.width) : rect.width) / width;
   let y = ($ ? round(rect.height) : rect.height) / height;
-  if (!x || !Number.isFinite(x)) {
-    x = 1;
+  if (!x2 || !Number.isFinite(x2)) {
+    x2 = 1;
   }
   if (!y || !Number.isFinite(y)) {
     y = 1;
   }
   return {
-    x,
+    x: x2,
     y
   };
 }
@@ -15136,7 +15145,7 @@ function getBoundingClientRect(element, includeScale, isFixedStrategy, offsetPar
     }
   }
   const visualOffsets = shouldAddVisualOffsets(domElement, isFixedStrategy, offsetParent) ? getVisualOffsets(domElement) : createCoords(0);
-  let x = (clientRect.left + visualOffsets.x) / scale.x;
+  let x2 = (clientRect.left + visualOffsets.x) / scale.x;
   let y = (clientRect.top + visualOffsets.y) / scale.y;
   let width = clientRect.width / scale.x;
   let height = clientRect.height / scale.y;
@@ -15147,14 +15156,14 @@ function getBoundingClientRect(element, includeScale, isFixedStrategy, offsetPar
     while (currentIFrame && offsetParent && offsetWin !== win) {
       const iframeScale = getScale(currentIFrame);
       const iframeRect = currentIFrame.getBoundingClientRect();
-      const css3 = getComputedStyle(currentIFrame);
-      const left = iframeRect.left + (currentIFrame.clientLeft + parseFloat(css3.paddingLeft)) * iframeScale.x;
-      const top = iframeRect.top + (currentIFrame.clientTop + parseFloat(css3.paddingTop)) * iframeScale.y;
-      x *= iframeScale.x;
+      const css5 = getComputedStyle(currentIFrame);
+      const left = iframeRect.left + (currentIFrame.clientLeft + parseFloat(css5.paddingLeft)) * iframeScale.x;
+      const top = iframeRect.top + (currentIFrame.clientTop + parseFloat(css5.paddingTop)) * iframeScale.y;
+      x2 *= iframeScale.x;
       y *= iframeScale.y;
       width *= iframeScale.x;
       height *= iframeScale.y;
-      x += left;
+      x2 += left;
       y += top;
       currentIFrame = getWindow(currentIFrame).frameElement;
     }
@@ -15162,7 +15171,7 @@ function getBoundingClientRect(element, includeScale, isFixedStrategy, offsetPar
   return rectToClientRect({
     width,
     height,
-    x,
+    x: x2,
     y
   });
 }
@@ -15213,15 +15222,15 @@ function getDocumentRect(element) {
   const body2 = element.ownerDocument.body;
   const width = max(html2.scrollWidth, html2.clientWidth, body2.scrollWidth, body2.clientWidth);
   const height = max(html2.scrollHeight, html2.clientHeight, body2.scrollHeight, body2.clientHeight);
-  let x = -scroll.scrollLeft + getWindowScrollBarX(element);
+  let x2 = -scroll.scrollLeft + getWindowScrollBarX(element);
   const y = -scroll.scrollTop;
   if (getComputedStyle(body2).direction === "rtl") {
-    x += max(html2.clientWidth, body2.clientWidth) - width;
+    x2 += max(html2.clientWidth, body2.clientWidth) - width;
   }
   return {
     width,
     height,
-    x,
+    x: x2,
     y
   };
 }
@@ -15231,21 +15240,21 @@ function getViewportRect(element, strategy) {
   const visualViewport = win.visualViewport;
   let width = html2.clientWidth;
   let height = html2.clientHeight;
-  let x = 0;
+  let x2 = 0;
   let y = 0;
   if (visualViewport) {
     width = visualViewport.width;
     height = visualViewport.height;
     const visualViewportBased = isWebKit();
     if (!visualViewportBased || visualViewportBased && strategy === "fixed") {
-      x = visualViewport.offsetLeft;
+      x2 = visualViewport.offsetLeft;
       y = visualViewport.offsetTop;
     }
   }
   return {
     width,
     height,
-    x,
+    x: x2,
     y
   };
 }
@@ -15256,12 +15265,12 @@ function getInnerBoundingClientRect(element, strategy) {
   const scale = isHTMLElement(element) ? getScale(element) : createCoords(1);
   const width = element.clientWidth * scale.x;
   const height = element.clientHeight * scale.y;
-  const x = left * scale.x;
+  const x2 = left * scale.x;
   const y = top * scale.y;
   return {
     width,
     height,
-    x,
+    x: x2,
     y
   };
 }
@@ -15608,6 +15617,7 @@ var storeHighlightJs, storePopup, cBase, cRowMain, cRowHeadline, cSlotLead, cSlo
 var init_layout_svelte = __esm({
   ".svelte-kit/output/server/entries/pages/_layout.svelte.js"() {
     init_ssr();
+    init_Icon();
     init_store();
     init_chunks();
     init_core();
@@ -15867,22 +15877,17 @@ var init__ = __esm({
     component = async () => component_cache ?? (component_cache = (await Promise.resolve().then(() => (init_layout_svelte(), layout_svelte_exports))).default);
     universal_id = "src/routes/+layout.ts";
     server_id = "src/routes/+layout.server.ts";
-    imports = ["_app/immutable/nodes/0.nkt5SX40.js", "_app/immutable/chunks/public.03yuBydq.js", "_app/immutable/chunks/scheduler.cyAdSMMW.js", "_app/immutable/chunks/index.x73yj52l.js", "_app/immutable/chunks/store.NtGi4C_o.js", "_app/immutable/chunks/index.Naitio2P.js", "_app/immutable/chunks/singletons.EaJ-0vB4.js", "_app/immutable/chunks/popup.F6XfQYMo.js"];
-    stylesheets = ["_app/immutable/assets/0.y7x4R2ht.css", "_app/immutable/assets/store.oq5aOWfL.css"];
+    imports = ["_app/immutable/nodes/0.11mdWbTp.js", "_app/immutable/chunks/public.03yuBydq.js", "_app/immutable/chunks/scheduler.qoUjChkd.js", "_app/immutable/chunks/index.HRC4UyyR.js", "_app/immutable/chunks/Icon.m_HsgSM1.js", "_app/immutable/chunks/store.xV9Yk6LI.js", "_app/immutable/chunks/index.xMhwf18p.js", "_app/immutable/chunks/navigation.wgBFGclu.js", "_app/immutable/chunks/singletons.uTW47gd3.js", "_app/immutable/chunks/popup.ApYA23B2.js"];
+    stylesheets = ["_app/immutable/assets/0.2PmGbyLj.css", "_app/immutable/assets/store.oq5aOWfL.css"];
     fonts = [];
   }
 });
 
-// .svelte-kit/output/server/entries/pages/_error.svelte.js
-var error_svelte_exports = {};
-__export(error_svelte_exports, {
-  default: () => Error$1
-});
-var getStores, page, Error$1;
-var init_error_svelte = __esm({
-  ".svelte-kit/output/server/entries/pages/_error.svelte.js"() {
+// .svelte-kit/output/server/chunks/stores.js
+var getStores, page;
+var init_stores = __esm({
+  ".svelte-kit/output/server/chunks/stores.js"() {
     init_ssr();
-    init_store();
     getStores = () => {
       const stores2 = getContext("__svelte__");
       return {
@@ -15904,7 +15909,22 @@ var init_error_svelte = __esm({
         return store.subscribe(fn);
       }
     };
-    Error$1 = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+  }
+});
+
+// .svelte-kit/output/server/entries/pages/_error.svelte.js
+var error_svelte_exports = {};
+__export(error_svelte_exports, {
+  default: () => Error2
+});
+var Error2;
+var init_error_svelte = __esm({
+  ".svelte-kit/output/server/entries/pages/_error.svelte.js"() {
+    init_ssr();
+    init_Icon();
+    init_stores();
+    init_store();
+    Error2 = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       let $page, $$unsubscribe_page;
       $$unsubscribe_page = subscribe(page, (value) => $page = value);
       const config2 = { runtime: "edge" };
@@ -15938,7 +15958,7 @@ var init__2 = __esm({
   ".svelte-kit/output/server/nodes/1.js"() {
     index2 = 1;
     component2 = async () => component_cache2 ?? (component_cache2 = (await Promise.resolve().then(() => (init_error_svelte(), error_svelte_exports))).default);
-    imports2 = ["_app/immutable/nodes/1.t2B7fUqW.js", "_app/immutable/chunks/scheduler.cyAdSMMW.js", "_app/immutable/chunks/index.x73yj52l.js", "_app/immutable/chunks/store.NtGi4C_o.js", "_app/immutable/chunks/index.Naitio2P.js", "_app/immutable/chunks/singletons.EaJ-0vB4.js"];
+    imports2 = ["_app/immutable/nodes/1.zQAv5gU_.js", "_app/immutable/chunks/scheduler.qoUjChkd.js", "_app/immutable/chunks/index.HRC4UyyR.js", "_app/immutable/chunks/Icon.m_HsgSM1.js", "_app/immutable/chunks/store.xV9Yk6LI.js", "_app/immutable/chunks/index.xMhwf18p.js", "_app/immutable/chunks/stores.bjN9DhPh.js", "_app/immutable/chunks/singletons.uTW47gd3.js"];
     stylesheets2 = ["_app/immutable/assets/store.oq5aOWfL.css"];
     fonts2 = [];
   }
@@ -15987,28 +16007,130 @@ var init_page_server_ts = __esm({
   }
 });
 
-// .svelte-kit/output/server/entries/pages/_page.svelte.js
-var page_svelte_exports = {};
-__export(page_svelte_exports, {
-  default: () => Page
-});
+// .svelte-kit/output/server/chunks/productStore.js
 function isFull(value2, index6) {
   return Math.floor(value2) >= index6 + 1;
 }
 function isHalf(value2, index6) {
   return value2 === index6 + 0.5;
 }
-function isValidCategoryId(category_id) {
-  return [1, 2, 3, 4, 5, 6, 7].includes(category_id);
-}
-var css$1, cTrack2, cMeter, ProgressBar, cBase2, Ratings, main, business, education, entertainment, technology, creative, lifestyle, Cardlist, css2, Page;
-var init_page_svelte = __esm({
-  ".svelte-kit/output/server/entries/pages/_page.svelte.js"() {
+var cBase2, Ratings, Stars, productReviewCache, categoryProductData, main, business, education, entertainment, technology, creative, lifestyle;
+var init_productStore = __esm({
+  ".svelte-kit/output/server/chunks/productStore.js"() {
     init_ssr();
     init_store();
+    cBase2 = "w-full flex";
+    Ratings = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+      let classesBase;
+      let { value = 0 } = $$props;
+      let { max: max2 = 5 } = $$props;
+      let { interactive = false } = $$props;
+      let { text: text2 = "text-token" } = $$props;
+      let { fill = "fill-token" } = $$props;
+      let { justify = "justify-center" } = $$props;
+      let { spacing = "space-x-2" } = $$props;
+      let { regionIcon = "" } = $$props;
+      createEventDispatcher();
+      if ($$props.value === void 0 && $$bindings.value && value !== void 0)
+        $$bindings.value(value);
+      if ($$props.max === void 0 && $$bindings.max && max2 !== void 0)
+        $$bindings.max(max2);
+      if ($$props.interactive === void 0 && $$bindings.interactive && interactive !== void 0)
+        $$bindings.interactive(interactive);
+      if ($$props.text === void 0 && $$bindings.text && text2 !== void 0)
+        $$bindings.text(text2);
+      if ($$props.fill === void 0 && $$bindings.fill && fill !== void 0)
+        $$bindings.fill(fill);
+      if ($$props.justify === void 0 && $$bindings.justify && justify !== void 0)
+        $$bindings.justify(justify);
+      if ($$props.spacing === void 0 && $$bindings.spacing && spacing !== void 0)
+        $$bindings.spacing(spacing);
+      if ($$props.regionIcon === void 0 && $$bindings.regionIcon && regionIcon !== void 0)
+        $$bindings.regionIcon(regionIcon);
+      classesBase = `${cBase2} ${text2} ${fill} ${justify} ${spacing} ${$$props.class ?? ""}`;
+      return `<div class="${"ratings " + escape(classesBase, true)}" data-testid="rating-bar"> ${each({ length: max2 }, (_, i) => {
+        return `${interactive ? `<button class="${"rating-icon " + escape(regionIcon, true)}" type="button">${isFull(value, i) ? `${slots.full ? slots.full({}) : ``}` : `${isHalf(value, i) ? `${slots.half ? slots.half({}) : ``}` : `${slots.empty ? slots.empty({}) : ``}`}`} </button>` : `<span class="${"rating-icon " + escape(regionIcon, true)}">${isFull(value, i) ? `${slots.full ? slots.full({}) : ``}` : `${isHalf(value, i) ? `${slots.half ? slots.half({}) : ``}` : `${slots.empty ? slots.empty({}) : ``}`}`} </span>`}`;
+      })}</div>`;
+    });
+    Stars = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+      let { type = "1" } = $$props;
+      if ($$props.type === void 0 && $$bindings.type && type !== void 0)
+        $$bindings.type(type);
+      return `${type == "empty" ? `<svg${spread(
+        [
+          { xmlns: "http://www.w3.org/2000/svg" },
+          { width: "1em" },
+          { height: "1em" },
+          { viewBox: "0 0 24 24" },
+          escape_object($$props)
+        ],
+        {}
+      )}><path fill="grey" fill-opacity="0" stroke="grey" stroke-dasharray="64" stroke-dashoffset="64" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3L14.35 8.76L20.56 9.22L15.8 13.24L17.29 19.28L12 16L6.71 19.28L8.2 13.24L3.44 9.22L9.65 8.76Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.6s" values="64;0"></animate><animate fill="freeze" attributeName="fill-opacity" begin="0.6s" dur="0.15s" values="0;0.3"></animate></path></svg>` : `${type == "half" ? `<svg${spread(
+        [
+          { xmlns: "http://www.w3.org/2000/svg" },
+          { width: "1em" },
+          { height: "1em" },
+          { viewBox: "0 0 24 24" },
+          escape_object($$props)
+        ],
+        {}
+      )}><path fill="none" stroke="gold" stroke-dasharray="32" stroke-dashoffset="32" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3L9.65 8.76L3.44 9.22L8.2 13.24L6.71 19.28L12 16M12 3L14.35 8.76L20.56 9.22L15.8 13.24L17.29 19.28L12 16"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.5s" values="32;0"></animate></path><path fill="gold" fill-opacity="0" d="M12 3L9.65 8.76L3.44 9.22L8.2 13.24L6.71 19.28L12 16Z"><animate fill="freeze" attributeName="fill-opacity" begin="0.5s" dur="0.5s" values="0;1"></animate></path></svg>` : `${type == "full" ? `<svg${spread(
+        [
+          { xmlns: "http://www.w3.org/2000/svg" },
+          { width: "1em" },
+          { height: "1em" },
+          { viewBox: "0 0 24 24" },
+          escape_object($$props)
+        ],
+        {}
+      )}><g fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M0 0h24v24H0z"></path><path fill="gold" d="m8.243 7.34l-6.38.925l-.113.023a1 1 0 0 0-.44 1.684l4.622 4.499l-1.09 6.355l-.013.11a1 1 0 0 0 1.464.944l5.706-3l5.693 3l.1.046a1 1 0 0 0 1.352-1.1l-1.091-6.355l4.624-4.5l.078-.085a1 1 0 0 0-.633-1.62l-6.38-.926l-2.852-5.78a1 1 0 0 0-1.794 0z"></path></g></svg>` : ``}`}`}`;
+    });
+    productReviewCache = localStorageStore("productReviewCache", { props: { productReviewData: {
+      review_id: 0,
+      product_id: 0,
+      product_name: "",
+      product_rating: 0,
+      product_review: null,
+      product_review_image: null,
+      product_review_alt: null,
+      product_pro: null,
+      product_con: null,
+      product_pricing: null,
+      product_input_price: null,
+      product_output_price: null,
+      product_quality: null,
+      product_description: null,
+      tag_array: [],
+      product_video: null,
+      product_url: "",
+      product_logo_alt: "",
+      product_logo: null,
+      product_table: {
+        product_url: "",
+        product_logo: ""
+      }
+    }, relatedProducts: [] } });
+    categoryProductData = localStorageStore("categoryProductData", {});
+    main = localStorageStore("main", {});
+    business = localStorageStore("business", {});
+    education = localStorageStore("education", {});
+    entertainment = localStorageStore("entertainment", {});
+    technology = localStorageStore("technology", {});
+    creative = localStorageStore("creative", {});
+    lifestyle = localStorageStore("lifestyle", {});
+  }
+});
+
+// .svelte-kit/output/server/chunks/cardlist.js
+var css2, cTrack2, cMeter, ProgressBar, Cardlist;
+var init_cardlist = __esm({
+  ".svelte-kit/output/server/chunks/cardlist.js"() {
+    init_ssr();
     init_chunks();
-    init_supabaseClient();
-    css$1 = {
+    init_store();
+    init_productStore();
+    init_Icon();
+    css2 = {
       code: ".anim-indeterminate.svelte-12wvf64{transform-origin:0% 50%;animation:svelte-12wvf64-anim-indeterminate 2s infinite linear}@keyframes svelte-12wvf64-anim-indeterminate{0%{transform:translateX(0) scaleX(0)}40%{transform:translateX(0) scaleX(0.4)}100%{transform:translateX(100%) scaleX(0.5)}}",
       map: null
     };
@@ -16050,7 +16172,7 @@ var init_page_svelte = __esm({
         $$bindings.track(track);
       if ($$props.labelledby === void 0 && $$bindings.labelledby && labelledby !== void 0)
         $$bindings.labelledby(labelledby);
-      $$result.css.add(css$1);
+      $$result.css.add(css2);
       fillPercent = value ? 100 * (value - min2) / (max2 - min2) : 0;
       indeterminate = value === void 0 || value < 0;
       classesIndeterminate = indeterminate ? animIndeterminate : "";
@@ -16060,48 +16182,6 @@ var init_page_svelte = __esm({
         "width": `${indeterminate ? 100 : fillPercent}%`
       })}></div> </div>`;
     });
-    cBase2 = "w-full flex";
-    Ratings = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-      let classesBase;
-      let { value = 0 } = $$props;
-      let { max: max2 = 5 } = $$props;
-      let { interactive = false } = $$props;
-      let { text: text2 = "text-token" } = $$props;
-      let { fill = "fill-token" } = $$props;
-      let { justify = "justify-center" } = $$props;
-      let { spacing = "space-x-2" } = $$props;
-      let { regionIcon = "" } = $$props;
-      createEventDispatcher();
-      if ($$props.value === void 0 && $$bindings.value && value !== void 0)
-        $$bindings.value(value);
-      if ($$props.max === void 0 && $$bindings.max && max2 !== void 0)
-        $$bindings.max(max2);
-      if ($$props.interactive === void 0 && $$bindings.interactive && interactive !== void 0)
-        $$bindings.interactive(interactive);
-      if ($$props.text === void 0 && $$bindings.text && text2 !== void 0)
-        $$bindings.text(text2);
-      if ($$props.fill === void 0 && $$bindings.fill && fill !== void 0)
-        $$bindings.fill(fill);
-      if ($$props.justify === void 0 && $$bindings.justify && justify !== void 0)
-        $$bindings.justify(justify);
-      if ($$props.spacing === void 0 && $$bindings.spacing && spacing !== void 0)
-        $$bindings.spacing(spacing);
-      if ($$props.regionIcon === void 0 && $$bindings.regionIcon && regionIcon !== void 0)
-        $$bindings.regionIcon(regionIcon);
-      classesBase = `${cBase2} ${text2} ${fill} ${justify} ${spacing} ${$$props.class ?? ""}`;
-      return `<div class="${"ratings " + escape(classesBase, true)}" data-testid="rating-bar"> ${each({ length: max2 }, (_, i) => {
-        return `${interactive ? `<button class="${"rating-icon " + escape(regionIcon, true)}" type="button">${isFull(value, i) ? `${slots.full ? slots.full({}) : ``}` : `${isHalf(value, i) ? `${slots.half ? slots.half({}) : ``}` : `${slots.empty ? slots.empty({}) : ``}`}`} </button>` : `<span class="${"rating-icon " + escape(regionIcon, true)}">${isFull(value, i) ? `${slots.full ? slots.full({}) : ``}` : `${isHalf(value, i) ? `${slots.half ? slots.half({}) : ``}` : `${slots.empty ? slots.empty({}) : ``}`}`} </span>`}`;
-      })}</div>`;
-    });
-    localStorageStore("tagsState", {});
-    localStorageStore("categoryDataStore", {});
-    main = localStorageStore("main", {});
-    business = localStorageStore("business", {});
-    education = localStorageStore("education", {});
-    entertainment = localStorageStore("entertainment", {});
-    technology = localStorageStore("technology", {});
-    creative = localStorageStore("creative", {});
-    lifestyle = localStorageStore("lifestyle", {});
     Cardlist = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       let aggregated_data;
       let lightswitch;
@@ -16150,44 +16230,38 @@ var init_page_svelte = __esm({
           {},
           {
             full: () => {
-              return `${validate_component(Icon, "Icon").$$render(
-                $$result,
-                {
-                  icon: "line-md:star-filled",
-                  color: "gold"
-                },
-                {},
-                {}
-              )}`;
+              return `${validate_component(Stars, "Stars").$$render($$result, { type: "full" }, {}, {})}`;
             },
             half: () => {
-              return `${validate_component(Icon, "Icon").$$render(
-                $$result,
-                {
-                  icon: "line-md:star-filled-half",
-                  color: "gold"
-                },
-                {},
-                {}
-              )} `;
+              return `${validate_component(Stars, "Stars").$$render($$result, { type: "half" }, {}, {})}`;
             },
             empty: () => {
-              return `${validate_component(Icon, "Icon").$$render(
-                $$result,
-                {
-                  icon: "line-md:star-alt-twotone",
-                  color: "gray"
-                },
-                {},
-                {}
-              )}`;
+              return `${validate_component(Stars, "Stars").$$render($$result, { type: "empty" }, {}, {})}`;
             }
           }
         )}</div> <p class="p-1 text-sm opacity-80 text-ellipsis overflow-hidden h-16"> ${aggregated_data.product_table[i].product_description ? `${escape(aggregated_data.product_table[i].product_description)}` : ``}</p> ${`  <a${add_attribute("href", aggregated_data.product_table[i].product_name.replace(/\s/g, ""), 0)}><div class="flex justify-center" data-svelte-h="svelte-1f6z1o6"><button class="btn btn-sm w-[50%] bg-warning-500 border-2 border-black h-6 absolute bottom-2 left-0 right-0 mx-auto">Learn More
 														</button></div> </a>`} <div class="arrow variant-filled-secondary"></div></div>  ${` <ol class="flex justify-between"><button class="[&>*]:pointer-events-none min-w-[80%] group/item"><div class="flex w-full min-w-[66%]"><div class="mt-1"> ${escape(i + 1)}.</div> <div class="px-3"> ${aggregated_data.product_table[i].product_logo ? `<img class="rounded-full h-8 w-8 object-cover"${add_attribute("src", aggregated_data.product_table[i].product_logo, 0)} alt="AI FLUENTLY logo">` : `<img class="rounded-full h-8 w-8 object-cover" src="/assets/logo/logomark-black-circle.svg" alt="AI FLUENTLY logo">`}</div> <div class="pt-1 group-hover/item:underline group-active/item:underline"> ${escape(aggregated_data.product_table[i].product_name)}</div> </div></button> <a${add_attribute("href", aggregated_data.product_table[i].product_url, 0)} target="_blank" class="flex opacity-50 hover:opacity-100 text-3xl p-1">${validate_component(Icon, "Icon").$$render($$result, { icon: "system-uicons:jump-up" }, {}, {})}</a>  </ol>`}`;
       })}</ol></section></div></div>`}</div> ${lightswitch ? `<div class="pointer-events-none h-16 absolute w-full bottom-10 bg-gradient-to-t from-surface-800 to-surface-800/0"></div>` : `<div class="pointer-events-none h-16 absolute w-full bottom-10 bg-gradient-to-t from-surface-50 to-white/0"></div>`} <div class="btn btn-sm w-full h-8 opacity-0 bg-warning-500 border-2 border-black z-[5]"></div> <button class="btn btn-sm w-[85%] h-8 bg-warning-500 border-2 border-black z-[0] absolute bottom-2 left-0 right-0 mx-auto" data-svelte-h="svelte-1i73027">More</button></div></div>` : `<div class="card grid grid-cols-1 relative card-hover"${add_attribute("style", `height: ${outer_height};`, 0)}></div>`}`;
     });
-    css2 = {
+  }
+});
+
+// .svelte-kit/output/server/entries/pages/_page.svelte.js
+var page_svelte_exports = {};
+__export(page_svelte_exports, {
+  default: () => Page
+});
+function isValidCategoryId(category_id) {
+  return [1, 2, 3, 4, 5, 6, 7].includes(category_id);
+}
+var css3, Page;
+var init_page_svelte = __esm({
+  ".svelte-kit/output/server/entries/pages/_page.svelte.js"() {
+    init_ssr();
+    init_cardlist();
+    init_productStore();
+    init_supabaseClient();
+    css3 = {
       code: ".no-scrollbar.svelte-111b3a7::-webkit-scrollbar{display:none}.no-scrollbar.svelte-111b3a7{-ms-overflow-style:none;scrollbar-width:none}",
       map: null
     };
@@ -16242,7 +16316,7 @@ var init_page_svelte = __esm({
         $$bindings.data(data);
       if ($$props.categoryData === void 0 && $$bindings.categoryData && categoryData !== void 0)
         $$bindings.categoryData(categoryData);
-      $$result.css.add(css2);
+      $$result.css.add(css3);
       {
         {
           if (isValidCategoryId(category)) {
@@ -16435,9 +16509,1638 @@ var init__3 = __esm({
     component3 = async () => component_cache3 ?? (component_cache3 = (await Promise.resolve().then(() => (init_page_svelte(), page_svelte_exports))).default);
     universal_id2 = "src/routes/+page.ts";
     server_id2 = "src/routes/+page.server.ts";
-    imports3 = ["_app/immutable/nodes/2.-QOjVuFO.js", "_app/immutable/chunks/scheduler.cyAdSMMW.js", "_app/immutable/chunks/index.x73yj52l.js", "_app/immutable/chunks/store.NtGi4C_o.js", "_app/immutable/chunks/index.Naitio2P.js", "_app/immutable/chunks/popup.F6XfQYMo.js", "_app/immutable/chunks/supabaseClient.V3wEEveg.js", "_app/immutable/chunks/public.03yuBydq.js"];
+    imports3 = ["_app/immutable/nodes/2.t4QAxH5W.js", "_app/immutable/chunks/scheduler.qoUjChkd.js", "_app/immutable/chunks/index.HRC4UyyR.js", "_app/immutable/chunks/productStore.1ET5QMgR.js", "_app/immutable/chunks/store.xV9Yk6LI.js", "_app/immutable/chunks/index.xMhwf18p.js", "_app/immutable/chunks/cardlist.mMBOxlWg.js", "_app/immutable/chunks/popup.ApYA23B2.js", "_app/immutable/chunks/Icon.m_HsgSM1.js", "_app/immutable/chunks/supabaseClient.V3wEEveg.js", "_app/immutable/chunks/public.03yuBydq.js"];
     stylesheets3 = ["_app/immutable/assets/2.nr8xzUJT.css", "_app/immutable/assets/store.oq5aOWfL.css"];
     fonts3 = [];
+  }
+});
+
+// node_modules/.pnpm/blurhash@2.0.5/node_modules/blurhash/dist/esm/index.js
+var q, x, f, h, F, M, d, C, z, L, U, j;
+var init_esm = __esm({
+  "node_modules/.pnpm/blurhash@2.0.5/node_modules/blurhash/dist/esm/index.js"() {
+    q = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "#", "$", "%", "*", "+", ",", "-", ".", ":", ";", "=", "?", "@", "[", "]", "^", "_", "{", "|", "}", "~"];
+    x = (t) => {
+      let e = 0;
+      for (let r2 = 0; r2 < t.length; r2++) {
+        let n = t[r2], l = q.indexOf(n);
+        e = e * 83 + l;
+      }
+      return e;
+    };
+    f = (t) => {
+      let e = t / 255;
+      return e <= 0.04045 ? e / 12.92 : Math.pow((e + 0.055) / 1.055, 2.4);
+    };
+    h = (t) => {
+      let e = Math.max(0, Math.min(1, t));
+      return e <= 31308e-7 ? Math.trunc(e * 12.92 * 255 + 0.5) : Math.trunc((1.055 * Math.pow(e, 0.4166666666666667) - 0.055) * 255 + 0.5);
+    };
+    F = (t) => t < 0 ? -1 : 1;
+    M = (t, e) => F(t) * Math.pow(Math.abs(t), e);
+    d = class extends Error {
+      constructor(e) {
+        super(e), this.name = "ValidationError", this.message = e;
+      }
+    };
+    C = (t) => {
+      if (!t || t.length < 6)
+        throw new d("The blurhash string must be at least 6 characters");
+      let e = x(t[0]), r2 = Math.floor(e / 9) + 1, n = e % 9 + 1;
+      if (t.length !== 4 + 2 * n * r2)
+        throw new d(`blurhash length mismatch: length is ${t.length} but it should be ${4 + 2 * n * r2}`);
+    };
+    z = (t) => {
+      let e = t >> 16, r2 = t >> 8 & 255, n = t & 255;
+      return [f(e), f(r2), f(n)];
+    };
+    L = (t, e) => {
+      let r2 = Math.floor(t / 361), n = Math.floor(t / 19) % 19, l = t % 19;
+      return [M((r2 - 9) / 9, 2) * e, M((n - 9) / 9, 2) * e, M((l - 9) / 9, 2) * e];
+    };
+    U = (t, e, r2, n) => {
+      C(t), n = n | 1;
+      let l = x(t[0]), m = Math.floor(l / 9) + 1, b = l % 9 + 1, i = (x(t[1]) + 1) / 166, u = new Array(b * m);
+      for (let o = 0; o < u.length; o++)
+        if (o === 0) {
+          let a2 = x(t.substring(2, 6));
+          u[o] = z(a2);
+        } else {
+          let a2 = x(t.substring(4 + o * 2, 6 + o * 2));
+          u[o] = L(a2, i * n);
+        }
+      let c2 = e * 4, s2 = new Uint8ClampedArray(c2 * r2);
+      for (let o = 0; o < r2; o++)
+        for (let a2 = 0; a2 < e; a2++) {
+          let y = 0, B = 0, R = 0;
+          for (let w = 0; w < m; w++)
+            for (let P = 0; P < b; P++) {
+              let G = Math.cos(Math.PI * a2 * P / e) * Math.cos(Math.PI * o * w / r2), T = u[P + w * b];
+              y += T[0] * G, B += T[1] * G, R += T[2] * G;
+            }
+          let V = h(y), I = h(B), E = h(R);
+          s2[4 * a2 + 0 + o * c2] = V, s2[4 * a2 + 1 + o * c2] = I, s2[4 * a2 + 2 + o * c2] = E, s2[4 * a2 + 3 + o * c2] = 255;
+        }
+      return s2;
+    };
+    j = U;
+  }
+});
+
+// node_modules/.pnpm/@unpic+placeholder@0.1.2/node_modules/@unpic/placeholder/dist/index.mjs
+function percentOrZero(num) {
+  if (num === 0)
+    return 0;
+  return `${num}%`;
+}
+function pixelsToCssGradients(pixels, columns, rows) {
+  const stops = [];
+  for (let i = 0, j2 = 0; i < pixels.length; i += 4, j2++) {
+    const col = j2 % columns;
+    const row = Math.floor(j2 / columns);
+    const percentX = Math.round(col / (columns - 1) * 100);
+    const percentY = Math.round(row / (rows - 1) * 100);
+    const r2 = pixels[i];
+    const g = pixels[i + 1];
+    const b = pixels[i + 2];
+    const color = `radial-gradient(at ${percentOrZero(
+      percentX
+      // Hex is smaller than rgba. #00000000 = transparent
+    )} ${percentOrZero(percentY)},${rgbToHex(r2, g, b)},#00000000 50%)`;
+    stops.push(color);
+  }
+  return stops;
+}
+function blurhashToCssGradients(blurhash, columns = 4, rows = 3) {
+  const pixels = j(blurhash, columns, rows);
+  return pixelsToCssGradients(pixels, columns, rows);
+}
+function blurhashToCssGradientString(blurhash, columns = 4, rows = 3) {
+  return blurhashToCssGradients(blurhash, columns, rows).join(",");
+}
+var toHex, rgbToHex;
+var init_dist3 = __esm({
+  "node_modules/.pnpm/@unpic+placeholder@0.1.2/node_modules/@unpic/placeholder/dist/index.mjs"() {
+    init_esm();
+    toHex = (n) => {
+      const hex = n.toString(16);
+      return hex.length === 1 ? "0" + hex : hex;
+    };
+    rgbToHex = (r2, g, b) => {
+      return "#" + toHex(r2) + toHex(g) + toHex(b);
+    };
+  }
+});
+
+// .svelte-kit/output/server/chunks/imagecard.js
+function getImageCdnForUrl(url) {
+  return getImageCdnForUrlByDomain(url) || getImageCdnForUrlByPath(url);
+}
+function getImageCdnForUrlByDomain(url) {
+  if (typeof url === "string" && !url.startsWith("https://")) {
+    return false;
+  }
+  const { hostname } = toUrl(url);
+  if (cdnDomains.has(hostname)) {
+    return cdnDomains.get(hostname);
+  }
+  for (const [subdomain, cdn] of cdnSubdomains) {
+    if (hostname.endsWith(`.${subdomain}`)) {
+      return cdn;
+    }
+  }
+  return false;
+}
+function getImageCdnForUrlByPath(url) {
+  const { pathname } = toUrl(url);
+  for (const [prefix, cdn] of Object.entries(paths)) {
+    if (pathname.startsWith(prefix)) {
+      return cdn;
+    }
+  }
+  return false;
+}
+function getDirective(key2) {
+  let keyArray = Object.keys(OBJECT_TO_DIRECTIVES_MAP);
+  let directive = keyArray.find((k) => OBJECT_TO_DIRECTIVES_MAP[k] === key2) || "";
+  return directive;
+}
+function getParameterArray(url) {
+  let url_string = url.toString();
+  let paramArray = [];
+  if (url_string) {
+    let splitURL = url_string.split("imgeng=");
+    if (splitURL.length > 1) {
+      paramArray = splitURL[1].split("/");
+    }
+  }
+  return paramArray;
+}
+function getBaseUrl(url) {
+  let url_string = url.toString();
+  let baseUrl = "";
+  if (url_string) {
+    let splitURL = url_string.split("imgeng=");
+    if (splitURL.length > 1) {
+      baseUrl = splitURL[0].slice(0, -1);
+    } else {
+      baseUrl = url_string;
+    }
+  }
+  return baseUrl;
+}
+function build_IE_directives(directives) {
+  return Object.entries(directives).reduce((acc, [k, v]) => {
+    return acc + maybe_create_directive(k, v);
+  }, "");
+}
+function build_IE_query_string(directives_string) {
+  if (directives_string && directives_string !== "") {
+    return `imgeng=${directives_string}`;
+  }
+  return "";
+}
+function maybe_create_directive(directive, value) {
+  let translated_directive = OBJECT_TO_DIRECTIVES_MAP[directive];
+  if (translated_directive && (value || value === 0)) {
+    return `/${translated_directive}_${value}`;
+  }
+  return "";
+}
+function getDirectives(paramArray) {
+  let directives = {};
+  paramArray.forEach((para) => {
+    let keyValue = para.split("_");
+    if (keyValue.length > 1) {
+      let key2 = keyValue[0];
+      let value = keyValue[1];
+      let directiveKey = getDirective(key2);
+      if (directiveKey) {
+        directives[directiveKey] = value;
+      }
+    }
+  });
+  return directives;
+}
+function extractFilename(cdnUrl) {
+  const url = new URL(cdnUrl);
+  const noOrigin = url.pathname + url.search + url.hash;
+  const urlFilenameIdx = noOrigin.lastIndexOf("http");
+  const plainFilenameIdx = noOrigin.lastIndexOf("/");
+  let filename = "";
+  if (urlFilenameIdx >= 0) {
+    filename = noOrigin.slice(urlFilenameIdx);
+  } else if (plainFilenameIdx >= 0) {
+    filename = noOrigin.slice(plainFilenameIdx + 1);
+  }
+  return filename;
+}
+function isFileUrl(filename) {
+  return filename.startsWith("http");
+}
+function splitFileUrl(fileUrl) {
+  const url = new URL(fileUrl);
+  return {
+    pathname: url.origin + url.pathname || "",
+    search: url.search || "",
+    hash: url.hash || ""
+  };
+}
+function trimFilename(cdnUrl) {
+  const url = new URL(cdnUrl);
+  const filename = extractFilename(cdnUrl);
+  const filenamePathPart = isFileUrl(filename) ? splitFileUrl(filename).pathname : filename;
+  url.pathname = url.pathname.replace(filenamePathPart, "");
+  url.search = "";
+  url.hash = "";
+  return url.toString();
+}
+function extractOperations(cdnUrl) {
+  const withoutFilename = trimFilename(cdnUrl);
+  const url = new URL(withoutFilename);
+  const operationsMarker = url.pathname.indexOf("/-/");
+  if (operationsMarker === -1) {
+    return [];
+  }
+  const operationsStr = url.pathname.substring(operationsMarker);
+  return operationsStr.split("/-/").filter(Boolean).map((operation) => normalizeCdnOperation(operation));
+}
+function getDelegatedCdn(url, cdn) {
+  if (!(cdn in delegators)) {
+    return false;
+  }
+  const maybeDelegate = delegators[cdn];
+  if (!maybeDelegate) {
+    return false;
+  }
+  return maybeDelegate(url);
+}
+function getCanonicalCdnForUrl(url, defaultCdn) {
+  const cdn = getImageCdnForUrl(url) || defaultCdn;
+  if (!cdn) {
+    return false;
+  }
+  const maybeDelegated = getDelegatedCdn(url, cdn);
+  if (maybeDelegated) {
+    return maybeDelegated;
+  }
+  return { cdn, url };
+}
+function transformSharedProps({
+  width,
+  height,
+  priority,
+  layout = "constrained",
+  aspectRatio,
+  ...props
+}) {
+  width = width && Number(width) || void 0;
+  height = height && Number(height) || void 0;
+  if (priority) {
+    props.loading || (props.loading = "eager");
+    props.fetchpriority || (props.fetchpriority = "high");
+  } else {
+    props.loading || (props.loading = "lazy");
+    props.decoding || (props.decoding = "async");
+  }
+  if (props.alt === "") {
+    props.role || (props.role = "presentation");
+  }
+  if (aspectRatio) {
+    if (width) {
+      if (height)
+        ;
+      else {
+        height = width / aspectRatio;
+      }
+    } else if (height) {
+      width = height * aspectRatio;
+    } else
+      ;
+  } else if (width && height) {
+    aspectRatio = width / height;
+  } else
+    ;
+  return {
+    width,
+    height,
+    aspectRatio,
+    layout,
+    ...props
+  };
+}
+function transformProps(props) {
+  let {
+    src,
+    cdn,
+    transformer,
+    background,
+    layout,
+    objectFit,
+    breakpoints,
+    width,
+    height,
+    aspectRatio,
+    unstyled,
+    ...transformedProps
+  } = transformSharedProps(props);
+  const canonical = src ? getCanonicalCdnForUrl(src, cdn) : void 0;
+  let url = src;
+  if (canonical) {
+    url = canonical.url;
+    transformer || (transformer = getTransformer(canonical.cdn));
+  }
+  if (transformer && background === "auto") {
+    const lowResHeight = aspectRatio ? Math.round(LOW_RES_WIDTH / aspectRatio) : void 0;
+    const lowResImage = transformer({
+      url,
+      width: LOW_RES_WIDTH,
+      height: lowResHeight
+    });
+    if (lowResImage) {
+      background = lowResImage.toString();
+    }
+  }
+  const styleProps = {
+    width,
+    height,
+    aspectRatio,
+    layout,
+    objectFit,
+    background
+  };
+  transformedProps.sizes || (transformedProps.sizes = getSizes(width, layout));
+  if (!unstyled) {
+    transformedProps.style = {
+      ...getStyle(styleProps),
+      ...transformedProps.style
+    };
+  }
+  if (transformer) {
+    transformedProps.srcset = getSrcSet({
+      src: url,
+      width,
+      height,
+      aspectRatio,
+      layout,
+      breakpoints,
+      transformer,
+      cdn
+    });
+    const transformed = transformer({ url, width, height });
+    if (transformed) {
+      url = transformed;
+    }
+    if (layout === "fullWidth" || layout === "constrained") {
+      width = void 0;
+      height = void 0;
+    }
+  }
+  return {
+    ...transformedProps,
+    src: url?.toString(),
+    width,
+    height
+  };
+}
+function a(t, o) {
+  const r2 = RegExp(t, "g");
+  return (e) => {
+    if (typeof e != "string")
+      throw new TypeError(`expected an argument of type string, but got ${typeof e}`);
+    return e.match(r2) ? e.replace(r2, o) : e;
+  };
+}
+function c(o, r$1 = r) {
+  if (!o || typeof o != "object" || Array.isArray(o))
+    throw new TypeError(`expected an argument of type object, but got ${typeof o}`);
+  return Object.keys(o).map((e) => `${r$1(e)}: ${o[e]};`).join(`
+`);
+}
+var domains, subdomains, paths, roundIfNumeric, setParamIfDefined, setParamIfUndefined, getNumericParam, toRelativeUrl, toCanonicalUrlString, toUrl, cdnDomains, cdnSubdomains, transform$n, transform$m, transform$l, shopifyRegex, parse$7, generate$8, transform$k, transform$j, transform$i, cloudinaryRegex, parseTransforms$2, formatUrl$3, parse$6, generate$7, transform$h, cloudflareRegex, parseTransforms$1, formatUrl$2, parse$5, generate$6, transform$g, transform$f, storyBlokAssets, storyBlokImg2, splitFilters, generateFilters, parse$4, generate$5, transform$e, transform$d, delegateUrl, generate$4, transform$c, transform$b, transform$a, transform$9, transform$8, OBJECT_TO_DIRECTIVES_MAP, transform$7, transform$6, cloudflareImagesRegex, parseTransforms, formatUrl$1, parse$3, generate$3, transform$5, parse$2, generate$2, transform$4, transform$3, skippedParams, parse$12, generate$1, transform$2, getTransformParams, transform$1, uploadcareRegex, normalizeCdnOperation, parseOperations, formatUrl, parse2, generate, transform, delegators, getTransformer, getSizes, pixelate, getStyle, DEFAULT_RESOLUTIONS, LOW_RES_WIDTH, getBreakpoints, getSrcSetEntries, getSrcSet, r, Image, Linkicon, Imagecard;
+var init_imagecard = __esm({
+  ".svelte-kit/output/server/chunks/imagecard.js"() {
+    init_ssr();
+    init_productStore();
+    init_store();
+    init_dist3();
+    domains = {
+      "images.ctfassets.net": "contentful",
+      "cdn.builder.io": "builder.io",
+      "images.prismic.io": "imgix",
+      "www.datocms-assets.com": "imgix",
+      "cdn.sanity.io": "imgix",
+      "images.unsplash.com": "imgix",
+      "cdn.shopify.com": "shopify",
+      "s7d1.scene7.com": "scene7",
+      "ip.keycdn.com": "keycdn",
+      "assets.caisy.io": "bunny",
+      "images.contentstack.io": "contentstack",
+      "ucarecdn.com": "uploadcare"
+    };
+    subdomains = {
+      "imgix.net": "imgix",
+      "files.wordpress.com": "wordpress",
+      "b-cdn.net": "bunny",
+      "storyblok.com": "storyblok",
+      "kc-usercontent.com": "kontent.ai",
+      "cloudinary.com": "cloudinary",
+      "kxcdn.com": "keycdn",
+      "imgeng.in": "imageengine",
+      "imagekit.io": "imagekit",
+      "cloudimg.io": "cloudimage",
+      "ucarecdn.com": "uploadcare"
+    };
+    paths = {
+      "/cdn-cgi/image/": "cloudflare",
+      "/cdn-cgi/imagedelivery/": "cloudflare_images",
+      "/_next/image": "nextjs",
+      "/_next/static": "nextjs",
+      "/_vercel/image": "vercel",
+      "/is/image": "scene7",
+      "/_ipx/": "ipx",
+      "/_image": "astro",
+      "/.netlify/images": "netlify"
+    };
+    roundIfNumeric = (value) => {
+      if (!value) {
+        return value;
+      }
+      const num = Number(value);
+      return isNaN(num) ? value : Math.round(num);
+    };
+    setParamIfDefined = (url, key2, value, deleteExisting, roundValue) => {
+      if (value) {
+        if (roundValue) {
+          value = roundIfNumeric(value);
+        }
+        url.searchParams.set(key2, value.toString());
+      } else if (deleteExisting) {
+        url.searchParams.delete(key2);
+      }
+    };
+    setParamIfUndefined = (url, key2, value) => {
+      if (!url.searchParams.has(key2)) {
+        url.searchParams.set(key2, value.toString());
+      }
+    };
+    getNumericParam = (url, key2) => {
+      const value = Number(url.searchParams.get(key2));
+      return isNaN(value) ? void 0 : value;
+    };
+    toRelativeUrl = (url) => {
+      const { pathname, search } = url;
+      return `${pathname}${search}`;
+    };
+    toCanonicalUrlString = (url) => {
+      return url.hostname === "n" ? toRelativeUrl(url) : url.toString();
+    };
+    toUrl = (url, base2) => {
+      return typeof url === "string" ? new URL(url, base2 ?? "http://n/") : url;
+    };
+    cdnDomains = new Map(Object.entries(domains));
+    cdnSubdomains = Object.entries(subdomains);
+    transform$n = ({ url: originalUrl, width, height, format }) => {
+      const url = toUrl(originalUrl);
+      if (width && width > 4e3) {
+        if (height) {
+          height = Math.round(height * 4e3 / width);
+        }
+        width = 4e3;
+      }
+      if (height && height > 4e3) {
+        if (width) {
+          width = Math.round(width * 4e3 / height);
+        }
+        height = 4e3;
+      }
+      setParamIfDefined(url, "w", width, true, true);
+      setParamIfDefined(url, "h", height, true, true);
+      setParamIfDefined(url, "fm", format);
+      setParamIfUndefined(url, "fit", "fill");
+      return url;
+    };
+    transform$m = ({ url: originalUrl, width, height, format }) => {
+      const url = toUrl(originalUrl);
+      setParamIfDefined(url, "width", width, true, true);
+      setParamIfDefined(url, "height", height, true, true);
+      setParamIfDefined(url, "format", format);
+      if (width && height) {
+        setParamIfUndefined(url, "fit", "cover");
+        setParamIfUndefined(url, "sharp", "true");
+      }
+      return url;
+    };
+    transform$l = ({ url: originalUrl, width, height, format }) => {
+      const url = toUrl(originalUrl);
+      setParamIfDefined(url, "w", width, true, true);
+      setParamIfDefined(url, "h", height, true, true);
+      setParamIfUndefined(url, "fit", "min");
+      if (format) {
+        url.searchParams.set("fm", format);
+        const fm = url.searchParams.get("auto");
+        if (fm === "format") {
+          url.searchParams.delete("auto");
+        } else if (fm?.includes("format")) {
+          url.searchParams.set("auto", fm.split(",").filter((s2) => s2 !== "format").join(","));
+        }
+      } else {
+        url.searchParams.delete("fm");
+        if (!url.searchParams.get("auto")?.includes("format")) {
+          url.searchParams.append("auto", "format");
+        }
+      }
+      return url;
+    };
+    shopifyRegex = /(.+?)(?:_(?:(pico|icon|thumb|small|compact|medium|large|grande|original|master)|(\d*)x(\d*)))?(?:_crop_([a-z]+))?(\.[a-zA-Z]+)(\.png|\.jpg|\.webp|\.avif)?$/;
+    parse$7 = (imageUrl) => {
+      const url = toUrl(imageUrl);
+      const match = url.pathname.match(shopifyRegex);
+      if (!match) {
+        throw new Error("Invalid Shopify URL");
+      }
+      const [, path, size2, width, height, crop, extension, format] = match;
+      url.pathname = `${path}${extension}`;
+      const widthString = width ? width : url.searchParams.get("width");
+      const heightString = height ? height : url.searchParams.get("height");
+      url.searchParams.delete("width");
+      url.searchParams.delete("height");
+      return {
+        base: url.toString(),
+        width: Number(widthString) || void 0,
+        height: Number(heightString) || void 0,
+        format: format ? format.slice(1) : void 0,
+        params: { crop, size: size2 },
+        cdn: "shopify"
+      };
+    };
+    generate$8 = ({ base: base2, width, height, format, params }) => {
+      const url = toUrl(base2);
+      setParamIfDefined(url, "width", width, true, true);
+      setParamIfDefined(url, "height", height, true, true);
+      setParamIfDefined(url, "crop", params?.crop);
+      setParamIfDefined(url, "format", format);
+      return url;
+    };
+    transform$k = ({ url: originalUrl, width, height }) => {
+      const parsed = parse$7(originalUrl);
+      if (!parsed) {
+        return;
+      }
+      const props = {
+        ...parsed,
+        width,
+        height
+      };
+      return generate$8(props);
+    };
+    transform$j = ({ url: originalUrl, width, height }) => {
+      const url = toUrl(originalUrl);
+      setParamIfDefined(url, "w", width, true, true);
+      setParamIfDefined(url, "h", height, true, true);
+      setParamIfUndefined(url, "crop", "1");
+      return url;
+    };
+    transform$i = ({ url: originalUrl, width, height }) => {
+      const url = toUrl(originalUrl);
+      setParamIfDefined(url, "w", width, true, true);
+      setParamIfDefined(url, "h", height, true, true);
+      setParamIfDefined(url, "q", getNumericParam(url, "q"), true);
+      return url;
+    };
+    cloudinaryRegex = /https?:\/\/(?<host>[^\/]+)\/(?<cloudName>[^\/]+)\/(?<assetType>image|video|raw)\/(?<deliveryType>upload|fetch|private|authenticated|sprite|facebook|twitter|youtube|vimeo)\/?(?<signature>s\-\-[a-zA-Z0-9]+\-\-)?\/?(?<transformations>(?:[^_\/]+_[^,\/]+,?)*)?\/(?:(?<version>v\d+)\/)?(?<idAndFormat>[^\s]+)$/g;
+    parseTransforms$2 = (transformations) => {
+      return transformations ? Object.fromEntries(transformations.split(",").map((t) => t.split("_"))) : {};
+    };
+    formatUrl$3 = ({ host, cloudName, assetType, deliveryType, signature, transformations = {}, version: version6, id, format }) => {
+      if (format) {
+        transformations.f = format;
+      }
+      const transformString = Object.entries(transformations).map(([key2, value]) => `${key2}_${value}`).join(",");
+      const pathSegments = [
+        host,
+        cloudName,
+        assetType,
+        deliveryType,
+        signature,
+        transformString,
+        version6,
+        id
+      ].filter(Boolean).join("/");
+      return `https://${pathSegments}`;
+    };
+    parse$6 = (imageUrl) => {
+      const url = toUrl(imageUrl);
+      const matches = [...url.toString().matchAll(cloudinaryRegex)];
+      if (!matches.length) {
+        throw new Error("Invalid Cloudinary URL");
+      }
+      const group = matches[0].groups || {};
+      const { transformations: transformString = "", idAndFormat, ...baseParams } = group;
+      delete group.idAndFormat;
+      const lastDotIndex = idAndFormat.lastIndexOf(".");
+      const id = lastDotIndex < 0 ? idAndFormat : idAndFormat.slice(0, lastDotIndex);
+      const originalFormat = lastDotIndex < 0 ? void 0 : idAndFormat.slice(lastDotIndex + 1);
+      const { w, h: h2, f: f2, ...transformations } = parseTransforms$2(transformString);
+      const format = f2 && f2 !== "auto" ? f2 : originalFormat;
+      const base2 = formatUrl$3({ ...baseParams, id, transformations });
+      return {
+        base: base2,
+        width: Number(w) || void 0,
+        height: Number(h2) || void 0,
+        format,
+        cdn: "cloudinary",
+        params: {
+          ...group,
+          id: group.deliveryType === "fetch" ? idAndFormat : id,
+          format,
+          transformations
+        }
+      };
+    };
+    generate$7 = ({ base: base2, width, height, format, params }) => {
+      var _a;
+      const parsed = parse$6(base2.toString());
+      const props = {
+        transformations: {},
+        ...parsed.params,
+        ...params,
+        format: format || "auto"
+      };
+      if (width) {
+        props.transformations.w = roundIfNumeric(width).toString();
+      }
+      if (height) {
+        props.transformations.h = roundIfNumeric(height).toString();
+      }
+      (_a = props.transformations).c || (_a.c = "lfill");
+      return formatUrl$3(props);
+    };
+    transform$h = ({ url: originalUrl, width, height, format = "auto" }) => {
+      const parsed = parse$6(originalUrl);
+      if (!parsed) {
+        throw new Error("Invalid Cloudinary URL");
+      }
+      if (parsed.params?.assetType !== "image") {
+        throw new Error("Cloudinary transformer only supports images");
+      }
+      if (parsed.params?.signature) {
+        throw new Error("Cloudinary transformer does not support signed URLs");
+      }
+      const props = {
+        ...parsed,
+        width,
+        height,
+        format
+      };
+      return generate$7(props);
+    };
+    cloudflareRegex = /https?:\/\/(?<host>[^\/]+)\/cdn-cgi\/image\/(?<transformations>[^\/]+)?\/(?<path>.*)$/g;
+    parseTransforms$1 = (transformations) => Object.fromEntries(transformations.split(",").map((t) => t.split("=")));
+    formatUrl$2 = ({ host, transformations = {}, path }) => {
+      const transformString = Object.entries(transformations).map(([key2, value]) => `${key2}=${value}`).join(",");
+      const pathSegments = [
+        host,
+        "cdn-cgi",
+        "image",
+        transformString,
+        path
+      ].join("/");
+      return `https://${pathSegments}`;
+    };
+    parse$5 = (imageUrl) => {
+      const url = toUrl(imageUrl);
+      const matches = [...url.toString().matchAll(cloudflareRegex)];
+      if (!matches.length) {
+        throw new Error("Invalid Cloudflare URL");
+      }
+      const group = matches[0].groups || {};
+      const { transformations: transformString, ...baseParams } = group;
+      const { width, height, f: f2, ...transformations } = parseTransforms$1(transformString);
+      formatUrl$2({ ...baseParams, transformations });
+      return {
+        base: url.toString(),
+        width: Number(width) || void 0,
+        height: Number(height) || void 0,
+        format: f2,
+        cdn: "cloudflare",
+        params: { ...group, transformations }
+      };
+    };
+    generate$6 = ({ base: base2, width, height, format, params }) => {
+      var _a;
+      const parsed = parse$5(base2.toString());
+      const props = {
+        transformations: {},
+        ...parsed.params,
+        ...params
+      };
+      if (width) {
+        props.transformations.width = width?.toString();
+      }
+      if (height) {
+        props.transformations.height = height?.toString();
+      }
+      if (format) {
+        props.transformations.f = format === "jpg" ? "jpeg" : format;
+      }
+      (_a = props.transformations).fit || (_a.fit = "cover");
+      return new URL(formatUrl$2(props));
+    };
+    transform$g = ({ url: originalUrl, width, height, format = "auto" }) => {
+      const parsed = parse$5(originalUrl);
+      if (!parsed) {
+        throw new Error("Invalid Cloudflare URL");
+      }
+      const props = {
+        ...parsed,
+        width,
+        height,
+        format
+      };
+      return generate$6(props);
+    };
+    transform$f = ({ url: originalUrl, width, height }) => {
+      const url = toUrl(originalUrl);
+      setParamIfDefined(url, "width", width, true, true);
+      if (width && height) {
+        setParamIfUndefined(url, "aspect_ratio", `${width}:${height}`);
+      }
+      return url;
+    };
+    storyBlokAssets = /(?<id>\/f\/\d+\/\d+x\d+\/\w+\/[^\/]+)\/?(?<modifiers>m\/?(?<crop>\d+x\d+:\d+x\d+)?\/?(?<resize>(?<flipx>\-)?(?<width>\d+)x(?<flipy>\-)?(?<height>\d+))?\/?(filters\:(?<filters>[^\/]+))?)?$/g;
+    storyBlokImg2 = /^(?<modifiers>\/(?<crop>\d+x\d+:\d+x\d+)?\/?(?<resize>(?<flipx>\-)?(?<width>\d+)x(?<flipy>\-)?(?<height>\d+))?\/?(filters\:(?<filters>[^\/]+))?\/?)?(?<id>\/f\/.+)$/g;
+    splitFilters = (filters) => {
+      if (!filters) {
+        return {};
+      }
+      return Object.fromEntries(filters.split(":").map((filter) => {
+        if (!filter)
+          return [];
+        const [key2, value] = filter.split("(");
+        return [key2, value.replace(")", "")];
+      }));
+    };
+    generateFilters = (filters) => {
+      if (!filters) {
+        return void 0;
+      }
+      const filterItems = Object.entries(filters).map(([key2, value]) => `${key2}(${value ?? ""})`);
+      if (filterItems.length === 0) {
+        return void 0;
+      }
+      return `filters:${filterItems.join(":")}`;
+    };
+    parse$4 = (imageUrl) => {
+      const url = toUrl(imageUrl);
+      const regex2 = url.hostname === "img2.storyblok.com" ? storyBlokImg2 : storyBlokAssets;
+      const [matches] = url.pathname.matchAll(regex2);
+      if (!matches || !matches.groups) {
+        throw new Error("Invalid Storyblok URL");
+      }
+      const { id, crop, width, height, filters, flipx, flipy } = matches.groups;
+      const { format, ...filterMap } = splitFilters(filters);
+      if (url.hostname === "img2.storyblok.com") {
+        url.hostname = "a.storyblok.com";
+      }
+      return {
+        base: url.origin + id,
+        width: Number(width) || void 0,
+        height: Number(height) || void 0,
+        format,
+        params: {
+          crop,
+          filters: filterMap,
+          flipx,
+          flipy
+        },
+        cdn: "storyblok"
+      };
+    };
+    generate$5 = ({ base: base2, width = 0, height = 0, format, params = {} }) => {
+      const { crop, filters, flipx = "", flipy = "" } = params;
+      const size2 = `${flipx}${width}x${flipy}${height}`;
+      return new URL([base2, "m", crop, size2, generateFilters(filters), format].filter(Boolean).join("/"));
+    };
+    transform$e = ({ url: originalUrl, width, height, format }) => {
+      const parsed = parse$4(originalUrl);
+      if (!parsed) {
+        return;
+      }
+      if (format) {
+        if (!parsed.params) {
+          parsed.params = { filters: {} };
+        }
+        if (!parsed.params.filters) {
+          parsed.params.filters = {};
+        }
+        parsed.params.filters.format = format;
+      }
+      return generate$5({
+        ...parsed,
+        width,
+        height
+      });
+    };
+    transform$d = ({ url: originalUrl, width, height, format }) => {
+      const url = toUrl(originalUrl);
+      setParamIfDefined(url, "w", width, true, true);
+      setParamIfDefined(url, "h", height, true, true);
+      setParamIfDefined(url, "fm", format, true);
+      if (width && height) {
+        setParamIfUndefined(url, "fit", "crop");
+      }
+      return url;
+    };
+    delegateUrl = (url) => {
+      const parsed = toUrl(url);
+      const source = parsed.searchParams.get("url");
+      if (!source || !source.startsWith("http")) {
+        return false;
+      }
+      const cdn = getImageCdnForUrlByDomain(source);
+      if (!cdn) {
+        return false;
+      }
+      return {
+        cdn,
+        url: source
+      };
+    };
+    generate$4 = ({ base: base2, width, params: { quality = 75, root = "_vercel" } = {} }) => {
+      const url = new URL("http://n");
+      url.pathname = `/${root}/image`;
+      url.searchParams.set("url", base2.toString());
+      setParamIfDefined(url, "w", width, false, true);
+      setParamIfUndefined(url, "q", quality);
+      return toRelativeUrl(url);
+    };
+    transform$c = ({ url, width, cdn }) => {
+      const parsedUrl = toUrl(url);
+      const isNextImage = parsedUrl.pathname.startsWith("/_next/image") || parsedUrl.pathname.startsWith("/_vercel/image");
+      const src = isNextImage ? parsedUrl.searchParams.get("url") : url.toString();
+      if (!src) {
+        return void 0;
+      }
+      setParamIfDefined(parsedUrl, "w", width, true, true);
+      if (isNextImage) {
+        return toCanonicalUrlString(parsedUrl);
+      }
+      return generate$4({
+        base: src,
+        width,
+        params: { root: cdn === "nextjs" ? "_next" : "_vercel" }
+      });
+    };
+    transform$b = (params) => transform$c({ ...params, cdn: "nextjs" });
+    transform$a = ({ url: originalUrl, width, height, format }) => {
+      const url = toUrl(originalUrl);
+      setParamIfDefined(url, "wid", width, true, true);
+      setParamIfDefined(url, "hei", height, true, true);
+      setParamIfDefined(url, "fmt", format, true);
+      setParamIfDefined(url, "qlt", getNumericParam(url, "qlt"), true);
+      setParamIfDefined(url, "scl", getNumericParam(url, "scl"), true);
+      setParamIfUndefined(url, "fit", "crop");
+      if (!width && !height) {
+        setParamIfUndefined(url, "scl", 1);
+      }
+      return url;
+    };
+    transform$9 = ({ url: originalUrl, width, height, format }) => {
+      const url = toUrl(originalUrl);
+      setParamIfDefined(url, "width", width, true, true);
+      setParamIfDefined(url, "height", height, true, true);
+      setParamIfDefined(url, "format", format, true);
+      setParamIfDefined(url, "quality", getNumericParam(url, "quality"), true);
+      setParamIfUndefined(url, "enlarge", 0);
+      return url;
+    };
+    transform$8 = ({ url: originalUrl, width, height, format }) => {
+      const url = toUrl(originalUrl);
+      setParamIfDefined(url, "width", width, true, true);
+      setParamIfDefined(url, "height", height, true, true);
+      setParamIfDefined(url, "format", format);
+      setParamIfDefined(url, "quality", getNumericParam(url, "quality"), true);
+      return url;
+    };
+    OBJECT_TO_DIRECTIVES_MAP = {
+      width: "w",
+      height: "h",
+      autoWidthWithFallback: "w_auto",
+      auto_width_fallback: "w_auto",
+      scaleToScreenWidth: "pc",
+      scale_to_screen_width: "pc",
+      crop: "cr",
+      outputFormat: "f",
+      format: "f",
+      fit: "m",
+      fitMethod: "m",
+      compression: "cmpr",
+      sharpness: "s",
+      rotate: "r",
+      inline: "in",
+      keepMeta: "meta",
+      keep_meta: "meta",
+      noOptimization: "pass",
+      no_optimization: "pass",
+      force_download: "dl",
+      max_device_pixel_ratio: "maxdpr",
+      maxDevicePixelRatio: "maxdpr"
+    };
+    transform$7 = ({ url: originalUrl, width, height, format }) => {
+      const url = toUrl(originalUrl);
+      const src = getBaseUrl(url);
+      let directives = {};
+      const param = url.toString() === src ? [] : getParameterArray(url);
+      if (param.length) {
+        directives = getDirectives(param);
+      }
+      if (width) {
+        directives["width"] = width;
+      }
+      if (height) {
+        directives["height"] = height;
+      }
+      if (format) {
+        directives["format"] = format;
+      }
+      if (!directives.hasOwnProperty("fit")) {
+        directives = { ...directives, "fit": "cropbox" };
+      }
+      let directives_string = build_IE_directives(directives);
+      let query_string = build_IE_query_string(directives_string);
+      let query_prefix = query_string === "" ? "" : src.includes("?") ? "&" : "?";
+      return `${src}${query_prefix}${query_string}`;
+    };
+    transform$6 = ({ url: originalUrl, width, height, format }) => {
+      const url = toUrl(originalUrl);
+      setParamIfDefined(url, "width", width, true, true);
+      setParamIfDefined(url, "height", height, true, true);
+      setParamIfDefined(url, "format", format);
+      if (!url.searchParams.has("format")) {
+        setParamIfUndefined(url, "auto", "webp");
+      }
+      if (width && height) {
+        setParamIfUndefined(url, "fit", "crop");
+      }
+      return url;
+    };
+    cloudflareImagesRegex = /https?:\/\/(?<host>[^\/]+)\/cdn-cgi\/imagedelivery\/(?<accountHash>[^\/]+)\/(?<imageId>[^\/]+)\/*(?<transformations>[^\/]+)*$/g;
+    parseTransforms = (transformations) => Object.fromEntries(transformations?.split(",")?.map((t) => t.split("=")) ?? []);
+    formatUrl$1 = ({ host, accountHash, transformations = {}, imageId }) => {
+      const transformString = Object.entries(transformations).map(([key2, value]) => `${key2}=${value}`).join(",");
+      const pathSegments = [
+        host,
+        "cdn-cgi",
+        "imagedelivery",
+        accountHash,
+        imageId,
+        transformString
+      ].join("/");
+      return `https://${pathSegments}`;
+    };
+    parse$3 = (imageUrl) => {
+      const url = toUrl(imageUrl);
+      const matches = [...url.toString().matchAll(cloudflareImagesRegex)];
+      if (!matches.length) {
+        throw new Error("Invalid Cloudflare Images URL");
+      }
+      const group = matches[0].groups || {};
+      const { transformations: transformString, ...baseParams } = group;
+      const { w, h: h2, f: f2, ...transformations } = parseTransforms(transformString);
+      return {
+        base: url.toString(),
+        width: Number(w) || void 0,
+        height: Number(h2) || void 0,
+        format: f2,
+        cdn: "cloudflare_images",
+        params: { ...baseParams, transformations }
+      };
+    };
+    generate$3 = ({ base: base2, width, height, format, params }) => {
+      var _a;
+      const parsed = parse$3(base2.toString());
+      const props = {
+        transformations: {},
+        ...parsed.params,
+        ...params
+      };
+      if (width) {
+        props.transformations.w = width?.toString();
+      }
+      if (height) {
+        props.transformations.h = height?.toString();
+      }
+      if (format) {
+        props.transformations.f = format;
+      }
+      (_a = props.transformations).fit || (_a.fit = "cover");
+      return new URL(formatUrl$1(props));
+    };
+    transform$5 = ({ url: originalUrl, width, height, format = "auto" }) => {
+      const parsed = parse$3(originalUrl);
+      if (!parsed) {
+        throw new Error("Invalid Cloudflare Images URL");
+      }
+      const props = {
+        ...parsed,
+        width,
+        height,
+        format
+      };
+      return generate$3(props);
+    };
+    parse$2 = (imageUrl) => {
+      const url = toUrl(imageUrl);
+      const [modifiers, ...id] = url.pathname.split("/").slice(1);
+      const params = Object.fromEntries(modifiers.split(",").map((modifier) => {
+        const [key2, value] = modifier.split("_");
+        return [key2, value];
+      }));
+      if (params.s) {
+        const [width, height] = params.s.split("x");
+        params.w || (params.w = width);
+        params.h || (params.h = height);
+      }
+      return {
+        base: id.join("/"),
+        width: Number(params.w) || void 0,
+        height: Number(params.h) || void 0,
+        quality: Number(params.q) || void 0,
+        format: params.f || "auto",
+        params,
+        cdn: "ipx"
+      };
+    };
+    generate$2 = ({ base: id, width, height, format, params }) => {
+      const modifiers = params?.modifiers ?? {};
+      if (width && height) {
+        modifiers.s = `${width}x${height}`;
+      } else if (width) {
+        modifiers.w = `${width}`;
+      } else if (height) {
+        modifiers.h = `${height}`;
+      }
+      if (format) {
+        modifiers.f = format;
+      }
+      const base2 = params?.base.endsWith("/") ? params?.base : `${params?.base}/`;
+      const modifiersString = Object.entries(modifiers).map(([key2, value]) => `${key2}_${value}`).join(",");
+      const stringId = id.toString();
+      const image = stringId.startsWith("/") ? stringId.slice(1) : stringId;
+      return `${base2}${modifiersString}/${image}`;
+    };
+    transform$4 = (options3) => {
+      const url = String(options3.url);
+      const parsedUrl = toUrl(url);
+      const defaultBase = parsedUrl.pathname.startsWith("/_ipx") && parsedUrl.hostname !== "n" ? `${parsedUrl.origin}/_ipx` : "/_ipx";
+      const base2 = options3.cdnOptions?.ipx?.base ?? defaultBase;
+      const isIpxUrl = base2 && base2 !== "/" && url.startsWith(base2);
+      if (isIpxUrl) {
+        const parsed = parse$2(url.replace(base2, ""));
+        return generate$2({
+          ...parsed,
+          ...options3,
+          params: {
+            ...options3.cdnOptions?.ipx,
+            base: base2
+          }
+        });
+      }
+      return generate$2({
+        ...options3,
+        base: url,
+        params: {
+          ...options3.cdnOptions?.ipx,
+          base: base2
+        }
+      });
+    };
+    transform$3 = ({ url: originalUrl, width, height, format }) => {
+      const parsedUrl = toUrl(originalUrl);
+      const href = toCanonicalUrlString(new URL(parsedUrl.pathname, parsedUrl.origin));
+      const url = { searchParams: new URLSearchParams() };
+      setParamIfDefined(url, "href", href, true, true);
+      setParamIfDefined(url, "w", width, true, true);
+      setParamIfDefined(url, "h", height, true, true);
+      setParamIfDefined(url, "f", format);
+      return `/_image?${url.searchParams.toString()}`;
+    };
+    skippedParams = /* @__PURE__ */ new Set([
+      "w",
+      "h",
+      "q",
+      "fm",
+      "url",
+      "width",
+      "height",
+      "quality"
+    ]);
+    parse$12 = (url) => {
+      const parsed = toUrl(url);
+      const width = Number(parsed.searchParams.get("w") ?? parsed.searchParams.get("width")) ?? void 0;
+      const height = Number(parsed.searchParams.get("h") ?? parsed.searchParams.get("height")) ?? void 0;
+      const quality = Number(parsed.searchParams.get("q") ?? parsed.searchParams.get("quality")) || void 0;
+      const format = parsed.searchParams.get("fm") || void 0;
+      const base2 = parsed.searchParams.get("url") || "";
+      const params = {
+        quality
+      };
+      parsed.searchParams.forEach((value, key2) => {
+        if (skippedParams.has(key2)) {
+          return;
+        }
+        params[key2] = value;
+      });
+      parsed.search = "";
+      return {
+        base: base2,
+        width,
+        height,
+        format,
+        params,
+        cdn: "netlify"
+      };
+    };
+    generate$1 = ({ base: base2, width, height, format, params: { site, quality, ...params } = {} }) => {
+      const url = toUrl("/.netlify/images", site);
+      Object.entries(params).forEach(([key2, value]) => setParamIfDefined(url, key2, value));
+      setParamIfDefined(url, "q", quality, true, true);
+      setParamIfDefined(url, "w", width, true, true);
+      setParamIfDefined(url, "h", height, true, true);
+      setParamIfDefined(url, "fm", format);
+      setParamIfUndefined(url, "fit", "cover");
+      url.searchParams.set("url", base2.toString());
+      return toCanonicalUrlString(url);
+    };
+    transform$2 = (options3) => {
+      const url = toUrl(options3.url);
+      if (url.pathname.startsWith("/.netlify/images")) {
+        const { params, base: base2, format } = parse$12(url);
+        return generate$1({
+          base: base2,
+          format,
+          ...options3,
+          params: {
+            ...params,
+            // If hostname is "n", we're dealing with a relative URL, so we don't need to set the site param
+            site: url.hostname === "n" ? void 0 : url.origin
+          }
+        });
+      }
+      return generate$1({
+        ...options3,
+        base: options3.url,
+        params: {
+          site: options3.cdnOptions?.netlify?.site
+        }
+      });
+    };
+    getTransformParams = (url) => {
+      const transforms = url.searchParams.get("tr") || "";
+      return transforms.split(",").reduce((acc, transform2) => {
+        const [key2, value] = transform2.split("-");
+        acc[key2] = value;
+        return acc;
+      }, {});
+    };
+    transform$1 = ({ url: originalUrl, width, height, format }) => {
+      const url = toUrl(originalUrl);
+      const transformParams = getTransformParams(url);
+      transformParams.w = width ? Math.round(width) : width;
+      transformParams.h = height ? Math.round(height) : height;
+      if (!transformParams.f) {
+        transformParams.f = "auto";
+      }
+      if (format) {
+        transformParams.f = format;
+      }
+      const tr = Object.keys(transformParams).map((key2) => {
+        const value = transformParams[key2];
+        if (value) {
+          return `${key2}-${value}`;
+        }
+      }).filter((x2) => x2).join(",");
+      url.searchParams.set("tr", tr);
+      return url;
+    };
+    uploadcareRegex = /^https?:\/\/(?<host>[^\/]+)\/(?<uuid>[^\/]+)/g;
+    normalizeCdnOperation = (operation) => {
+      if (typeof operation !== "string" || !operation) {
+        return "";
+      }
+      let str = operation.trim();
+      if (str.startsWith("-/")) {
+        str = str.slice(2);
+      } else if (str.startsWith("/")) {
+        str = str.slice(1);
+      }
+      if (str.endsWith("/")) {
+        str = str.slice(0, str.length - 1);
+      }
+      return str;
+    };
+    parseOperations = (operations) => {
+      return operations.length ? operations.reduce((acc, operation) => {
+        const [key2, value] = operation.split("/");
+        return {
+          ...acc,
+          [key2]: value
+        };
+      }, {}) : {};
+    };
+    formatUrl = ({ host, uuid: uuid2, operations = {}, filename }) => {
+      const operationString = Object.entries(operations).map(([key2, value]) => `${key2}/${value}`).join("/-/");
+      const pathSegments = [
+        host,
+        uuid2,
+        operationString ? `-/${operationString}` : "",
+        filename
+      ].join("/");
+      return `https://${pathSegments}`;
+    };
+    parse2 = (imageUrl) => {
+      const url = toUrl(imageUrl);
+      const matchers = [...url.toString().matchAll(uploadcareRegex)];
+      if (!matchers.length) {
+        throw new Error("Invalid Uploadcare URL");
+      }
+      const group = matchers[0].groups || {};
+      const { ...baseParams } = group;
+      const filename = extractFilename(url.toString());
+      const { format: f2, ...operations } = parseOperations(extractOperations(url.toString()));
+      const format = f2 && f2 !== "auto" ? f2 : "auto";
+      const base2 = formatUrl({
+        ...baseParams,
+        filename: filename || void 0,
+        operations: {
+          ...operations,
+          format
+        }
+      });
+      return {
+        base: base2,
+        cdn: "uploadcare",
+        params: {
+          ...group,
+          filename: filename || void 0,
+          operations: {
+            ...operations,
+            format
+          }
+        }
+      };
+    };
+    generate = ({ base: base2, width, height, params }) => {
+      const baseUrl = base2.toString();
+      const parsed = parse2(baseUrl.endsWith("/") ? baseUrl : `${baseUrl}/`);
+      const props = {
+        operations: {},
+        ...parsed.params,
+        ...params
+      };
+      if (width && height) {
+        props.operations = {
+          ...props.operations,
+          resize: `${width}x${height}`
+        };
+      } else {
+        if (width) {
+          props.operations = {
+            ...props.operations,
+            resize: `${width}x`
+          };
+        }
+        if (height) {
+          props.operations = {
+            ...props.operations,
+            resize: `x${height}`
+          };
+        }
+      }
+      return formatUrl(props);
+    };
+    transform = ({ url: originalUrl, width, height }) => {
+      const parsed = parse2(originalUrl);
+      if (!parsed) {
+        throw new Error("Invalid Uploadcare URL");
+      }
+      const props = {
+        ...parsed,
+        width,
+        height
+      };
+      return generate(props);
+    };
+    delegators = {
+      vercel: delegateUrl,
+      nextjs: delegateUrl
+    };
+    getTransformer = (cdn) => ({
+      imgix: transform$l,
+      contentful: transform$n,
+      "builder.io": transform$m,
+      shopify: transform$k,
+      wordpress: transform$j,
+      cloudimage: transform$i,
+      cloudinary: transform$h,
+      bunny: transform$f,
+      storyblok: transform$e,
+      cloudflare: transform$g,
+      vercel: transform$c,
+      nextjs: transform$b,
+      scene7: transform$a,
+      "kontent.ai": transform$d,
+      keycdn: transform$9,
+      directus: transform$8,
+      imageengine: transform$7,
+      contentstack: transform$6,
+      "cloudflare_images": transform$5,
+      ipx: transform$4,
+      astro: transform$3,
+      netlify: transform$2,
+      imagekit: transform$1,
+      uploadcare: transform
+    })[cdn];
+    getSizes = (width, layout) => {
+      if (!width || !layout) {
+        return void 0;
+      }
+      switch (layout) {
+        case `constrained`:
+          return `(min-width: ${width}px) ${width}px, 100vw`;
+        case `fixed`:
+          return `${width}px`;
+        case `fullWidth`:
+          return `100vw`;
+        default:
+          return void 0;
+      }
+    };
+    pixelate = (value) => value || value === 0 ? `${value}px` : void 0;
+    getStyle = ({
+      width,
+      height,
+      aspectRatio,
+      layout,
+      objectFit = "cover",
+      background
+    }) => {
+      const styleEntries = [
+        ["object-fit", objectFit]
+      ];
+      if (background?.startsWith("https:") || background?.startsWith("http:") || background?.startsWith("data:")) {
+        styleEntries.push(["background-image", `url(${background})`]);
+        styleEntries.push(["background-size", "cover"]);
+        styleEntries.push(["background-repeat", "no-repeat"]);
+      } else {
+        styleEntries.push(["background", background]);
+      }
+      if (layout === "fixed") {
+        styleEntries.push(["width", pixelate(width)]);
+        styleEntries.push(["height", pixelate(height)]);
+      }
+      if (layout === "constrained") {
+        styleEntries.push(["max-width", pixelate(width)]);
+        styleEntries.push(["max-height", pixelate(height)]);
+        styleEntries.push([
+          "aspect-ratio",
+          aspectRatio ? `${aspectRatio}` : void 0
+        ]);
+        styleEntries.push(["width", "100%"]);
+      }
+      if (layout === "fullWidth") {
+        styleEntries.push(["width", "100%"]);
+        styleEntries.push([
+          "aspect-ratio",
+          aspectRatio ? `${aspectRatio}` : void 0
+        ]);
+        styleEntries.push(["height", pixelate(height)]);
+      }
+      return Object.fromEntries(
+        styleEntries.filter(([, value]) => value)
+      );
+    };
+    DEFAULT_RESOLUTIONS = [
+      6016,
+      // 6K
+      5120,
+      // 5K
+      4480,
+      // 4.5K
+      3840,
+      // 4K
+      3200,
+      // QHD+
+      2560,
+      // WQXGA
+      2048,
+      // QXGA
+      1920,
+      // 1080p
+      1668,
+      // Various iPads
+      1280,
+      // 720p
+      1080,
+      // iPhone 6-8 Plus
+      960,
+      // older horizontal phones
+      828,
+      // iPhone XR/11
+      750,
+      // iPhone 6-8
+      640
+      // older and lower-end phones
+    ];
+    LOW_RES_WIDTH = 24;
+    getBreakpoints = ({
+      width,
+      layout,
+      resolutions = DEFAULT_RESOLUTIONS
+    }) => {
+      if (layout === "fullWidth") {
+        return resolutions;
+      }
+      if (!width) {
+        return [];
+      }
+      const doubleWidth = width * 2;
+      if (layout === "fixed") {
+        return [width, doubleWidth];
+      }
+      if (layout === "constrained") {
+        return [
+          // Always include the image at 1x and 2x the specified width
+          width,
+          doubleWidth,
+          // Filter out any resolutions that are larger than the double-res image
+          ...resolutions.filter((w) => w < doubleWidth)
+        ];
+      }
+      return [];
+    };
+    getSrcSetEntries = ({
+      src,
+      width,
+      layout = "constrained",
+      height,
+      aspectRatio,
+      breakpoints,
+      cdn,
+      transformer,
+      format
+    }) => {
+      const canonical = getCanonicalCdnForUrl(src, cdn);
+      if (canonical && !transformer) {
+        transformer = getTransformer(canonical.cdn);
+      }
+      if (!transformer) {
+        return [];
+      }
+      breakpoints || (breakpoints = getBreakpoints({ width, layout }));
+      return breakpoints.sort((a2, b) => a2 - b).map((bp) => {
+        let transformedHeight;
+        if (height && aspectRatio) {
+          transformedHeight = Math.round(bp / aspectRatio);
+        }
+        return {
+          url: canonical ? canonical.url : src,
+          width: bp,
+          height: transformedHeight,
+          format
+        };
+      });
+    };
+    getSrcSet = (options3) => {
+      let { src, cdn, transformer } = options3;
+      const canonical = getCanonicalCdnForUrl(src, cdn);
+      if (canonical && !transformer) {
+        transformer = getTransformer(canonical.cdn);
+      }
+      if (!transformer) {
+        return "";
+      }
+      return getSrcSetEntries({ ...options3, transformer }).map((transform2) => {
+        const url = transformer(transform2);
+        return `${url?.toString()} ${transform2.width}w`;
+      }).join(",\n");
+    };
+    r = a(/[A-Z]/, (o) => `-${o.toLowerCase()}`);
+    Image = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+      let parentStyle;
+      let props;
+      let alt;
+      let styleObj;
+      let src;
+      let width;
+      let height;
+      let loading;
+      let decoding;
+      let srcset;
+      let role;
+      let sizes;
+      let fetchpriority;
+      let style;
+      ({ style: parentStyle, ...props } = $$props);
+      ({ alt, style: styleObj, src, width, height, loading, decoding, srcset, role, sizes, fetchpriority } = transformProps(props));
+      style = [c(styleObj || {}), parentStyle].filter(Boolean).join(";");
+      return `<img${spread(
+        [
+          escape_object($$props),
+          { style: escape_attribute_value(style) },
+          { loading: escape_attribute_value(loading) },
+          { width: escape_attribute_value(width) },
+          { height: escape_attribute_value(height) },
+          {
+            decoding: escape_attribute_value(decoding)
+          },
+          { role: escape_attribute_value(role) },
+          {
+            fetchpriority: escape_attribute_value(fetchpriority)
+          },
+          {
+            alt: escape_attribute_value(alt?.toString())
+          },
+          {
+            src: escape_attribute_value(src?.toString())
+          },
+          {
+            srcset: escape_attribute_value(srcset?.toString())
+          },
+          {
+            sizes: escape_attribute_value(sizes?.toString())
+          }
+        ],
+        {}
+      )}>`;
+    });
+    Linkicon = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+      return `<svg${spread(
+        [
+          { xmlns: "http://www.w3.org/2000/svg" },
+          { width: "1em" },
+          { height: "1em" },
+          { viewBox: "0 -2 24 24" },
+          escape_object($$props)
+        ],
+        {}
+      )}><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path stroke-dasharray="42" stroke-dashoffset="42" d="M11 5H5V19H19V13"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.6s" values="42;0"></animate></path><path stroke-dasharray="12" stroke-dashoffset="12" d="M13 11L20 4"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.6s" dur="0.3s" values="12;0"></animate></path><path stroke-dasharray="8" stroke-dashoffset="8" d="M21 3H15M21 3V9"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.9s" dur="0.2s" values="8;0"></animate></path></g></svg>`;
+    });
+    Imagecard = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+      let relatedProducts;
+      let relatedProductsData = get_store_value(productReviewCache);
+      const placeholder = blurhashToCssGradientString("L48W{f-p00E0~pWBs.s:?cNGRjWB");
+      relatedProducts = relatedProductsData.props?.relatedProducts;
+      return ` ${relatedProductsData?.props?.relatedProducts ? `<div class="grid grid-cols-2 md:grid-cols-3 gap-4">${each(relatedProducts, (_, i) => {
+        return `<div id="product-image" class="h-auto max-w-full rounded-lg card parent-hover mb-4"><div id="images" class="flex justify-center fade-in relative">${validate_component(Image, "Image").$$render(
+          $$result,
+          {
+            class: "fade-in rounded-t-md rounded-b-sm",
+            src: relatedProducts[i].product_review_image,
+            layout: "constrained",
+            priority: "true",
+            width: 1e3,
+            height: 500,
+            background: placeholder,
+            alt: relatedProducts[i].product_review_alt
+          },
+          {},
+          {}
+        )}  <div id="overlay-hover" class="w-full absolute h-full parent-hover overlay-fade rounded-t-lg top-0 z-10 blur-lg bg-slate-300/40"></div> <div class="absolute w-full h-full top-[35%]"><div id="name-comp" class="parent-hover overlay-fade w-full absolute z-10"><h1 class="lg:text-3xl md:text-xl text-center sm:text-center"><div class="flex justify-center">${escape(relatedProducts[i].product_name)} ${relatedProducts[i].product_logo ? `${validate_component(Image, "Image").$$render(
+          $$result,
+          {
+            class: "ml-4 fade-in rounded-full ",
+            src: relatedProducts[i].product_logo,
+            priority: "true",
+            width: 32,
+            height: 32,
+            background: placeholder,
+            alt: relatedProducts[i].product_logo_alt
+          },
+          {},
+          {}
+        )}` : `<div></div>`} </div></h1>  ${validate_component(Ratings, "Ratings").$$render(
+          $$result,
+          {
+            value: Math.round((+relatedProducts[i].product_rating || 0) / 20 * 2) / 2,
+            max: 5
+          },
+          {},
+          {
+            full: () => {
+              return `${validate_component(Stars, "Stars").$$render($$result, { type: "full" }, {}, {})}`;
+            },
+            half: () => {
+              return `${validate_component(Stars, "Stars").$$render($$result, { type: "half" }, {}, {})}`;
+            },
+            empty: () => {
+              return `${validate_component(Stars, "Stars").$$render($$result, { type: "empty" }, {}, {})}`;
+            }
+          }
+        )} <p class="text-center text-sm opacity-80 text-ellipsis overflow-hidden">${escape(relatedProducts[i].product_description)}</p> </div></div> <div class="absolute w-full h-full"><button class="parent-hover overlay-show btn variant-ghost-primary w-1/2 text-white text-base md:text-xl lg:text-2xl absolute top-[40%] left-[25%] z-30 opacity-0"><span data-svelte-h="svelte-11bf9kr">Visit</span>${validate_component(Linkicon, "Linkicon").$$render($$result, {}, {}, {})}</button> </div></div> </div>`;
+      })}</div>` : ``}`;
+    });
   }
 });
 
@@ -16450,8 +18153,11 @@ var Page2;
 var init_page_svelte2 = __esm({
   ".svelte-kit/output/server/entries/pages/debug/_page.svelte.js"() {
     init_ssr();
+    init_productStore();
+    init_store();
+    init_imagecard();
     Page2 = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-      return `\`\`\``;
+      return `${validate_component(Imagecard, "Imagecard").$$render($$result, {}, {}, {})}`;
     });
   }
 });
@@ -16470,8 +18176,8 @@ var init__4 = __esm({
   ".svelte-kit/output/server/nodes/3.js"() {
     index4 = 3;
     component4 = async () => component_cache4 ?? (component_cache4 = (await Promise.resolve().then(() => (init_page_svelte2(), page_svelte_exports2))).default);
-    imports4 = ["_app/immutable/nodes/3.b4Qt7pMw.js", "_app/immutable/chunks/scheduler.cyAdSMMW.js", "_app/immutable/chunks/index.x73yj52l.js"];
-    stylesheets4 = [];
+    imports4 = ["_app/immutable/nodes/3.7zdtCBNk.js", "_app/immutable/chunks/scheduler.qoUjChkd.js", "_app/immutable/chunks/index.HRC4UyyR.js", "_app/immutable/chunks/productStore.1ET5QMgR.js", "_app/immutable/chunks/store.xV9Yk6LI.js", "_app/immutable/chunks/index.xMhwf18p.js", "_app/immutable/chunks/imagecard.y8eM8LGS.js"];
+    stylesheets4 = ["_app/immutable/assets/store.oq5aOWfL.css"];
     fonts4 = [];
   }
 });
@@ -16504,7 +18210,7 @@ var init_page_server_ts2 = __esm({
       const { data: allProductsData, error: allProductsError } = await supabase.from("product_review").select(`
       product_name, product_rating, product_review_image, product_review_alt, 
       tag_array, product_video, product_pro, product_con, product_pricing, 
-      product_input_price, product_output_price
+      product_input_price, product_output_price,product_description,product_url
     `);
       let relatedProducts = [];
       if (!allProductsError && allProductsData) {
@@ -16622,7 +18328,7 @@ function splitCells(tableRow, count) {
   }
   return cells;
 }
-function rtrim(str, c, invert) {
+function rtrim(str, c2, invert) {
   const l = str.length;
   if (l === 0) {
     return "";
@@ -16630,9 +18336,9 @@ function rtrim(str, c, invert) {
   let suffLen = 0;
   while (suffLen < l) {
     const currChar = str.charAt(l - suffLen - 1);
-    if (currChar === c && !invert) {
+    if (currChar === c2 && !invert) {
       suffLen++;
-    } else if (currChar !== c && invert) {
+    } else if (currChar !== c2 && invert) {
       suffLen++;
     } else {
       break;
@@ -18027,13 +19733,13 @@ ${content}</tr>
               const tableToken = token;
               let header = "";
               let cell = "";
-              for (let j = 0; j < tableToken.header.length; j++) {
-                cell += this.renderer.tablecell(this.parseInline(tableToken.header[j].tokens), { header: true, align: tableToken.align[j] });
+              for (let j2 = 0; j2 < tableToken.header.length; j2++) {
+                cell += this.renderer.tablecell(this.parseInline(tableToken.header[j2].tokens), { header: true, align: tableToken.align[j2] });
               }
               header += this.renderer.tablerow(cell);
               let body2 = "";
-              for (let j = 0; j < tableToken.rows.length; j++) {
-                const row = tableToken.rows[j];
+              for (let j2 = 0; j2 < tableToken.rows.length; j2++) {
+                const row = tableToken.rows[j2];
                 cell = "";
                 for (let k = 0; k < row.length; k++) {
                   cell += this.renderer.tablecell(this.parseInline(row[k].tokens), { header: false, align: tableToken.align[k] });
@@ -18055,8 +19761,8 @@ ${content}</tr>
               const start = listToken.start;
               const loose = listToken.loose;
               let body2 = "";
-              for (let j = 0; j < listToken.items.length; j++) {
-                const item = listToken.items[j];
+              for (let j2 = 0; j2 < listToken.items.length; j2++) {
+                const item = listToken.items[j2];
                 const checked = item.checked;
                 const task = item.task;
                 let itemBody = "";
@@ -18547,12 +20253,116 @@ var page_svelte_exports3 = {};
 __export(page_svelte_exports3, {
   default: () => Page3
 });
-var Page3;
+var Cardgallery, Backbtn, Relatedcardlist, css4, Page3;
 var init_page_svelte3 = __esm({
   ".svelte-kit/output/server/entries/pages/_product_name_/_page.svelte.js"() {
     init_ssr();
-    init_chunks();
     init_marked_esm();
+    init_imagecard();
+    init_dist3();
+    init_store();
+    init_productStore();
+    init_chunks();
+    init_cardlist();
+    init_Icon();
+    init_stores();
+    init_supabaseClient();
+    Cardgallery = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+      let { category = 0 } = $$props;
+      let category_data = get_store_value(categoryProductData);
+      let product_data = category_data[category];
+      if ($$props.category === void 0 && $$bindings.category && category !== void 0)
+        $$bindings.category(category);
+      return ` ${product_data ? `<section class="grid grid-cols-2 md:grid-cols-3 gap-4">${each(product_data.aggregated_data || [], (_, i) => {
+        return `<div class="parent-element">${validate_component(Cardlist, "Cardlist").$$render(
+          $$result,
+          {
+            tag: i,
+            product_data,
+            outer_height: "300px",
+            inner_height: "200px",
+            icon: "quill:chat"
+          },
+          {},
+          {}
+        )} </div>`;
+      })}</section>` : ``}`;
+    });
+    Backbtn = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+      return `<svg${spread(
+        [
+          { xmlns: "http://www.w3.org/2000/svg" },
+          { width: "20" },
+          { height: "20" },
+          { viewBox: "0 0 48 48" },
+          escape_object($$props)
+        ],
+        {}
+      )}><path fill="currentColor" fill-rule="evenodd" stroke="currentColor" stroke-linejoin="round" stroke-width="4.6" d="M44 40.836c-4.893-5.973-9.238-9.362-13.036-10.168c-3.797-.805-7.412-.927-10.846-.365V41L4 23.545L20.118 7v10.167c6.349.05 11.746 2.328 16.192 6.833c4.445 4.505 7.009 10.117 7.69 16.836Z" clip-rule="evenodd"></path></svg>`;
+    });
+    Relatedcardlist = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+      let lightswitch;
+      let $lighttoggle, $$unsubscribe_lighttoggle;
+      let $isMounted, $$unsubscribe_isMounted;
+      $$unsubscribe_lighttoggle = subscribe(lighttoggle, (value) => $lighttoggle = value);
+      let { tag: tag2 } = $$props;
+      let { icon } = $$props;
+      let { product_data } = $$props;
+      let { outer_height = "200px" } = $$props;
+      let { inner_height = "150px" } = $$props;
+      let isMounted = writable(false);
+      $$unsubscribe_isMounted = subscribe(isMounted, (value) => $isMounted = value);
+      let tag_name = "";
+      if ($$props.tag === void 0 && $$bindings.tag && tag2 !== void 0)
+        $$bindings.tag(tag2);
+      if ($$props.icon === void 0 && $$bindings.icon && icon !== void 0)
+        $$bindings.icon(icon);
+      if ($$props.product_data === void 0 && $$bindings.product_data && product_data !== void 0)
+        $$bindings.product_data(product_data);
+      if ($$props.outer_height === void 0 && $$bindings.outer_height && outer_height !== void 0)
+        $$bindings.outer_height(outer_height);
+      if ($$props.inner_height === void 0 && $$bindings.inner_height && inner_height !== void 0)
+        $$bindings.inner_height(inner_height);
+      tag_name = "Related Products";
+      lightswitch = $lighttoggle;
+      $$unsubscribe_lighttoggle();
+      $$unsubscribe_isMounted();
+      return `  ${product_data && $isMounted ? `<div><div class="card grid grid-cols-1 relative card"${add_attribute("style", `height: ${outer_height}px;`, 0)}><header class="card-header text-center pr-6"><span class="badge text-4xl p-0 m-0 translate-y-2">${validate_component(Icon, "Icon").$$render($$result, { icon }, {}, {})}</span> <span class="text-2xl font-bold uppercase">${escape(tag_name)}</span></header> ${validate_component(ProgressBar, "ProgressBar").$$render(
+        $$result,
+        {
+          animIndeterminate: "anim-progress-bar",
+          rounded: "false",
+          height: "h-1"
+        },
+        {},
+        {}
+      )} <div class="overflow-auto scrollbar scrollbar-w-1 scrollbar-thumb-primary-500"${add_attribute("style", `height: ${inner_height}px;`, 0)}>${` <div><div class="flex justify-start"><section class="p-4 w-full"><ol>${each(product_data || [], (_, i) => {
+        return ` <div class="card p-4 z-10 variant-filled-secondary w-[90%] sm:w-[90%] lg:w-[90%] h-40 lg:h-40"${add_attribute("data-popup", "popupHover" + tag2 + "-" + i, 0)}><div class="grid justify-center"><div class="flex"><span class="p-1"> ${product_data[i].product_logo ? `<img class="rounded-full h-5 w-5 object-cover"${add_attribute("src", product_data[i].product_logo, 0)} alt="AI FLUENTLY logo">` : ``}</span> <span class="font-bold flex-auto [&>*]:pointer-events-none"> ${escape(product_data[i].product_name)}</span> </div></div> <div> ${validate_component(Ratings, "Ratings").$$render(
+          $$result,
+          {
+            value: Math.round(product_data[i].product_rating / 20 * 2) / 2,
+            max: 5
+          },
+          {},
+          {
+            full: () => {
+              return `${validate_component(Stars, "Stars").$$render($$result, { type: "full" }, {}, {})}`;
+            },
+            half: () => {
+              return `${validate_component(Stars, "Stars").$$render($$result, { type: "half" }, {}, {})}`;
+            },
+            empty: () => {
+              return `${validate_component(Stars, "Stars").$$render($$result, { type: "empty" }, {}, {})}`;
+            }
+          }
+        )}</div> <p class="p-1 text-sm opacity-80 text-ellipsis overflow-hidden h-16"> ${product_data[i].product_description ? `${escape(product_data[i].product_description)}` : ``}</p> ${`  <a${add_attribute("href", product_data[i].product_name.replace(/\s/g, ""), 0)}><div class="flex justify-center" data-svelte-h="svelte-1f6z1o6"><button class="btn btn-sm w-[50%] bg-warning-500 border-2 border-black h-6 absolute bottom-2 left-0 right-0 mx-auto">Learn More
+														</button></div> </a>`} <div class="arrow variant-filled-secondary"></div></div>  ${` <ol class="flex justify-between"><button class="[&>*]:pointer-events-none min-w-[80%] group/item"><div class="flex w-full min-w-[66%]"><div class="mt-1"> ${escape(i + 1)}.</div> <div class="px-3"> ${product_data[i].product_logo ? `<img class="rounded-full h-8 w-8 object-cover"${add_attribute("src", product_data[i].product_logo, 0)} alt="AI FLUENTLY logo">` : `<img class="rounded-full h-8 w-8 object-cover" src="/assets/logo/logomark-black-circle.svg" alt="AI FLUENTLY logo">`}</div> <div class="pt-1 group-hover/item:underline group-active/item:underline"> ${escape(product_data[i].product_name)}</div> </div></button> <a${add_attribute("href", product_data[i].product_url, 0)} target="_blank" class="flex opacity-50 hover:opacity-100 text-3xl p-1">${validate_component(Icon, "Icon").$$render($$result, { icon: "system-uicons:jump-up" }, {}, {})}</a>  </ol>`}`;
+      })}</ol></section></div></div>`}</div> ${lightswitch ? `<div class="pointer-events-none h-16 absolute w-full bottom-10 bg-gradient-to-t from-surface-800 to-surface-800/0"></div>` : `<div class="pointer-events-none h-16 absolute w-full bottom-10 bg-gradient-to-t from-surface-50 to-white/0"></div>`} <div class="btn btn-sm w-full h-8 opacity-0 bg-warning-500 border-2 border-black z-[5]"></div> <button class="btn btn-sm w-[85%] h-8 bg-warning-500 border-2 border-black z-[0] absolute bottom-2 left-0 right-0 mx-auto" data-svelte-h="svelte-1i73027">More</button></div></div>` : `<div class="card grid grid-cols-1 relative card-hover"${add_attribute("style", `height: ${outer_height};`, 0)}></div>`}`;
+    });
+    css4 = {
+      code: ".fade-in.svelte-p4xbsw{opacity:0;animation:svelte-p4xbsw-fadeInAnimation ease 1s;animation-fill-mode:forwards}@keyframes svelte-p4xbsw-fadeInAnimation{0%{opacity:0}100%{opacity:1}}",
+      map: null
+    };
     Page3 = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       let name;
       let rating;
@@ -18560,14 +20370,33 @@ var init_page_svelte3 = __esm({
       let image;
       let alt;
       let reviewHTML;
+      let logo;
+      let pricing;
+      let description;
+      let pro;
+      let con;
+      let lightswitch;
+      let $page, $$unsubscribe_page;
+      let $lighttoggle, $$unsubscribe_lighttoggle;
+      $$unsubscribe_page = subscribe(page, (value) => $page = value);
+      $$unsubscribe_lighttoggle = subscribe(lighttoggle, (value) => $lighttoggle = value);
       let { data } = $$props;
-      const productReviewCache = writable({});
-      productReviewCache.subscribe((cache) => {
-      });
+      const placeholder = blurhashToCssGradientString("L48W{f-p00E0~pWBs.s:?cNGRjWB");
       productReviewCache.update((cache) => ({ ...cache, ...data }));
       let productReviewData = get_store_value(productReviewCache).props?.productReviewData;
+      let relatedProductsData = get_store_value(productReviewCache).props?.relatedProducts;
+      function updateCache(data2) {
+        productReviewCache.update((cache) => ({ ...cache, ...data2 }));
+      }
       if ($$props.data === void 0 && $$bindings.data && data !== void 0)
         $$bindings.data(data);
+      $$result.css.add(css4);
+      {
+        $page.params.product_name, productReviewData = get_store_value(productReviewCache).props?.productReviewData;
+      }
+      {
+        $page.params.product_name, relatedProductsData = get_store_value(productReviewCache).props?.relatedProducts;
+      }
       name = productReviewData?.product_name ?? "No name";
       rating = productReviewData?.product_rating ?? "No rating";
       reviewMarkdown = productReviewData?.product_review ?? "No review";
@@ -18575,12 +20404,81 @@ var init_page_svelte3 = __esm({
       alt = productReviewData?.product_review_alt ?? "No alt text";
       reviewHTML = reviewMarkdown ? marked.parse(reviewMarkdown) : "No review";
       productReviewData?.product_table.product_url ?? "No url";
-      productReviewData?.product_table.product_logo ?? "No logo";
-      productReviewData?.product_pricing ?? "No pricing";
+      logo = productReviewData?.product_table.product_logo ?? "No logo";
+      pricing = productReviewData?.product_pricing ?? "No pricing";
       productReviewData?.product_input_price ?? "No input price";
       productReviewData?.product_output_price ?? "No output price";
       productReviewData?.product_quality ?? "No quality";
-      return ` ${productReviewData && image ? `<section><div class="grid sm:grid-cols-1 md: lg: xl:"><div id="images" class="flex justify-center relative"><img${add_attribute("src", image, 0)}${add_attribute("alt", alt, 0)}> <button class="card w-20 absolute bottom-1/2" data-svelte-h="svelte-1iibyg4">test</button></div></div></section>` : ``} ${productReviewData && image ? `<h1>${escape(name)}</h1> <h2>${escape(rating)}</h2> <p><!-- HTML_TAG_START -->${reviewHTML}<!-- HTML_TAG_END --></p> <img${add_attribute("src", image, 0)}${add_attribute("alt", alt, 0)}> ${escape(image)}` : ``}`;
+      description = productReviewData?.product_description ?? "No description";
+      pro = productReviewData?.product_pro ?? [];
+      con = productReviewData?.product_con ?? [];
+      lightswitch = $lighttoggle;
+      {
+        $page.params.product_name, updateCache(data);
+      }
+      $$unsubscribe_page();
+      $$unsubscribe_lighttoggle();
+      return `${escape($page.params.product_name)} ${productReviewData && image ? `<section class="grid grid-col-1 md:grid-col-1 lg:grid-cols- xl:grid-cols-2 md:mx-10 xl:mx-32"><div id="hero" class="h-full flex flex-col"><div id="product-image" class="flex-grow grid card mb-4"><div id="images" class="flex justify-center relative fade-in svelte-p4xbsw">${validate_component(Image, "Image").$$render(
+        $$result,
+        {
+          class: "fade-in rounded-t-md rounded-b-sm ",
+          src: image,
+          layout: "constrained",
+          priority: "true",
+          width: 1e3,
+          height: 500,
+          background: placeholder,
+          alt
+        },
+        {},
+        {}
+      )} <button class="absolute top-3 left-3 z-20">${validate_component(Backbtn, "Backbtn").$$render($$result, {}, {}, {})}</button> <div id="overlay" class="w-full absolute h-52 rounded-t-lg top-0 z-10 bg-gradient-to-b from-surface-500 to-surface-500/0"></div> <div class="w-full absolute h-40 rounded-t-md pt-4 z-10"><h1 class="text-2xl text-center sm:text-center"><div class="flex justify-center">${escape(name)} ${logo !== "No logo" ? `${validate_component(Image, "Image").$$render(
+        $$result,
+        {
+          class: "ml-4 fade-in  rounded-full",
+          src: logo,
+          priority: "true",
+          width: 32,
+          height: 32,
+          background: placeholder,
+          alt
+        },
+        {},
+        {}
+      )}` : ``}</div></h1>  ${validate_component(Ratings, "Ratings").$$render(
+        $$result,
+        {
+          value: Math.round((+rating || 0) / 20 * 2) / 2,
+          max: 5
+        },
+        {},
+        {
+          full: () => {
+            return `${validate_component(Stars, "Stars").$$render($$result, { type: "full" }, {}, {})}`;
+          },
+          half: () => {
+            return `${validate_component(Stars, "Stars").$$render($$result, { type: "half" }, {}, {})}`;
+          },
+          empty: () => {
+            return `${validate_component(Stars, "Stars").$$render($$result, { type: "empty" }, {}, {})}`;
+          }
+        }
+      )} <p class="text-center text-sm opacity-80 text-ellipsis overflow-hidden">${escape(description)}</p></div> <button class="btn variant-ghost text-white text-base md:text-xl lg:text-2xl absolute bottom-1/3 w-1/3"><span data-svelte-h="svelte-11bf9kr">Visit</span>${validate_component(Linkicon, "Linkicon").$$render($$result, {}, {}, {})}</button></div></div> <div class="card px-10 pt-4 mb-4 flex-grow"><h1 data-svelte-h="svelte-1f5df6w">pricing</h1> ${escape(pricing)}</div> <div class="parent-element">${validate_component(Relatedcardlist, "Relatedcardlist").$$render(
+        $$result,
+        {
+          icon: "",
+          product_data: relatedProductsData,
+          tag: 1,
+          outer_height: "300",
+          inner_height: "190"
+        },
+        {},
+        {}
+      )}</div></div> <div id="overview" class="card mt-4 lg:mt-0 lg:ml-4"><div id="pros and cons" class="grid grid-cols-1 md:grid-cols-2"><div><h2 class="text-2xl text-center p-8" data-svelte-h="svelte-3vzi5p">Strenghts</h2> <ol class="h-46 overflow-y-auto">${each(pro || [], (_, i) => {
+        return `<div class="flex px-10 pb-2"><span data-svelte-h="svelte-1s4sarz">-</span> <li class="pl-4">${escape(pro[i])}</li> </div>`;
+      })}</ol></div> <div><h2 class="text-2xl text-center p-8" data-svelte-h="svelte-1jpssfm">Weaknesses</h2> <ol class="h-46 overflow-y-auto">${each(con || [], (_, i) => {
+        return `<div class="flex px-10 pb-2"><span data-svelte-h="svelte-1s4sarz">-</span> <li class="pl-4">${escape(con[i])}</li> </div>`;
+      })}</ol></div></div> <div class="border-b-2 border-black/50 mx-10 mt-4"></div> <h2 class="text-2xl text-center p-8" data-svelte-h="svelte-v1cf0y">Overview</h2> <div class="relative h-[430px]"><p class="h-[430px] overflow-y-scroll px-10 pb-10"><!-- HTML_TAG_START -->${reviewHTML}<!-- HTML_TAG_END --></p> ${lightswitch ? `<div class="pointer-events-none h-16 absolute w-full bottom-0 bg-gradient-to-t from-surface-800 to-surface-800/0"></div>` : `<div class="pointer-events-none h-16 absolute w-full bottom-0 bg-gradient-to-t from-surface-50 to-white/0"></div>`}</div></div></section>` : ``} <div class="md:mx-10 xl:mx-32 my-4 card p-4">${validate_component(Imagecard, "Imagecard").$$render($$result, {}, {}, {})}</div> <div class="md:mx-10 xl:mx-32 my-4 card p-4">${validate_component(Cardgallery, "Cardgallery").$$render($$result, {}, {}, {})} </div>`;
     });
   }
 });
@@ -18603,8 +20501,8 @@ var init__5 = __esm({
     index5 = 4;
     component5 = async () => component_cache5 ?? (component_cache5 = (await Promise.resolve().then(() => (init_page_svelte3(), page_svelte_exports3))).default);
     server_id3 = "src/routes/[product_name]/+page.server.ts";
-    imports5 = ["_app/immutable/nodes/4.A_uBYUEE.js", "_app/immutable/chunks/scheduler.cyAdSMMW.js", "_app/immutable/chunks/index.x73yj52l.js", "_app/immutable/chunks/index.Naitio2P.js"];
-    stylesheets5 = [];
+    imports5 = ["_app/immutable/nodes/4.X2XGF3ef.js", "_app/immutable/chunks/scheduler.qoUjChkd.js", "_app/immutable/chunks/index.HRC4UyyR.js", "_app/immutable/chunks/productStore.1ET5QMgR.js", "_app/immutable/chunks/store.xV9Yk6LI.js", "_app/immutable/chunks/index.xMhwf18p.js", "_app/immutable/chunks/imagecard.y8eM8LGS.js", "_app/immutable/chunks/cardlist.mMBOxlWg.js", "_app/immutable/chunks/popup.ApYA23B2.js", "_app/immutable/chunks/Icon.m_HsgSM1.js", "_app/immutable/chunks/navigation.wgBFGclu.js", "_app/immutable/chunks/singletons.uTW47gd3.js", "_app/immutable/chunks/stores.bjN9DhPh.js", "_app/immutable/chunks/supabaseClient.V3wEEveg.js", "_app/immutable/chunks/public.03yuBydq.js"];
+    stylesheets5 = ["_app/immutable/assets/4.UzcHbuZU.css", "_app/immutable/assets/store.oq5aOWfL.css"];
     fonts5 = [];
   }
 });
@@ -18614,9 +20512,9 @@ init_ssr();
 var base = "";
 var assets = base;
 var initial = { base, assets };
-function override(paths) {
-  base = paths.base;
-  assets = paths.assets;
+function override(paths2) {
+  base = paths2.base;
+  assets = paths2.assets;
 }
 function reset() {
   base = initial.base;
@@ -18794,7 +20692,7 @@ var options = {
 		<div class="error">
 			<span class="status">` + status + '</span>\n			<div class="message">\n				<h1>' + message + "</h1>\n			</div>\n		</div>\n	</body>\n</html>\n"
   },
-  version_hash: "10vn4j"
+  version_hash: "1gz0fa7"
 };
 function get_hooks() {
   return Promise.resolve().then(() => (init_hooks_server(), hooks_server_exports));
@@ -18811,21 +20709,21 @@ function negotiate(accept, types2) {
   accept.split(",").forEach((str, i) => {
     const match = /([^/]+)\/([^;]+)(?:;q=([0-9.]+))?/.exec(str);
     if (match) {
-      const [, type, subtype, q = "1"] = match;
-      parts.push({ type, subtype, q: +q, i });
+      const [, type, subtype, q2 = "1"] = match;
+      parts.push({ type, subtype, q: +q2, i });
     }
   });
-  parts.sort((a, b) => {
-    if (a.q !== b.q) {
-      return b.q - a.q;
+  parts.sort((a2, b) => {
+    if (a2.q !== b.q) {
+      return b.q - a2.q;
     }
-    if (a.subtype === "*" !== (b.subtype === "*")) {
-      return a.subtype === "*" ? 1 : -1;
+    if (a2.subtype === "*" !== (b.subtype === "*")) {
+      return a2.subtype === "*" ? 1 : -1;
     }
-    if (a.type === "*" !== (b.type === "*")) {
-      return a.type === "*" ? 1 : -1;
+    if (a2.type === "*" !== (b.type === "*")) {
+      return a2.type === "*" ? 1 : -1;
     }
-    return a.i - b.i;
+    return a2.i - b.i;
   });
   let accepted;
   let min_priority = Infinity;
@@ -19370,7 +21268,7 @@ function uneval(value, replacer) {
   }
   walk(value);
   const names = /* @__PURE__ */ new Map();
-  Array.from(counts).filter((entry) => entry[1] > 1).sort((a, b) => b[1] - a[1]).forEach((entry, i) => {
+  Array.from(counts).filter((entry) => entry[1] > 1).sort((a2, b) => b[1] - a2[1]).forEach((entry, i) => {
     names.set(entry[0], get_name(i));
   });
   function stringify2(thing) {
@@ -19490,8 +21388,8 @@ function get_name(num) {
   } while (num >= 0);
   return reserved.test(name) ? `${name}0` : name;
 }
-function escape_unsafe_char(c) {
-  return escaped[c] || c;
+function escape_unsafe_char(c2) {
+  return escaped[c2] || c2;
 }
 function escape_unsafe_chars(str) {
   return str.replace(unsafe_chars, escape_unsafe_char);
@@ -20219,7 +22117,7 @@ function sha2562(data) {
   for (let i = 0; i < array2.length; i += 16) {
     const w = array2.subarray(i, i + 16);
     let tmp;
-    let a;
+    let a2;
     let b;
     let out0 = out[0];
     let out1 = out[1];
@@ -20233,9 +22131,9 @@ function sha2562(data) {
       if (i2 < 16) {
         tmp = w[i2];
       } else {
-        a = w[i2 + 1 & 15];
+        a2 = w[i2 + 1 & 15];
         b = w[i2 + 14 & 15];
-        tmp = w[i2 & 15] = (a >>> 7 ^ a >>> 18 ^ a >>> 3 ^ a << 25 ^ a << 14) + (b >>> 17 ^ b >>> 19 ^ b >>> 10 ^ b << 15 ^ b << 13) + w[i2 & 15] + w[i2 + 9 & 15] | 0;
+        tmp = w[i2 & 15] = (a2 >>> 7 ^ a2 >>> 18 ^ a2 >>> 3 ^ a2 << 25 ^ a2 << 14) + (b >>> 17 ^ b >>> 19 ^ b >>> 10 ^ b << 15 ^ b << 13) + w[i2 & 15] + w[i2 + 9 & 15] | 0;
       }
       tmp = tmp + out7 + (out4 >>> 6 ^ out4 >>> 11 ^ out4 >>> 25 ^ out4 << 26 ^ out4 << 21 ^ out4 << 7) + (out6 ^ out4 & (out5 ^ out6)) + key[i2];
       out7 = out6;
@@ -20263,8 +22161,8 @@ function sha2562(data) {
 var init = new Uint32Array(8);
 var key = new Uint32Array(64);
 function precompute() {
-  function frac(x) {
-    return (x - Math.floor(x)) * 4294967296;
+  function frac(x2) {
+    return (x2 - Math.floor(x2)) * 4294967296;
   }
   let prime = 2;
   for (let i = 0; i < 64; prime++) {
@@ -20286,14 +22184,14 @@ function precompute() {
 }
 function reverse_endianness(bytes) {
   for (let i = 0; i < bytes.length; i += 4) {
-    const a = bytes[i + 0];
+    const a2 = bytes[i + 0];
     const b = bytes[i + 1];
-    const c = bytes[i + 2];
-    const d = bytes[i + 3];
-    bytes[i + 0] = d;
-    bytes[i + 1] = c;
+    const c2 = bytes[i + 2];
+    const d2 = bytes[i + 3];
+    bytes[i + 0] = d2;
+    bytes[i + 1] = c2;
     bytes[i + 2] = b;
-    bytes[i + 3] = a;
+    bytes[i + 3] = a2;
   }
 }
 function encode$1(str) {
@@ -20380,17 +22278,17 @@ var BaseProvider = class {
     __privateAdd(this, _nonce, void 0);
     __privateSet(this, _use_hashes, use_hashes);
     __privateSet(this, _directives, directives);
-    const d = __privateGet(this, _directives);
+    const d2 = __privateGet(this, _directives);
     __privateSet(this, _script_src, []);
     __privateSet(this, _script_src_elem, []);
     __privateSet(this, _style_src, []);
     __privateSet(this, _style_src_attr, []);
     __privateSet(this, _style_src_elem, []);
-    const effective_script_src = d["script-src"] || d["default-src"];
-    const script_src_elem = d["script-src-elem"];
-    const effective_style_src = d["style-src"] || d["default-src"];
-    const style_src_attr = d["style-src-attr"];
-    const style_src_elem = d["style-src-elem"];
+    const effective_script_src = d2["script-src"] || d2["default-src"];
+    const script_src_elem = d2["script-src-elem"];
+    const effective_style_src = d2["style-src"] || d2["default-src"];
+    const style_src_attr = d2["style-src-attr"];
+    const style_src_elem = d2["style-src-elem"];
     __privateSet(this, _script_needs_csp, !!effective_script_src && effective_script_src.filter((value) => value !== "unsafe-inline").length > 0 || !!script_src_elem && script_src_elem.filter((value) => value !== "unsafe-inline").length > 0);
     __privateSet(this, _style_needs_csp, !!effective_style_src && effective_style_src.filter((value) => value !== "unsafe-inline").length > 0 || !!style_src_attr && style_src_attr.filter((value) => value !== "unsafe-inline").length > 0 || !!style_src_elem && style_src_elem.filter((value) => value !== "unsafe-inline").length > 0);
     this.script_needs_nonce = __privateGet(this, _script_needs_csp) && !__privateGet(this, _use_hashes);
@@ -20400,18 +22298,18 @@ var BaseProvider = class {
   /** @param {string} content */
   add_script(content) {
     if (__privateGet(this, _script_needs_csp)) {
-      const d = __privateGet(this, _directives);
+      const d2 = __privateGet(this, _directives);
       if (__privateGet(this, _use_hashes)) {
         const hash2 = sha2562(content);
         __privateGet(this, _script_src).push(`sha256-${hash2}`);
-        if (d["script-src-elem"]?.length) {
+        if (d2["script-src-elem"]?.length) {
           __privateGet(this, _script_src_elem).push(`sha256-${hash2}`);
         }
       } else {
         if (__privateGet(this, _script_src).length === 0) {
           __privateGet(this, _script_src).push(`nonce-${__privateGet(this, _nonce)}`);
         }
-        if (d["script-src-elem"]?.length) {
+        if (d2["script-src-elem"]?.length) {
           __privateGet(this, _script_src_elem).push(`nonce-${__privateGet(this, _nonce)}`);
         }
       }
@@ -20420,24 +22318,24 @@ var BaseProvider = class {
   /** @param {string} content */
   add_style(content) {
     if (__privateGet(this, _style_needs_csp)) {
-      const d = __privateGet(this, _directives);
+      const d2 = __privateGet(this, _directives);
       if (__privateGet(this, _use_hashes)) {
         const hash2 = sha2562(content);
         __privateGet(this, _style_src).push(`sha256-${hash2}`);
-        if (d["style-src-attr"]?.length) {
+        if (d2["style-src-attr"]?.length) {
           __privateGet(this, _style_src_attr).push(`sha256-${hash2}`);
         }
-        if (d["style-src-elem"]?.length) {
+        if (d2["style-src-elem"]?.length) {
           __privateGet(this, _style_src_elem).push(`sha256-${hash2}`);
         }
       } else {
         if (__privateGet(this, _style_src).length === 0) {
           __privateGet(this, _style_src).push(`nonce-${__privateGet(this, _nonce)}`);
         }
-        if (d["style-src-attr"]?.length) {
+        if (d2["style-src-attr"]?.length) {
           __privateGet(this, _style_src_attr).push(`nonce-${__privateGet(this, _nonce)}`);
         }
-        if (d["style-src-elem"]?.length) {
+        if (d2["style-src-elem"]?.length) {
           __privateGet(this, _style_src_elem).push(`nonce-${__privateGet(this, _nonce)}`);
         }
       }
@@ -20578,9 +22476,9 @@ var Csp = class {
 function defer() {
   let fulfil;
   let reject;
-  const promise = new Promise((f, r) => {
-    fulfil = f;
-    reject = r;
+  const promise = new Promise((f2, r2) => {
+    fulfil = f2;
+    reject = r2;
   });
   return { promise, fulfil, reject };
 }
@@ -21127,10 +23025,10 @@ async function render_data(event, route, options22, manifest2, state, invalidate
             node,
             parent: async () => {
               const data2 = {};
-              for (let j = 0; j < i; j += 1) {
+              for (let j2 = 0; j2 < i; j2 += 1) {
                 const parent = (
                   /** @type {import('types').ServerDataNode | null} */
-                  await functions[j]()
+                  await functions[j2]()
                 );
                 if (parent) {
                   Object.assign(data2, parent.data);
@@ -21380,8 +23278,8 @@ async function render_page(event, page2, options22, manifest2, state, resolve_op
             node,
             parent: async () => {
               const data = {};
-              for (let j = 0; j < i; j += 1) {
-                const parent = await server_promises[j];
+              for (let j2 = 0; j2 < i; j2 += 1) {
+                const parent = await server_promises[j2];
                 if (parent)
                   Object.assign(data, await parent.data);
               }
@@ -21407,8 +23305,8 @@ async function render_page(event, page2, options22, manifest2, state, resolve_op
             node,
             parent: async () => {
               const data = {};
-              for (let j = 0; j < i; j += 1) {
-                Object.assign(data, await load_promises[j]);
+              for (let j2 = 0; j2 < i; j2 += 1) {
+                Object.assign(data, await load_promises[j2]);
               }
               return data;
             },
@@ -21461,9 +23359,9 @@ async function render_page(event, page2, options22, manifest2, state, resolve_op
                 page2.errors[i]
               );
               const node2 = await manifest2._.nodes[index6]();
-              let j = i;
-              while (!branch[j])
-                j -= 1;
+              let j2 = i;
+              while (!branch[j2])
+                j2 -= 1;
               return await render_response({
                 event,
                 options: options22,
@@ -21473,7 +23371,7 @@ async function render_page(event, page2, options22, manifest2, state, resolve_op
                 page_config: { ssr: true, csr: true },
                 status: status2,
                 error,
-                branch: compact(branch.slice(0, j + 1)).concat({
+                branch: compact(branch.slice(0, j2 + 1)).concat({
                   node: node2,
                   data: null,
                   server_data: null
@@ -21735,9 +23633,9 @@ function get_cookies(request, url, trailing_slash) {
      * @param {import('cookie').CookieParseOptions} opts
      */
     get(name, opts) {
-      const c = new_cookies[name];
-      if (c && domain_matches(url.hostname, c.options.domain) && path_matches(url.pathname, c.options.path)) {
-        return c.value;
+      const c2 = new_cookies[name];
+      if (c2 && domain_matches(url.hostname, c2.options.domain) && path_matches(url.pathname, c2.options.path)) {
+        return c2.value;
       }
       const decoder2 = opts?.decode || decodeURIComponent;
       const req_cookies = parse_1(header, { decode: decoder2 });
@@ -21750,9 +23648,9 @@ function get_cookies(request, url, trailing_slash) {
     getAll(opts) {
       const decoder2 = opts?.decode || decodeURIComponent;
       const cookies2 = parse_1(header, { decode: decoder2 });
-      for (const c of Object.values(new_cookies)) {
-        if (domain_matches(url.hostname, c.options.domain) && path_matches(url.pathname, c.options.path)) {
-          cookies2[c.name] = c.value;
+      for (const c2 of Object.values(new_cookies)) {
+        if (domain_matches(url.hostname, c2.options.domain) && path_matches(url.pathname, c2.options.path)) {
+          cookies2[c2.name] = c2.value;
         }
       }
       return Object.entries(cookies2).map(([name, value]) => ({ name, value }));
@@ -22626,7 +24524,7 @@ var manifest = (() => {
     assets: /* @__PURE__ */ new Set(["assets/logo/horizontal-black.svg", "assets/logo/horizontal-gradient.svg", "assets/logo/horizontal-white.svg", "assets/logo/logomark-black-circle.svg", "assets/logo/logomark-black.svg", "assets/logo/logomark-white-circle.svg", "assets/logo/logomark-white.svg", "assets/logo/vertical-black.svg", "assets/logo/vertical-gradient.svg", "assets/logo/vertical-white.svg", "favicon.png", "fonts/SpaceGrotesk.ttf"]),
     mimeTypes: { ".svg": "image/svg+xml", ".png": "image/png", ".ttf": "font/ttf" },
     _: {
-      client: { "start": "_app/immutable/entry/start.xHCfTmdK.js", "app": "_app/immutable/entry/app.IBeuBQGM.js", "imports": ["_app/immutable/entry/start.xHCfTmdK.js", "_app/immutable/chunks/scheduler.cyAdSMMW.js", "_app/immutable/chunks/singletons.EaJ-0vB4.js", "_app/immutable/chunks/index.Naitio2P.js", "_app/immutable/entry/app.IBeuBQGM.js", "_app/immutable/chunks/public.03yuBydq.js", "_app/immutable/chunks/supabaseClient.V3wEEveg.js", "_app/immutable/chunks/scheduler.cyAdSMMW.js", "_app/immutable/chunks/index.x73yj52l.js"], "stylesheets": [], "fonts": [], "uses_env_dynamic_public": false },
+      client: { "start": "_app/immutable/entry/start.QloF9H3o.js", "app": "_app/immutable/entry/app.N4i5r7Zg.js", "imports": ["_app/immutable/entry/start.QloF9H3o.js", "_app/immutable/chunks/scheduler.qoUjChkd.js", "_app/immutable/chunks/singletons.uTW47gd3.js", "_app/immutable/chunks/index.xMhwf18p.js", "_app/immutable/entry/app.N4i5r7Zg.js", "_app/immutable/chunks/public.03yuBydq.js", "_app/immutable/chunks/supabaseClient.V3wEEveg.js", "_app/immutable/chunks/scheduler.qoUjChkd.js", "_app/immutable/chunks/index.HRC4UyyR.js"], "stylesheets": [], "fonts": [], "uses_env_dynamic_public": false },
       nodes: [
         __memo(() => Promise.resolve().then(() => (init__(), __exports))),
         __memo(() => Promise.resolve().then(() => (init__2(), __exports2))),
