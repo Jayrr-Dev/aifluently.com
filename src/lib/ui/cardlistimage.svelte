@@ -16,6 +16,7 @@
 	let isMounted = writable(false);
 	let showTag = true;
 	let windowWidth = 0;
+
 	let tag_name: string = '';
 	onMount(() => {
 		isMounted.set(true); // Set to true when the component is mounted

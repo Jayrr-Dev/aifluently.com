@@ -56,3 +56,23 @@ p {
 	transform: scaleX(1); /* Full width on hover */
 	border-radius: 0; /* No rounded corners when scaled fully */
 }
+
+.parent-hover:hover .overlay-fade {
+	opacity: 0;
+	transition-property: opacity;
+	transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+	transition-duration: 300ms;
+}
+
+.overlay-fade {
+}
+
+.overlay-show {
+}
+
+.parent-hover:hover .overlay-show {
+	opacity: 100;
+	transition-property: opacity;
+	transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+	transition-duration: 300ms;
+}

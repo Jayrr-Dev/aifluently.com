@@ -12,8 +12,9 @@
 		entertainment,
 		technology,
 		creative,
-		lifestyle
-	} from '../stores/tagsStore';
+		lifestyle,
+		categoryProductData
+	} from '../stores/productStore';
 	import { supabase } from '$lib/supabaseClient';
 	import type { CategoryData, Category, TagsState } from '$lib/types';
 	export let data;
@@ -22,6 +23,7 @@
 	let categoryStore = writable(categoryData);
 	let currentCategoryId = categoryData?.category_id || 1; // Default or fetched category ID
 	let fadeOptions = { duration: 1000 };
+
 	const initialState: CategoryData = {
 		tags: [],
 		tagProductDetails: [],
@@ -54,6 +56,7 @@
 
 	// Determine whether to bypass our intersecting check
 	onMount(() => {
+		categoryProductData.set(categoriesData);
 		populateStores(categoriesData);
 	});
 

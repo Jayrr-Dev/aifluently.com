@@ -3,7 +3,6 @@ import { supabase } from '$lib/supabaseClient';
 import type { PageLoad } from '../$types';
 import type { Product } from '$lib/types';
 
-
 interface MyRouteParams {
   product_name: string; // Consider renaming this parameter to product_slug for clarity
 }
@@ -40,7 +39,7 @@ export const load: PageLoad = async ({ params }) => {
     .select(`
       product_name, product_rating, product_review_image, product_review_alt, 
       tag_array, product_video, product_pro, product_con, product_pricing, 
-      product_input_price, product_output_price
+      product_input_price, product_output_price,product_description,product_url
     `);
 
   let relatedProducts: Product[] = [];
@@ -52,7 +51,7 @@ export const load: PageLoad = async ({ params }) => {
   } else {
     console.error('Failed to fetch related products:', allProductsError);
   }
-
+  
   return {
     props: {
       productReviewData: typedProductReviewData,
