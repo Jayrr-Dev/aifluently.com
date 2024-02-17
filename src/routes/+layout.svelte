@@ -1,6 +1,7 @@
 <script lang="ts">
 	//ui
 	import Footer from '$lib/ui/footer.svelte';
+	import Searchbar from '$lib/ui/searchbar.svelte';
 	//supabase
 	import { invalidate } from '$app/navigation';
 	import { onMount } from 'svelte';
@@ -59,6 +60,7 @@
 	<svelte:fragment slot="header">
 		<!-- App Bar -->
 		<AppBar>
+			<Searchbar />
 			<svelte:fragment slot="lead">
 				<a href="/">
 					{#if lightswitch}
