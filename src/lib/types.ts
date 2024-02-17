@@ -68,7 +68,7 @@ export interface Product {
     product_input_price: number | null;
     product_output_price: number | null;
     product_quality: string | null;
-    product_description: string | null;
+    product_highlight: string | null;
     product_slug?: string; // Optional field for slug
     tag_array: number[]; // Array of tag IDs
     product_video: string | null;

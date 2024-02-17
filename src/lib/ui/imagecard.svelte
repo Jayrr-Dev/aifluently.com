@@ -73,7 +73,7 @@
 								<svelte:fragment slot="full"><Stars type="full" /></svelte:fragment>
 							</Ratings>
 							<p class=" text-center text-sm opacity-80 text-ellipsis overflow-hidden">
-								{relatedProducts[i].product_description}
+								{relatedProducts[i].product_highlight}
 							</p>
 						</div>
 					</div>

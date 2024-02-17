@@ -39,13 +39,13 @@ export const load: PageLoad = async ({ params }) => {
     .select(`
       product_name, product_slug, product_rating, product_review_image, product_review_alt, 
       tag_array, product_video, product_pro, product_con, product_pricing, 
-      product_input_price, product_output_price,product_description,product_url
+      product_input_price, product_output_price,product_highlight,product_url
     `);
 
   let relatedProducts: Product[] = [];
   if (!allProductsError && allProductsData) {
     const currentTags = typedProductReviewData.tag_array;
-    relatedProducts = allProductsData.map(product => product as Product).filter(product =>
+    relatedProducts = allProductsData.map(product => product as unknown as Product).filter(product =>
       product.tag_array && currentTags.some(tag => product.tag_array.includes(tag))
     );
   } else {
