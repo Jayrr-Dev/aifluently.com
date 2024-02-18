@@ -142,7 +142,7 @@
 		<div id="overview" class="card mt-4 lg:mt-0 lg:ml-4">
 			<div id="pros and cons" class="  grid grid-cols-1 md:grid-cols-2">
 				<div>
-					<h2 class="text-2xl text-center p-8">Strenghts</h2>
+					<h2 class="text-2xl text-center p-8">Strengths</h2>
 					<ol class=" h-46 overflow-y-auto">
 						{#each pro || [] as _, i}
 							<div class="flex px-10 pb-2">
