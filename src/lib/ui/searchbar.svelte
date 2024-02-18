@@ -5,6 +5,14 @@
 	import { onMount } from 'svelte';
 	import { popup } from '@skeletonlabs/skeleton';
 	import type { PopupSettings } from '@skeletonlabs/skeleton';
+	import Fuse from 'fuse.js';
+	import { goto } from '$app/navigation';
+
+	// review options
+	let reviewsOptions: AutocompleteOption<string>[] = [];
+	let filteredOptions: AutocompleteOption<string>[] = [];
+	let fuse: Fuse<AutocompleteOption<string>>;
+	let inputPopupDemo: string = '';
 
 	// Function to fetch product reviews based on the search query
 	async function fetchProductReviews() {
@@ -14,13 +22,39 @@
 			console.error('Error fetching product reviews:', error);
 			return;
 		}
+
+		// transform the fetched data to fit autocompletoption format
+		reviewsOptions = data.map((review) => {
+			return {
+				label: review.product_name,
+				meta: {
+					slug: review.product_slug
+				},
+				value: review.review_id,
+				keywords: review.product_highlights
+			};
+		});
+
+		// initliaze fuse.js
+		fuse = new Fuse(reviewsOptions, {
+			keys: ['label', 'keywords']
+		});
+
 		return data;
+	}
+
+	function fuzzyFinding(): AutocompleteOption<string>[] {
+		let _options = [...reviewsOptions];
+		let result = fuse.search(inputPopupDemo);
+		filteredOptions = result.map((item) => {
+			return _options[item.refIndex];
+		});
+		return filteredOptions;
 	}
 
 	// Use onMount to ensure this runs when the component mounts
 	onMount(async () => {
-		const reviews = await fetchProductReviews();
-		console.log(reviews);
+		await fetchProductReviews();
 	});
 
 	// popup demo
@@ -30,24 +64,11 @@
 		target: 'popupAutocomplete',
 		placement: 'bottom'
 	};
-	let inputPopupDemo: string = '';
-
-	const flavorOptions: AutocompleteOption<string>[] = [
-		{ label: 'Vanilla', value: 'vanilla', keywords: 'plain, basic', meta: { healthy: false } },
-		{ label: 'Chocolate', value: 'chocolate', keywords: 'dark, white', meta: { healthy: false } },
-		{ label: 'Strawberry', value: 'strawberry', keywords: 'fruit', meta: { healthy: true } },
-		{
-			label: 'Neapolitan',
-			value: 'neapolitan',
-			keywords: 'mix, strawberry, chocolate, vanilla',
-			meta: { healthy: false }
-		},
-		{ label: 'Pineapple', value: 'pineapple', keywords: 'fruit', meta: { healthy: true } },
-		{ label: 'Peach', value: 'peach', keywords: 'fruit', meta: { healthy: true } }
-	];
 
 	let onPopupDemoSelect = (event: CustomEvent<AutocompleteOption<string>>) => {
-		console.log('Selected:', event.detail);
+		const detail = event.detail as { meta: { slug: string } };
+		const slug: string = detail.meta.slug ?? '';
+		goto(`/${slug}`);
 	};
 </script>
 
@@ -62,8 +83,9 @@
 <div data-popup="popupAutocomplete" class="autocomplete-popup-content">
 	<Autocomplete
 		bind:input={inputPopupDemo}
-		options={flavorOptions}
+		options={reviewsOptions}
 		on:selection={onPopupDemoSelect}
+		filter={fuzzyFinding}
 	/>
 </div>
 
