@@ -10,9 +10,8 @@
 
 	// review options
 	let reviewsOptions: AutocompleteOption<string>[] = [];
-	let filteredOptions: AutocompleteOption<string>[] = [];
 	let fuse: Fuse<AutocompleteOption<string>>;
-	let inputPopupDemo: string = '';
+	let userInput: string = '';
 
 	// Function to fetch product reviews based on the search query
 	async function fetchProductReviews() {
@@ -45,8 +44,8 @@
 
 	function fuzzyFinding(): AutocompleteOption<string>[] {
 		let _options = [...reviewsOptions];
-		let result = fuse.search(inputPopupDemo);
-		filteredOptions = result.map((item) => {
+		let result = fuse.search(userInput);
+		const filteredOptions: AutocompleteOption<string>[] = result.map((item) => {
 			return _options[item.refIndex];
 		});
 		return filteredOptions;
@@ -73,50 +72,21 @@
 </script>
 
 <input
-	class="input autocomplete"
+	class="w-full max-w-xs rounded-md"
 	type="search"
 	name="autocomplete-search"
-	bind:value={inputPopupDemo}
+	bind:value={userInput}
 	placeholder="Search..."
 	use:popup={popupSettings}
 />
-<div data-popup="popupAutocomplete" class="autocomplete-popup-content">
+<div
+	data-popup="popupAutocomplete"
+	class="absolute z-10 w-full max-w-xs box-border bg-white border border-gray-300 shadow-md rounded-md top-full left-0"
+>
 	<Autocomplete
-		bind:input={inputPopupDemo}
-		options={reviewsOptions}
+		bind:input={userInput}
+		options={userInput ? reviewsOptions : []}
 		on:selection={onPopupDemoSelect}
 		filter={fuzzyFinding}
 	/>
 </div>
-
-<style>
-	/* Ensure the container of the input and popup has a relative position */
-	.autocomplete-container {
-		position: relative; /* This creates a stacking context for the popup */
-		max-width: 400px; /* Adjust based on your design */
-		margin: 0 auto; /* Center the container if desired */
-	}
-
-	.input.autocomplete {
-		width: 100%; /* Full width of the container */
-		max-width: 400px;
-		/* Ensure your input styles here */
-	}
-
-	/* Style the popup to make it float over other elements */
-	[data-popup='popupAutocomplete'] {
-		position: absolute; /* Position it relative to its nearest positioned ancestor (`.autocomplete-container` here) */
-		z-index: 1000; /* High z-index to ensure it's above most other elements */
-		width: 100%; /* Match the width of the search bar */
-		max-width: 400px;
-		box-sizing: border-box; /* Include padding and border in the element's total width and height */
-		/* Additional positioning to align with the bottom of the search bar */
-		top: 100%; /* Place it right below the search bar */
-		left: 0; /* Align it to the left edge of the container */
-		/* Style your popup box here (border, shadow, etc.) */
-		border: 1px solid #ccc;
-		background: white; /* Ensure it has a background to mask items below */
-		box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-		border-radius: 4px;
-	}
-</style>
