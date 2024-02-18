@@ -144,6 +144,7 @@
 
 	let product_data: string = 'test';
 	$: product_data = categoriesData[category - 1]; // Reactive declaration to update product_data when categoryStore changes
+	$: category;
 </script>
 
 <!-- {#if data}
@@ -181,6 +182,7 @@
 {/if} -->
 <!-- 
 <Cardlist
+{category}
 	tag={0}
 
 	{product_data}
@@ -189,6 +191,7 @@
 	icon="quill:chat"
 />
 <Cardlist
+{category}
 	tag={1}
 	
 	{product_data}
@@ -197,6 +200,7 @@
 	icon="quill:chat"
 />
 <Cardlist
+{category}
 	tag={2}
 	
 	{product_data}
@@ -213,6 +217,7 @@
 				<!-- row 1 -->
 				<div class="h-full parent-element">
 					<Cardlist
+						{category}
 						tag={0}
 						{product_data}
 						outer_height="810px"
@@ -225,6 +230,7 @@
 				<div class="h-full grid gap-5">
 					<div class="parent-element">
 						<Cardlist
+							{category}
 							tag={1}
 							{product_data}
 							outer_height="290px"
@@ -234,6 +240,7 @@
 					</div>
 					<div class="parent-element">
 						<Cardlist
+							{category}
 							tag={2}
 							{product_data}
 							outer_height="500px"
@@ -247,6 +254,7 @@
 				<div class="h-full grid gap-5">
 					<div class="parent-element">
 						<Cardlist
+							{category}
 							tag={3}
 							{product_data}
 							outer_height="500px"
@@ -256,6 +264,7 @@
 					</div>
 					<div class="parent-element">
 						<Cardlist
+							{category}
 							tag={4}
 							{product_data}
 							outer_height="290px"
@@ -268,6 +277,7 @@
 				<!-- row 4 -->
 				<div class="h-full parent-element">
 					<Cardlist
+						{category}
 						tag={5}
 						{product_data}
 						outer_height="810px"
@@ -284,6 +294,7 @@
 				<div class="h-full grid gap-5">
 					<div class="parent-element">
 						<Cardlist
+							{category}
 							tag={6}
 							{product_data}
 							outer_height="500px"
@@ -293,6 +304,7 @@
 					</div>
 					<div class="parent-element">
 						<Cardlist
+							{category}
 							tag={7}
 							{product_data}
 							outer_height="290px"
@@ -306,6 +318,7 @@
 				<div class="h-full grid gap-5">
 					<div class="parent-element">
 						<Cardlist
+							{category}
 							tag={8}
 							{product_data}
 							outer_height="290px"
@@ -315,6 +328,7 @@
 					</div>
 					<div class="parent-element">
 						<Cardlist
+							{category}
 							tag={9}
 							{product_data}
 							outer_height="500px"
@@ -328,6 +342,7 @@
 				<div class="h-full grid gap-5">
 					<div class="parent-element">
 						<Cardlist
+							{category}
 							tag={10}
 							{product_data}
 							outer_height="500px"
@@ -337,6 +352,7 @@
 					</div>
 					<div class="parent-element">
 						<Cardlist
+							{category}
 							tag={11}
 							{product_data}
 							outer_height="290px"
@@ -349,6 +365,7 @@
 				<div class="h-full grid gap-5">
 					<div class="parent-element">
 						<Cardlist
+							{category}
 							tag={12}
 							{product_data}
 							outer_height="290px"
@@ -358,6 +375,7 @@
 					</div>
 					<div class="parent-element">
 						<Cardlist
+							{category}
 							tag={12}
 							{product_data}
 							outer_height="500px"
@@ -377,6 +395,7 @@
 					<div class="h-full grid gap-5">
 						<div class="parent-element">
 							<Cardlist
+								{category}
 								tag={6}
 								{product_data}
 								outer_height="500px"
@@ -386,6 +405,7 @@
 						</div>
 						<div class="parent-element">
 							<Cardlist
+								{category}
 								tag={7}
 								{product_data}
 								outer_height="290px"
@@ -399,6 +419,7 @@
 					<div class="h-full grid gap-5">
 						<div class="parent-element">
 							<Cardlist
+								{category}
 								tag={8}
 								{product_data}
 								outer_height="290px"
@@ -408,6 +429,7 @@
 						</div>
 						<div class="parent-element">
 							<Cardlist
+								{category}
 								tag={9}
 								{product_data}
 								outer_height="500px"
@@ -421,6 +443,7 @@
 					<div class="h-full grid gap-5">
 						<div class="parent-element">
 							<Cardlist
+								{category}
 								tag={10}
 								{product_data}
 								outer_height="500px"
@@ -430,6 +453,7 @@
 						</div>
 						<div class="parent-element">
 							<Cardlist
+								{category}
 								tag={11}
 								{product_data}
 								outer_height="290px"
@@ -442,6 +466,7 @@
 					<div class="h-full grid gap-5">
 						<div class="parent-element">
 							<Cardlist
+								{category}
 								tag={12}
 								{product_data}
 								outer_height="290px"
@@ -451,6 +476,7 @@
 						</div>
 						<div class="parent-element">
 							<Cardlist
+								{category}
 								tag={12}
 								{product_data}
 								outer_height="500px"
@@ -468,6 +494,7 @@
 					<div class="h-full grid gap-5">
 						<div class="parent-element">
 							<Cardlist
+								{category}
 								tag={6}
 								{product_data}
 								outer_height="500px"
@@ -477,6 +504,7 @@
 						</div>
 						<div class="parent-element">
 							<Cardlist
+								{category}
 								tag={7}
 								{product_data}
 								outer_height="290px"
@@ -490,6 +518,7 @@
 					<div class="h-full grid gap-5">
 						<div class="parent-element">
 							<Cardlist
+								{category}
 								tag={8}
 								{product_data}
 								outer_height="290px"
@@ -499,6 +528,7 @@
 						</div>
 						<div class="parent-element">
 							<Cardlist
+								{category}
 								tag={9}
 								{product_data}
 								outer_height="500px"
@@ -512,6 +542,7 @@
 					<div class="h-full grid gap-5">
 						<div class="parent-element">
 							<Cardlist
+								{category}
 								tag={10}
 								{product_data}
 								outer_height="500px"
@@ -521,6 +552,7 @@
 						</div>
 						<div class="parent-element">
 							<Cardlist
+								{category}
 								tag={11}
 								{product_data}
 								outer_height="290px"
@@ -533,6 +565,7 @@
 					<div class="h-full grid gap-5">
 						<div class="parent-element">
 							<Cardlist
+								{category}
 								tag={12}
 								{product_data}
 								outer_height="290px"
@@ -542,6 +575,7 @@
 						</div>
 						<div class="parent-element">
 							<Cardlist
+								{category}
 								tag={12}
 								{product_data}
 								outer_height="500px"

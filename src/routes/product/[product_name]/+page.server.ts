@@ -1,6 +1,6 @@
 // Server-side SvelteKit load function
 import { supabase } from '$lib/supabaseClient';
-import type { PageLoad } from '../$types';
+import type { PageLoad } from '../../$types';            
 import type { Product } from '$lib/types';
 
 interface MyRouteParams {

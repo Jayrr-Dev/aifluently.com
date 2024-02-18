@@ -82,7 +82,7 @@
 						<div class="grid grid-cols-1 gap-1">
 							<button
 								on:click={() => {
-									goto(`/${relatedProducts[i].product_slug}`);
+									goto(`${relatedProducts[i].product_slug}`);
 								}}
 								class="parent-hover overlay-show btn variant-ghost-primary w-[300px] h-[40px] text-white text-base md:text-xl lg:text-2xl z-30 opacity-0"
 							>

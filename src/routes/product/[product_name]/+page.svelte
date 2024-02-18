@@ -13,10 +13,10 @@
 	import Imagecard from '$lib/ui/imagecard.svelte';
 	import type { ProductReviewData } from '$lib/types';
 	import { goto } from '$app/navigation';
-	import { lighttoggle } from '../../stores/store';
+	import { lighttoggle } from '../../../stores/store';
 	import { page } from '$app/stores';
 	import { supabase } from '$lib/supabaseClient';
-	import { productReviewCache } from '../../stores/productStore';
+	import { productReviewCache } from '../../../stores/productStore';
 	import type { Product } from '$lib/types';
 	export let data: any;
 	const placeholder = blurhashToCssGradientString('L48W{f-p00E0~pWBs.s:?cNGRjWB');
@@ -51,16 +51,21 @@
 	$: inputPrice = productReviewData?.product_input_price ?? 'No input price';
 	$: outputPrice = productReviewData?.product_output_price ?? 'No output price';
 	$: quality = productReviewData?.product_quality ?? 'No quality';
-	$: description = productReviewData?.product_description ?? 'No description';
+	$: description = productReviewData?.product_highlight ?? 'No description';
 	$: pro = productReviewData?.product_pro ?? [];
 	$: con = productReviewData?.product_con ?? [];
 	$: lightswitch = $lighttoggle;
+
 	$: $page.params.product_name, updateCache(data);
 
 	function updateCache(data: any) {
 		productReviewCache.update((cache) => ({ ...cache, ...data }));
 	}
 </script>
+
+<!-- <pre>
+	{JSON.stringify(productReviewData, null, 2)}
+</pre> -->
 
 {#if productReviewData && image}
 	<section class="grid grid-col-1 md:grid-col-1 lg:grid-cols- xl:grid-cols-2 md:mx-10 xl:mx-32">

@@ -1,10 +1,15 @@
 <script lang="ts">
 	export let tag: number;
 	export let icon: string;
+	export let category: number;
 	//export let category: number;
 	export let product_data: any;
 	export let outer_height: string = '200px';
 	export let inner_height: string = '150px';
+	import { supabase } from '$lib/supabaseClient';
+	import { tagToCategory } from '$lib/tools/tagToCategory';
+	import { goto } from '$app/navigation';
+	import { sluglify } from '$lib/tools/sluglify';
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
 	import { ProgressBar } from '@skeletonlabs/skeleton';
@@ -26,8 +31,25 @@
 	$: aggregated_data = product_data?.aggregated_data[tag];
 	$: product_data;
 	$: lightswitch = $lighttoggle;
+	$: category;
+	$: tag_slug = sluglify(tag_name);
+	$: tag_array = product_data?.aggregated_data[tag].tag_array;
+
+	if (category === 0) {
+		category = tagToCategory(tag) as number;
+	}
 </script>
 
+<!-- 
+<pre>
+	{JSON.stringify(product_data?.aggregated_data[tag].product_table, null, 2)}
+</pre> -->
+<!-- {product_data?.aggregated_data[tag].product_table}
+this
+{tag_array} -->
+<!-- 
+{sluglify(tag_name)}
+{category} -->
 <!-- {#if product_data}
 	{#each product_data?.aggregated_data[tag].product_table || [] as _, i}
 		{i}
@@ -63,6 +85,7 @@
 								<ol>
 									{#each product_data?.aggregated_data[tag].product_table || [] as _, i}
 										<!-- ? Tooltip Styles -->
+
 										<div
 											class="card p-4 z-10 variant-filled-secondary w-[90%] sm:w-[90%] lg:w-[90%] h-40 lg:h-40"
 											data-popup={'popupHover' + tag + '-' + i}
@@ -123,7 +146,11 @@
 											{#if windowWidth < 768}
 												<!-- Product Review Button for Mobile -->
 												<!-- URL REFERENCE -->
-												<a href={aggregated_data.product_table[i].product_name.replace(/\s/g, '')}>
+												<!-- {aggregated_data.product_table[i].product_name.replace(/\s/g, '')} -->
+												<a
+													href={'product/' +
+														aggregated_data.product_table[i].product_name.replace(/\s/g, '')}
+												>
 													<div class="flex justify-center">
 														<button
 															class="btn btn-sm w-[50%] bg-warning-500 border-2 border-black h-6 absolute bottom-2 left-0 right-0 mx-auto"
@@ -258,8 +285,12 @@
 			{/if}
 
 			<div class="btn btn-sm w-full h-8 opacity-0 bg-warning-500 border-2 border-black z-[5]"></div>
+
 			<button
-				class="btn btn-sm w-[85%] h-8 bg-warning-500 border-2 border-black z-[0] absolute bottom-2 left-0 right-0 mx-auto"
+				class="btn btn-sm w-[85%] h-8 bg-warning-500 border-2 border-black z-20 absolute bottom-2 left-0 right-0 mx-auto"
+				on:click={() => {
+					goto(`/category/${category}/${tag_slug}`);
+				}}
 			>
 				More
 			</button>

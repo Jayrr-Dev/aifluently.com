@@ -5,6 +5,9 @@
 	export let product_data: any;
 	export let outer_height: string = '200px';
 	export let inner_height: string = '150px';
+	import { tagToCategory } from '$lib/tools/tagToCategory';
+	import { tagToTagName } from '$lib/tools/tagToTagName';
+	import { sluglify } from '$lib/tools/sluglify';
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
 	import { ProgressBar } from '@skeletonlabs/skeleton';
@@ -13,6 +16,7 @@
 	import Icon from '@iconify/svelte';
 	import { writable } from 'svelte/store';
 	import Stars from '$lib/svg/stars.svelte';
+	import { goto } from '$app/navigation';
 	let isMounted = writable(false);
 	let showTag = true;
 	let windowWidth = 0;
@@ -256,8 +260,12 @@
 			{/if}
 
 			<div class="btn btn-sm w-full h-8 opacity-0 bg-warning-500 border-2 border-black z-[5]"></div>
+			{tagToCategory(tag)}
 			<button
-				class="btn btn-sm w-[85%] h-8 bg-warning-500 border-2 border-black z-[0] absolute bottom-2 left-0 right-0 mx-auto"
+				class="btn btn-sm w-[85%] h-8 bg-warning-500 border-2 border-black z-20 absolute bottom-2 left-0 right-0 mx-auto"
+				on:click={() => {
+					goto(`/category/${tagToCategory(tag)}/${sluglify(tagToTagName(tag))}`);
+				}}
 			>
 				More
 			</button>
