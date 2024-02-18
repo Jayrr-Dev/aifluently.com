@@ -1,6 +1,7 @@
 <script lang="ts">
 	//ui
 	import Footer from '$lib/ui/footer.svelte';
+	import Searchbar from '$lib/ui/searchbar.svelte';
 	//supabase
 	import { invalidate } from '$app/navigation';
 	import { onMount } from 'svelte';
@@ -59,6 +60,7 @@
 	<svelte:fragment slot="header">
 		<!-- App Bar -->
 		<AppBar>
+			<Searchbar />
 			<svelte:fragment slot="lead">
 				<a href="/">
 					{#if lightswitch}
@@ -78,7 +80,7 @@
 			</svelte:fragment>
 			<svelte:fragment slot="trail">
 				<a
-					class="btn btn-sm variant-ghost-surface"
+					class="btn btn-sm variant-ghost-surface hidden md:block"
 					href="https://discord.gg/EXqV7W8MtY"
 					target="_blank"
 					rel="noreferrer"
@@ -86,7 +88,7 @@
 					Discord
 				</a>
 				<a
-					class="btn btn-sm variant-ghost-surface"
+					class="btn btn-sm variant-ghost-surface hidden md:block"
 					href="https://twitter.com/SkeletonUI"
 					target="_blank"
 					rel="noreferrer"
@@ -94,7 +96,7 @@
 					Twitter
 				</a>
 				<a
-					class="btn btn-sm variant-ghost-surface"
+					class="btn btn-sm variant-ghost-surface hidden md:block"
 					href="https://github.com/skeletonlabs/skeleton"
 					target="_blank"
 					rel="noreferrer"
