@@ -92,7 +92,7 @@
 	 */
 	function selectResult(slug: string) {
 		userInput = '';
-		goto(`/${slug}`);
+		goto(`/product/${slug}`);
 		isDropdownVisible = false;
 	}
 </script>

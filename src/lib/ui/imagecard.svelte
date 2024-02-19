@@ -17,9 +17,9 @@
 </pre> -->
 
 {#if relatedProductsData?.props?.relatedProducts}
-	<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-1">
+	<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4">
 		{#each relatedProducts as _, i}
-			<div id="product-image" class=" max-w-full rounded-lg relative card parent-hover mb-4">
+			<div id="product-image" class=" max-w-full rounded-lg relative card parent-hover">
 				<div id="images" class="flex h-full justify-center fade-in">
 					<Image
 						class="fade-in rounded-t-md rounded-b-sm"
