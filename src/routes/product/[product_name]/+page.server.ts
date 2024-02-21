@@ -56,6 +56,7 @@ export const load: PageLoad = async ({ params }) => {
     props: {
       productReviewData: typedProductReviewData,
       relatedProducts,
+      productSlug
     },
   };
 };
