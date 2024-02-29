@@ -21,26 +21,25 @@
 					{/if}
 				</a>
 				<p class="mb-3 max-w-lg pt-4 text-gray-600 dark:text-gray-400">
-					Individuater leverages 8 cognitive functions to deliver comprehensive and personalized
-					personality profiles. Built on a data-driven algorithm, the platform is designed for those
-					seeking deeper self-understanding for personal development, enhancing relationships, and
-					making informed career choices.
+					Aifluently offers a handpicked collection of artificial intelligence tools, providing a
+					refined and expertly curated selection to users. Unlike broader, user-generated
+					directories, Aifluently focuses on quality over quantity, ensuring that each tool meets a
+					high standard of utility and performance. The site is designed for discerning users
+					seeking reliable and effective AI solutions, without the need to sift through the
+					overwhelming noise of the rapidly growing AI market.
 				</p>
 			</div>
 			<div class="grid grid-cols-2 gap-8 sm:grid-cols-3 sm:gap-6">
 				<div>
 					<h2 class="mb-6 text-sm font-semibold uppercase text-gray-900 dark:text-white">
-						Resources
+						Company
 					</h2>
 					<ul class="font-medium text-gray-500 dark:text-gray-400">
 						<li class="mb-4">
-							<a href="/our-mission" class="hover:underline">Our Mission</a>
+							<a href="company/our-mission" class="hover:underline">Our Mission</a>
 						</li>
 						<li class="mb-4">
-							<a href="/contact-us" class="hover:underline">Contact Us</a>
-						</li>
-						<li>
-							<a href="/theory" class="hover:underline">Theory</a>
+							<a href="company/contact-us" class="hover:underline">Contact Us</a>
 						</li>
 					</ul>
 				</div>
@@ -54,11 +53,11 @@
 								>Twitter</a
 							>
 						</li>
-						<li class="mb-4">
+						<!-- <li class="mb-4">
 							<a href="https://github.com/themesberg/Individuater" class="hover:underline"
 								>Instagram</a
 							>
-						</li>
+						</li> -->
 						<li class="mb-4">
 							<a href="https://discord.gg/4eeurUVvTy" class="hover:underline">Youtube</a>
 						</li>
@@ -71,10 +70,11 @@
 					<h2 class="mb-6 text-sm font-semibold uppercase text-gray-900 dark:text-white">Legal</h2>
 					<ul class="font-medium text-gray-500 dark:text-gray-400">
 						<li class="mb-4">
-							<a href="/privacy-policy" class="hover:underline">Privacy Policy</a>
+							<a href="legal/privacy-policy" class="hover:underline">Privacy Policy</a>
 						</li>
 						<li>
-							<a href="/terms-and-conditions" class="hover:underline">Terms &amp; Conditions</a>
+							<a href="legal/terms-and-conditions" class="hover:underline">Terms &amp; Conditions</a
+							>
 						</li>
 					</ul>
 				</div>

@@ -23,7 +23,8 @@ const tailwindConfig: Config = {
             themes: {
                 custom: [neobrutalist]
             }
-        })
+        }),require('@tailwindcss/forms'),
+
     ],
     darkMode: 'class', // Include dark mode configuration here
 };

@@ -1,5 +1,7 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
 	export let data: { article: Article | null; user: User | null };
+	import Backbtn from '$lib/svg/backbtn.svelte';
 
 	interface User {
 		id: string;
@@ -30,14 +32,22 @@
 	$: username = data.user?.username;
 </script>
 
-<pre>
+<!-- <pre>
     {JSON.stringify(username, null, 2)}
-</pre>
+</pre> -->
 
 {#if article && username}
 	<div class="max-w-xl mx-auto px-4 py-8 sm:max-w-2xl md:max-w-3xl">
+		<button
+			class="py-6"
+			on:click={() => {
+				goto('/articles');
+			}}
+		>
+			<Backbtn />
+		</button>
 		<h1
-			class="text-3xl font-serif font-bold mb-4 leading-tight sm:text-4xl md:text-5xl lg:text-6xl"
+			class="text-xl font-serif font-extrabold mb-4 leading-tight sm:text-4xl md:text-5xl lg:text-6xl"
 		>
 			{article.title}
 		</h1>
