@@ -13,8 +13,8 @@ var __commonJS = (cb, mod) => function __require() {
   return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
 };
 var __export = (target, all) => {
-  for (var name in all)
-    __defProp(target, name, { get: all[name], enumerable: true });
+  for (var name2 in all)
+    __defProp(target, name2, { get: all[name2], enumerable: true });
 };
 var __copyProps = (to, from, except, desc) => {
   if (from && typeof from === "object" || typeof from === "function") {
@@ -71,6 +71,9 @@ function blank_object() {
 function run_all(fns) {
   fns.forEach(run);
 }
+function is_function(thing) {
+  return typeof thing === "function";
+}
 function safe_not_equal(a2, b) {
   return a2 != a2 ? b == b : a2 !== b || a2 && typeof a2 === "object" || typeof a2 === "function";
 }
@@ -89,6 +92,14 @@ function get_store_value(store) {
   subscribe(store, (_) => value = _)();
   return value;
 }
+function compute_rest_props(props, keys) {
+  const rest = {};
+  keys = new Set(keys);
+  for (const k in props)
+    if (!keys.has(k) && k[0] !== "$")
+      rest[k] = props[k];
+  return rest;
+}
 function compute_slots(slots) {
   const result = {};
   for (const key2 in slots) {
@@ -99,8 +110,8 @@ function compute_slots(slots) {
 function custom_event(type, detail, { bubbles = false, cancelable = false } = {}) {
   return new CustomEvent(type, { detail, bubbles, cancelable });
 }
-function set_current_component(component6) {
-  current_component = component6;
+function set_current_component(component13) {
+  current_component = component13;
 }
 function get_current_component() {
   if (!current_component)
@@ -111,9 +122,9 @@ function onDestroy(fn) {
   get_current_component().$$.on_destroy.push(fn);
 }
 function createEventDispatcher() {
-  const component6 = get_current_component();
+  const component13 = get_current_component();
   return (type, detail, { cancelable = false } = {}) => {
-    const callbacks = component6.$$.callbacks[type];
+    const callbacks = component13.$$.callbacks[type];
     if (callbacks) {
       const event = custom_event(
         /** @type {string} */
@@ -122,7 +133,7 @@ function createEventDispatcher() {
         { cancelable }
       );
       callbacks.slice().forEach((fn) => {
-        fn.call(component6, event);
+        fn.call(component13, event);
       });
       return !event.defaultPrevented;
     }
@@ -162,17 +173,17 @@ function spread(args, attrs_to_add) {
     }
   }
   let str = "";
-  Object.keys(attributes).forEach((name) => {
-    if (invalid_attribute_name_character.test(name))
+  Object.keys(attributes).forEach((name2) => {
+    if (invalid_attribute_name_character.test(name2))
       return;
-    const value = attributes[name];
+    const value = attributes[name2];
     if (value === true)
-      str += " " + name;
-    else if (boolean_attributes.has(name.toLowerCase())) {
+      str += " " + name2;
+    else if (boolean_attributes.has(name2.toLowerCase())) {
       if (value)
-        str += " " + name;
+        str += " " + name2;
     } else if (value != null) {
-      str += ` ${name}="${value}"`;
+      str += ` ${name2}="${value}"`;
     }
   });
   return str;
@@ -181,18 +192,18 @@ function merge_ssr_styles(style_attribute, style_directive) {
   const style_object = {};
   for (const individual_style of style_attribute.split(";")) {
     const colon_index = individual_style.indexOf(":");
-    const name = individual_style.slice(0, colon_index).trim();
+    const name2 = individual_style.slice(0, colon_index).trim();
     const value = individual_style.slice(colon_index + 1).trim();
-    if (!name)
+    if (!name2)
       continue;
-    style_object[name] = value;
+    style_object[name2] = value;
   }
-  for (const name in style_directive) {
-    const value = style_directive[name];
+  for (const name2 in style_directive) {
+    const value = style_directive[name2];
     if (value) {
-      style_object[name] = value;
+      style_object[name2] = value;
     } else {
-      delete style_object[name];
+      delete style_object[name2];
     }
   }
   return style_object;
@@ -230,15 +241,15 @@ function each(items, fn) {
   }
   return str;
 }
-function validate_component(component6, name) {
-  if (!component6 || !component6.$$render) {
-    if (name === "svelte:component")
-      name += " this={...}";
+function validate_component(component13, name2) {
+  if (!component13 || !component13.$$render) {
+    if (name2 === "svelte:component")
+      name2 += " this={...}";
     throw new Error(
-      `<${name}> is not a valid SSR component. You may need to review your build config to ensure that dependencies are compiled, rather than imported as pre-compiled modules. Otherwise you may need to fix a <${name}>.`
+      `<${name2}> is not a valid SSR component. You may need to review your build config to ensure that dependencies are compiled, rather than imported as pre-compiled modules. Otherwise you may need to fix a <${name2}>.`
     );
   }
-  return component6;
+  return component13;
 }
 function create_ssr_component(fn) {
   function $$render(result, props, bindings, slots, context) {
@@ -276,11 +287,11 @@ function create_ssr_component(fn) {
     $$render
   };
 }
-function add_attribute(name, value, boolean) {
+function add_attribute(name2, value, boolean) {
   if (value == null || boolean && !value)
     return "";
   const assignment = boolean && value === true ? "" : `="${escape(value, true)}"`;
-  return ` ${name}${assignment}`;
+  return ` ${name2}${assignment}`;
 }
 function style_object_to_string(style_object) {
   return Object.keys(style_object).filter((key2) => style_object[key2]).map((key2) => `${key2}: ${escape_attribute_value(style_object[key2])};`).join(" ");
@@ -1188,9 +1199,9 @@ var FunctionsError, FunctionsFetchError, FunctionsRelayError, FunctionsHttpError
 var init_types = __esm({
   "node_modules/.pnpm/@supabase+functions-js@2.1.5/node_modules/@supabase/functions-js/dist/module/types.js"() {
     FunctionsError = class extends Error {
-      constructor(message, name = "FunctionsError", context) {
+      constructor(message, name2 = "FunctionsError", context) {
         super(message);
-        this.name = name;
+        this.name = name2;
         this.context = context;
       }
     };
@@ -2416,8 +2427,8 @@ var init_PostgrestClient = __esm({
         let body2;
         if (head) {
           method = "HEAD";
-          Object.entries(args).forEach(([name, value]) => {
-            url.searchParams.append(name, `${value}`);
+          Object.entries(args).forEach(([name2, value]) => {
+            url.searchParams.append(name2, `${value}`);
           });
         } else {
           method = "POST";
@@ -3140,7 +3151,7 @@ var init_RealtimeChannel = __esm({
           const config2 = {
             broadcast,
             presence,
-            postgres_changes: (_b = (_a = this.bindings.postgres_changes) === null || _a === void 0 ? void 0 : _a.map((r2) => r2.filter)) !== null && _b !== void 0 ? _b : []
+            postgres_changes: (_b = (_a = this.bindings.postgres_changes) === null || _a === void 0 ? void 0 : _a.map((r3) => r3.filter)) !== null && _b !== void 0 ? _b : []
           };
           if (this.socket.accessToken) {
             accessTokenPayload.access_token = this.socket.accessToken;
@@ -4896,9 +4907,9 @@ var init_fetch2 = __esm({
 function stripTrailingSlash(url) {
   return url.replace(/\/$/, "");
 }
-function applySettingDefaults(options3, defaults) {
+function applySettingDefaults(options3, defaults2) {
   const { db: dbOptions, auth: authOptions, realtime: realtimeOptions, global: globalOptions } = options3;
-  const { db: DEFAULT_DB_OPTIONS2, auth: DEFAULT_AUTH_OPTIONS2, realtime: DEFAULT_REALTIME_OPTIONS2, global: DEFAULT_GLOBAL_OPTIONS2 } = defaults;
+  const { db: DEFAULT_DB_OPTIONS2, auth: DEFAULT_AUTH_OPTIONS2, realtime: DEFAULT_REALTIME_OPTIONS2, global: DEFAULT_GLOBAL_OPTIONS2 } = defaults2;
   return {
     db: Object.assign(Object.assign({}, DEFAULT_DB_OPTIONS2), dbOptions),
     auth: Object.assign(Object.assign({}, DEFAULT_AUTH_OPTIONS2), authOptions),
@@ -4918,7 +4929,7 @@ function expiresAt(expiresIn) {
 }
 function uuid() {
   return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(c2) {
-    const r2 = Math.random() * 16 | 0, v = c2 == "x" ? r2 : r2 & 3 | 8;
+    const r3 = Math.random() * 16 | 0, v = c2 == "x" ? r3 : r3 & 3 | 8;
     return v.toString(16);
   });
 }
@@ -5162,9 +5173,9 @@ var init_errors3 = __esm({
       }
     };
     CustomAuthError = class extends AuthError {
-      constructor(message, name, status) {
+      constructor(message, name2, status) {
         super(message);
-        this.name = name;
+        this.name = name2;
         this.status = status;
       }
       toJSON() {
@@ -5717,20 +5728,20 @@ var init_polyfills = __esm({
 });
 
 // node_modules/.pnpm/@supabase+gotrue-js@2.62.0/node_modules/@supabase/gotrue-js/dist/module/lib/locks.js
-async function navigatorLock(name, acquireTimeout, fn) {
+async function navigatorLock(name2, acquireTimeout, fn) {
   if (internals.debug) {
-    console.log("@supabase/gotrue-js: navigatorLock: acquire lock", name, acquireTimeout);
+    console.log("@supabase/gotrue-js: navigatorLock: acquire lock", name2, acquireTimeout);
   }
   const abortController = new globalThis.AbortController();
   if (acquireTimeout > 0) {
     setTimeout(() => {
       abortController.abort();
       if (internals.debug) {
-        console.log("@supabase/gotrue-js: navigatorLock acquire timed out", name);
+        console.log("@supabase/gotrue-js: navigatorLock acquire timed out", name2);
       }
     }, acquireTimeout);
   }
-  return await globalThis.navigator.locks.request(name, acquireTimeout === 0 ? {
+  return await globalThis.navigator.locks.request(name2, acquireTimeout === 0 ? {
     mode: "exclusive",
     ifAvailable: true
   } : {
@@ -5739,21 +5750,21 @@ async function navigatorLock(name, acquireTimeout, fn) {
   }, async (lock) => {
     if (lock) {
       if (internals.debug) {
-        console.log("@supabase/gotrue-js: navigatorLock: acquired", name, lock.name);
+        console.log("@supabase/gotrue-js: navigatorLock: acquired", name2, lock.name);
       }
       try {
         return await fn();
       } finally {
         if (internals.debug) {
-          console.log("@supabase/gotrue-js: navigatorLock: released", name, lock.name);
+          console.log("@supabase/gotrue-js: navigatorLock: released", name2, lock.name);
         }
       }
     } else {
       if (acquireTimeout === 0) {
         if (internals.debug) {
-          console.log("@supabase/gotrue-js: navigatorLock: not immediately available", name);
+          console.log("@supabase/gotrue-js: navigatorLock: not immediately available", name2);
         }
-        throw new NavigatorLockAcquireTimeoutError(`Acquiring an exclusive Navigator LockManager lock "${name}" immediately failed`);
+        throw new NavigatorLockAcquireTimeoutError(`Acquiring an exclusive Navigator LockManager lock "${name2}" immediately failed`);
       } else {
         if (internals.debug) {
           try {
@@ -5791,7 +5802,7 @@ var init_locks = __esm({
 });
 
 // node_modules/.pnpm/@supabase+gotrue-js@2.62.0/node_modules/@supabase/gotrue-js/dist/module/GoTrueClient.js
-async function lockNoOp(name, acquireTimeout, fn) {
+async function lockNoOp(name2, acquireTimeout, fn) {
   return await fn();
 }
 var DEFAULT_OPTIONS, AUTO_REFRESH_TICK_DURATION, AUTO_REFRESH_TICK_THRESHOLD, GoTrueClient;
@@ -7724,8 +7735,8 @@ var init_SupabaseClient = __esm({
        * @param {Object} opts - The options to pass to the Realtime channel.
        *
        */
-      channel(name, opts = { config: {} }) {
-        return this.realtime.channel(name, opts);
+      channel(name2, opts = { config: {} }) {
+        return this.realtime.channel(name2, opts);
       }
       /**
        * Returns all Realtime channels.
@@ -7874,8 +7885,8 @@ function createChunks(key2, value, chunkSize) {
   const chunks = [];
   const values = value.match(re);
   values == null ? void 0 : values.forEach((value2, i) => {
-    const name = `${key2}.${i}`;
-    chunks.push({ name, value: value2 });
+    const name2 = `${key2}.${i}`;
+    chunks.push({ name: name2, value: value2 });
   });
   return chunks;
 }
@@ -7955,20 +7966,20 @@ var init_dist = __esm({
           var obj = {};
           var opt = options3 || {};
           var dec = opt.decode || decode4;
-          var index6 = 0;
-          while (index6 < str.length) {
-            var eqIdx = str.indexOf("=", index6);
+          var index13 = 0;
+          while (index13 < str.length) {
+            var eqIdx = str.indexOf("=", index13);
             if (eqIdx === -1) {
               break;
             }
-            var endIdx = str.indexOf(";", index6);
+            var endIdx = str.indexOf(";", index13);
             if (endIdx === -1) {
               endIdx = str.length;
             } else if (endIdx < eqIdx) {
-              index6 = str.lastIndexOf(";", eqIdx - 1) + 1;
+              index13 = str.lastIndexOf(";", eqIdx - 1) + 1;
               continue;
             }
-            var key2 = str.slice(index6, eqIdx).trim();
+            var key2 = str.slice(index13, eqIdx).trim();
             if (void 0 === obj[key2]) {
               var val = str.slice(eqIdx + 1, endIdx).trim();
               if (val.charCodeAt(0) === 34) {
@@ -7976,24 +7987,24 @@ var init_dist = __esm({
               }
               obj[key2] = tryDecode2(val, dec);
             }
-            index6 = endIdx + 1;
+            index13 = endIdx + 1;
           }
           return obj;
         }
-        function serialize3(name, val, options3) {
+        function serialize3(name2, val, options3) {
           var opt = options3 || {};
           var enc = opt.encode || encode4;
           if (typeof enc !== "function") {
             throw new TypeError("option encode is invalid");
           }
-          if (!fieldContentRegExp2.test(name)) {
+          if (!fieldContentRegExp2.test(name2)) {
             throw new TypeError("argument name is invalid");
           }
           var value = enc(val);
           if (value && !fieldContentRegExp2.test(value)) {
             throw new TypeError("argument val is invalid");
           }
-          var str = name + "=" + value;
+          var str = name2 + "=" + value;
           if (null != opt.maxAge) {
             var maxAge = opt.maxAge - 0;
             if (isNaN(maxAge) || !isFinite(maxAge)) {
@@ -8147,24 +8158,24 @@ var init_dist = __esm({
       constructor(cookieOptions) {
         super(cookieOptions);
       }
-      getCookie(name) {
+      getCookie(name2) {
         if (!isBrowser2())
           return null;
         const cookies = (0, import_cookie2.parse)(document.cookie);
-        return cookies[name];
+        return cookies[name2];
       }
-      setCookie(name, value) {
+      setCookie(name2, value) {
         if (!isBrowser2())
           return null;
-        document.cookie = (0, import_cookie2.serialize)(name, value, {
+        document.cookie = (0, import_cookie2.serialize)(name2, value, {
           ...this.cookieOptions,
           httpOnly: false
         });
       }
-      deleteCookie(name) {
+      deleteCookie(name2) {
         if (!isBrowser2())
           return null;
-        document.cookie = (0, import_cookie2.serialize)(name, "", {
+        document.cookie = (0, import_cookie2.serialize)(name2, "", {
           ...this.cookieOptions,
           maxAge: 0,
           httpOnly: false
@@ -8260,17 +8271,17 @@ var init_dist2 = __esm({
         this.isInitialDelete = true;
         this.currentSession = null;
       }
-      getCookie(name) {
-        return this.event.cookies.get(name);
+      getCookie(name2) {
+        return this.event.cookies.get(name2);
       }
-      setCookie(name, value) {
-        this.event.cookies.set(name, value, {
+      setCookie(name2, value) {
+        this.event.cookies.set(name2, value, {
           httpOnly: false,
           ...this.cookieOptions
         });
       }
-      deleteCookie(name) {
-        this.event.cookies.delete(name, {
+      deleteCookie(name2) {
+        this.event.cookies.delete(name2, {
           httpOnly: false,
           ...this.cookieOptions
         });
@@ -8382,6 +8393,54 @@ function writable(value, start = noop) {
   }
   return { set, update, subscribe: subscribe2 };
 }
+function derived(stores2, fn, initial_value) {
+  const single = !Array.isArray(stores2);
+  const stores_array = single ? [stores2] : stores2;
+  if (!stores_array.every(Boolean)) {
+    throw new Error("derived() expects stores as input, got a falsy value");
+  }
+  const auto = fn.length < 2;
+  return readable(initial_value, (set, update) => {
+    let started = false;
+    const values = [];
+    let pending = 0;
+    let cleanup = noop;
+    const sync = () => {
+      if (pending) {
+        return;
+      }
+      cleanup();
+      const result = fn(single ? values[0] : values, set, update);
+      if (auto) {
+        set(result);
+      } else {
+        cleanup = is_function(result) ? result : noop;
+      }
+    };
+    const unsubscribers = stores_array.map(
+      (store, i) => subscribe(
+        store,
+        (value) => {
+          values[i] = value;
+          pending &= ~(1 << i);
+          if (started) {
+            sync();
+          }
+        },
+        () => {
+          pending |= 1 << i;
+        }
+      )
+    );
+    started = true;
+    sync();
+    return function stop() {
+      run_all(unsubscribers);
+      cleanup();
+      started = false;
+    };
+  });
+}
 var subscriber_queue;
 var init_chunks = __esm({
   ".svelte-kit/output/server/chunks/index.js"() {
@@ -8436,6 +8495,67 @@ var init_layout_server_ts = __esm({
   }
 });
 
+// .svelte-kit/output/server/chunks/ProgressBar.svelte_svelte_type_style_lang.js
+function localStorageStore(key2, initialValue, options3) {
+  options3?.serializer ?? JSON;
+  options3?.storage ?? "local";
+  if (!stores[key2]) {
+    const store = writable(initialValue, (set2) => {
+    });
+    const { subscribe: subscribe2, set } = store;
+    stores[key2] = {
+      set(value) {
+        set(value);
+      },
+      update(updater) {
+        const value = updater(get_store_value(store));
+        set(value);
+      },
+      subscribe: subscribe2
+    };
+  }
+  return stores[key2];
+}
+function setInitialClassState() {
+  const elemHtmlClasses = document.documentElement.classList;
+  const condLocalStorageUserPrefs = localStorage.getItem("modeUserPrefers") === "false";
+  const condLocalStorageUserPrefsExists = !("modeUserPrefers" in localStorage);
+  const condMatchMedia = window.matchMedia("(prefers-color-scheme: dark)").matches;
+  if (condLocalStorageUserPrefs || condLocalStorageUserPrefsExists && condMatchMedia) {
+    elemHtmlClasses.add("dark");
+  } else {
+    elemHtmlClasses.remove("dark");
+  }
+}
+function autoModeWatcher() {
+  const mql = window.matchMedia("(prefers-color-scheme: light)");
+  function setMode(value) {
+    const elemHtmlClasses = document.documentElement.classList;
+    const classDark = `dark`;
+    value === true ? elemHtmlClasses.remove(classDark) : elemHtmlClasses.add(classDark);
+  }
+  setMode(mql.matches);
+  mql.onchange = () => {
+    setMode(mql.matches);
+  };
+}
+function prefersReducedMotion() {
+  return false;
+}
+var stores, modeCurrent;
+var init_ProgressBar_svelte_svelte_type_style_lang = __esm({
+  ".svelte-kit/output/server/chunks/ProgressBar.svelte_svelte_type_style_lang.js"() {
+    init_chunks();
+    init_ssr();
+    stores = {};
+    localStorageStore("modeOsPrefers", false);
+    localStorageStore("modeUserPrefers", void 0);
+    modeCurrent = localStorageStore("modeCurrent", false);
+    readable(prefersReducedMotion(), (set) => {
+    });
+  }
+});
+
 // .svelte-kit/output/server/chunks/store.js
 function mergeIconTransformations(obj1, obj2) {
   const result = {};
@@ -8470,34 +8590,34 @@ function getIconsTree(data, names) {
   const icons = data.icons;
   const aliases = data.aliases || /* @__PURE__ */ Object.create(null);
   const resolved = /* @__PURE__ */ Object.create(null);
-  function resolve2(name) {
-    if (icons[name]) {
-      return resolved[name] = [];
+  function resolve2(name2) {
+    if (icons[name2]) {
+      return resolved[name2] = [];
     }
-    if (!(name in resolved)) {
-      resolved[name] = null;
-      const parent = aliases[name] && aliases[name].parent;
+    if (!(name2 in resolved)) {
+      resolved[name2] = null;
+      const parent = aliases[name2] && aliases[name2].parent;
       const value = parent && resolve2(parent);
       if (value) {
-        resolved[name] = [parent].concat(value);
+        resolved[name2] = [parent].concat(value);
       }
     }
-    return resolved[name];
+    return resolved[name2];
   }
   (names || Object.keys(icons).concat(Object.keys(aliases))).forEach(resolve2);
   return resolved;
 }
-function internalGetIconData(data, name, tree) {
+function internalGetIconData(data, name2, tree) {
   const icons = data.icons;
   const aliases = data.aliases || /* @__PURE__ */ Object.create(null);
   let currentProps = {};
-  function parse3(name2) {
+  function parse3(name22) {
     currentProps = mergeIconData(
-      icons[name2] || aliases[name2],
+      icons[name22] || aliases[name22],
       currentProps
     );
   }
-  parse3(name);
+  parse3(name2);
   tree.forEach(parse3);
   return mergeIconData(data, currentProps);
 }
@@ -8507,24 +8627,24 @@ function parseIconSet(data, callback) {
     return names;
   }
   if (data.not_found instanceof Array) {
-    data.not_found.forEach((name) => {
-      callback(name, null);
-      names.push(name);
+    data.not_found.forEach((name2) => {
+      callback(name2, null);
+      names.push(name2);
     });
   }
   const tree = getIconsTree(data);
-  for (const name in tree) {
-    const item = tree[name];
+  for (const name2 in tree) {
+    const item = tree[name2];
     if (item) {
-      callback(name, internalGetIconData(data, name, item));
-      names.push(name);
+      callback(name2, internalGetIconData(data, name2, item));
+      names.push(name2);
     }
   }
   return names;
 }
-function checkOptionalProps(item, defaults) {
-  for (const prop in defaults) {
-    if (prop in item && typeof item[prop] !== typeof defaults[prop]) {
+function checkOptionalProps(item, defaults2) {
+  for (const prop in defaults2) {
+    if (prop in item && typeof item[prop] !== typeof defaults2[prop]) {
       return false;
     }
   }
@@ -8542,9 +8662,9 @@ function quicklyValidateIconSet(obj) {
     return null;
   }
   const icons = data.icons;
-  for (const name in icons) {
-    const icon = icons[name];
-    if (!name.match(matchIconName) || typeof icon.body !== "string" || !checkOptionalProps(
+  for (const name2 in icons) {
+    const icon = icons[name2];
+    if (!name2.match(matchIconName) || typeof icon.body !== "string" || !checkOptionalProps(
       icon,
       defaultExtendedIconProps
     )) {
@@ -8552,10 +8672,10 @@ function quicklyValidateIconSet(obj) {
     }
   }
   const aliases = data.aliases || /* @__PURE__ */ Object.create(null);
-  for (const name in aliases) {
-    const icon = aliases[name];
+  for (const name2 in aliases) {
+    const icon = aliases[name2];
     const parent = icon.parent;
-    if (!name.match(matchIconName) || typeof parent !== "string" || !icons[parent] && !aliases[parent] || !checkOptionalProps(
+    if (!name2.match(matchIconName) || typeof parent !== "string" || !icons[parent] && !aliases[parent] || !checkOptionalProps(
       icon,
       defaultExtendedIconProps
     )) {
@@ -8580,18 +8700,18 @@ function addIconSet(storage2, data) {
   if (!quicklyValidateIconSet(data)) {
     return [];
   }
-  return parseIconSet(data, (name, icon) => {
+  return parseIconSet(data, (name2, icon) => {
     if (icon) {
-      storage2.icons[name] = icon;
+      storage2.icons[name2] = icon;
     } else {
-      storage2.missing.add(name);
+      storage2.missing.add(name2);
     }
   });
 }
-function addIconToStorage(storage2, name, icon) {
+function addIconToStorage(storage2, name2, icon) {
   try {
     if (typeof icon.body === "string") {
-      storage2.icons[name] = { ...icon };
+      storage2.icons[name2] = { ...icon };
       return true;
     }
   } catch (err) {
@@ -8604,16 +8724,16 @@ function allowSimpleNames(allow) {
   }
   return simpleNames;
 }
-function getIconData(name) {
-  const icon = typeof name === "string" ? stringToIcon(name, true, simpleNames) : name;
+function getIconData(name2) {
+  const icon = typeof name2 === "string" ? stringToIcon(name2, true, simpleNames) : name2;
   if (icon) {
     const storage2 = getStorage(icon.provider, icon.prefix);
     const iconName = icon.name;
     return storage2.icons[iconName] || (storage2.missing.has(iconName) ? null : void 0);
   }
 }
-function addIcon(name, data) {
-  const icon = stringToIcon(name, true, simpleNames);
+function addIcon(name2, data) {
+  const icon = stringToIcon(name2, true, simpleNames);
   if (!icon) {
     return false;
   }
@@ -8631,8 +8751,8 @@ function addCollection(data, provider) {
     let added = false;
     if (quicklyValidateIconSet(data)) {
       data.prefix = "";
-      parseIconSet(data, (name, icon) => {
-        if (icon && addIcon(name, icon)) {
+      parseIconSet(data, (name2, icon) => {
+        if (icon && addIcon(name2, icon)) {
           added = true;
         }
       });
@@ -8667,9 +8787,9 @@ function calculateSize(size2, ratio, precision) {
   }
   const newParts = [];
   let code = oldParts.shift();
-  let isNumber = unitsTest.test(code);
+  let isNumber2 = unitsTest.test(code);
   while (true) {
-    if (isNumber) {
+    if (isNumber2) {
       const num = parseFloat(code);
       if (isNaN(num)) {
         newParts.push(code);
@@ -8683,14 +8803,14 @@ function calculateSize(size2, ratio, precision) {
     if (code === void 0) {
       return newParts.join("");
     }
-    isNumber = !isNumber;
+    isNumber2 = !isNumber2;
   }
 }
 function splitSVGDefs(content, tag2 = "defs") {
   let defs = "";
-  const index6 = content.indexOf("<" + tag2);
-  while (index6 >= 0) {
-    const start = content.indexOf(">", index6);
+  const index13 = content.indexOf("<" + tag2);
+  while (index13 >= 0) {
+    const start = content.indexOf(">", index13);
     const end = content.indexOf("</" + tag2);
     if (start === -1 || end === -1) {
       break;
@@ -8700,7 +8820,7 @@ function splitSVGDefs(content, tag2 = "defs") {
       break;
     }
     defs += content.slice(start + 1, end).trim();
-    content = content.slice(0, index6).trim() + content.slice(endEnd + 1);
+    content = content.slice(0, index13).trim() + content.slice(endEnd + 1);
   }
   return {
     defs,
@@ -8954,13 +9074,13 @@ function sortIcons(icons) {
     lastIcon = icon;
     const provider = icon.provider;
     const prefix = icon.prefix;
-    const name = icon.name;
+    const name2 = icon.name;
     const providerStorage = storage2[provider] || (storage2[provider] = /* @__PURE__ */ Object.create(null));
     const localStorage2 = providerStorage[prefix] || (providerStorage[prefix] = getStorage(provider, prefix));
     let list2;
-    if (name in localStorage2.icons) {
+    if (name2 in localStorage2.icons) {
       list2 = result.loaded;
-    } else if (prefix === "" || localStorage2.missing.has(name)) {
+    } else if (prefix === "" || localStorage2.missing.has(name2)) {
       list2 = result.missing;
     } else {
       list2 = result.pending;
@@ -8968,7 +9088,7 @@ function sortIcons(icons) {
     const item = {
       provider,
       prefix,
-      name
+      name: name2
     };
     list2.push(item);
   });
@@ -9001,18 +9121,18 @@ function updateCallbacks(storage2) {
           if (icon.prefix !== prefix) {
             return true;
           }
-          const name = icon.name;
-          if (storage2.icons[name]) {
+          const name2 = icon.name;
+          if (storage2.icons[name2]) {
             icons.loaded.push({
               provider,
               prefix,
-              name
+              name: name2
             });
-          } else if (storage2.missing.has(name)) {
+          } else if (storage2.missing.has(name2)) {
             icons.missing.push({
               provider,
               prefix,
-              name
+              name: name2
             });
           } else {
             hasPending = true;
@@ -9172,9 +9292,9 @@ function sendQuery(config2, payload, query, done) {
     resetTimer();
     clearQueue();
     if (!config2.random) {
-      const index6 = config2.resources.indexOf(item.resource);
-      if (index6 !== -1 && index6 !== config2.index) {
-        config2.index = index6;
+      const index13 = config2.resources.indexOf(item.resource);
+      if (index13 !== -1 && index13 !== config2.index) {
+        config2.index = index13;
       }
     }
     status = "completed";
@@ -9249,8 +9369,8 @@ function initRedundancy(cfg) {
   const instance = {
     query,
     find,
-    setIndex: (index6) => {
-      config2.index = index6;
+    setIndex: (index13) => {
+      config2.index = index13;
     },
     getIndex: () => config2.index,
     cleanup
@@ -9361,21 +9481,21 @@ function iterateBrowserStorage(key2, callback) {
     return;
   }
   const minTime = Math.floor(Date.now() / browserStorageHour) - browserStorageCacheExpiration;
-  const parseItem = (index6) => {
-    const name = browserCachePrefix + index6.toString();
-    const item = getStoredItem(func, name);
+  const parseItem = (index13) => {
+    const name2 = browserCachePrefix + index13.toString();
+    const item = getStoredItem(func, name2);
     if (typeof item !== "string") {
       return;
     }
     try {
       const data = JSON.parse(item);
       if (typeof data === "object" && typeof data.cached === "number" && data.cached > minTime && typeof data.provider === "string" && typeof data.data === "object" && typeof data.data.prefix === "string" && // Valid item: run callback
-      callback(data, index6)) {
+      callback(data, index13)) {
         return true;
       }
     } catch (err) {
     }
-    removeStoredItem(func, name);
+    removeStoredItem(func, name2);
   };
   let total = getBrowserStorageItemsCount(func);
   for (let i = total - 1; i >= 0; i--) {
@@ -9441,12 +9561,12 @@ function storeInBrowserStorage(storage2, data) {
       return;
     }
     const set = browserStorageEmptyItems[key2];
-    let index6;
+    let index13;
     if (set.size) {
-      set.delete(index6 = Array.from(set).shift());
+      set.delete(index13 = Array.from(set).shift());
     } else {
-      index6 = getBrowserStorageItemsCount(func);
-      if (index6 >= browserStorageLimit || !setBrowserStorageItemsCount(func, index6 + 1)) {
+      index13 = getBrowserStorageItemsCount(func);
+      if (index13 >= browserStorageLimit || !setBrowserStorageItemsCount(func, index13 + 1)) {
         return;
       }
     }
@@ -9457,7 +9577,7 @@ function storeInBrowserStorage(storage2, data) {
     };
     return setStoredItem(
       func,
-      browserCachePrefix + index6.toString(),
+      browserCachePrefix + index13.toString(),
       JSON.stringify(item)
     );
   }
@@ -9507,8 +9627,8 @@ function loadNewIcons(storage2, icons) {
       params.forEach((item) => {
         sendAPIQuery(provider, item, (data) => {
           if (typeof data !== "object") {
-            item.icons.forEach((name) => {
-              storage2.missing.add(name);
+            item.icons.forEach((name2) => {
+              storage2.missing.add(name2);
             });
           } else {
             try {
@@ -9521,8 +9641,8 @@ function loadNewIcons(storage2, icons) {
               }
               const pending = storage2.pendingIcons;
               if (pending) {
-                parsed.forEach((name) => {
-                  pending.delete(name);
+                parsed.forEach((name2) => {
+                  pending.delete(name2);
                 });
               }
               storeInBrowserStorage(storage2, data);
@@ -9536,9 +9656,9 @@ function loadNewIcons(storage2, icons) {
     });
   }
 }
-function mergeCustomisations(defaults, item) {
+function mergeCustomisations(defaults2, item) {
   const result = {
-    ...defaults
+    ...defaults2
   };
   for (const key2 in item) {
     const value = item[key2];
@@ -9772,57 +9892,11 @@ function generateIcon(icon, props) {
     ...icon
   }, props) : null;
 }
-function localStorageStore(key2, initialValue, options3) {
-  options3?.serializer ?? JSON;
-  options3?.storage ?? "local";
-  if (!stores[key2]) {
-    const store = writable(initialValue, (set2) => {
-    });
-    const { subscribe: subscribe2, set } = store;
-    stores[key2] = {
-      set(value) {
-        set(value);
-      },
-      update(updater) {
-        const value = updater(get_store_value(store));
-        set(value);
-      },
-      subscribe: subscribe2
-    };
-  }
-  return stores[key2];
-}
-function setInitialClassState() {
-  const elemHtmlClasses = document.documentElement.classList;
-  const condLocalStorageUserPrefs = localStorage.getItem("modeUserPrefers") === "false";
-  const condLocalStorageUserPrefsExists = !("modeUserPrefers" in localStorage);
-  const condMatchMedia = window.matchMedia("(prefers-color-scheme: dark)").matches;
-  if (condLocalStorageUserPrefs || condLocalStorageUserPrefsExists && condMatchMedia) {
-    elemHtmlClasses.add("dark");
-  } else {
-    elemHtmlClasses.remove("dark");
-  }
-}
-function autoModeWatcher() {
-  const mql = window.matchMedia("(prefers-color-scheme: light)");
-  function setMode(value) {
-    const elemHtmlClasses = document.documentElement.classList;
-    const classDark = `dark`;
-    value === true ? elemHtmlClasses.remove(classDark) : elemHtmlClasses.add(classDark);
-  }
-  setMode(mql.matches);
-  mql.onchange = () => {
-    setMode(mql.matches);
-  };
-}
-function prefersReducedMotion() {
-  return false;
-}
-var matchIconName, stringToIcon, validateIconName, defaultIconDimensions, defaultIconTransformations, defaultIconProps, defaultExtendedIconProps, optionalPropertyDefaults, dataStorage, simpleNames, defaultIconSizeCustomisations, defaultIconCustomisations, unitsSplit, unitsTest, isUnsetKeyword, regex, randomPrefix, counter, storage, configStorage, fallBackAPISources, fallBackAPI, detectFetch, fetchModule, prepare, send, fetchAPIModule, idCounter, defaultConfig, redundancyCache, browserCacheVersion, browserCachePrefix, browserCacheCountKey, browserCacheVersionKey, browserStorageHour, browserStorageCacheExpiration, browserStorageLimit, browserStorageConfig, browserStorageEmptyItems, browserStorageStatus, _window, loadIcons, separator, defaultExtendedIconCustomisations, svgDefaults, commonProps, monotoneProps, coloredProps, propsToAdd, propsToAddTo, stores, modeCurrent, lighttoggle;
+var matchIconName, stringToIcon, validateIconName, defaultIconDimensions, defaultIconTransformations, defaultIconProps, defaultExtendedIconProps, optionalPropertyDefaults, dataStorage, simpleNames, defaultIconSizeCustomisations, defaultIconCustomisations, unitsSplit, unitsTest, isUnsetKeyword, regex, randomPrefix, counter, storage, configStorage, fallBackAPISources, fallBackAPI, detectFetch, fetchModule, prepare, send, fetchAPIModule, idCounter, defaultConfig, redundancyCache, browserCacheVersion, browserCachePrefix, browserCacheCountKey, browserCacheVersionKey, browserStorageHour, browserStorageCacheExpiration, browserStorageLimit, browserStorageConfig, browserStorageEmptyItems, browserStorageStatus, _window, loadIcons, separator, defaultExtendedIconCustomisations, svgDefaults, commonProps, monotoneProps, coloredProps, propsToAdd, propsToAddTo, lighttoggle;
 var init_store = __esm({
   ".svelte-kit/output/server/chunks/store.js"() {
     init_chunks();
-    init_ssr();
+    init_ProgressBar_svelte_svelte_type_style_lang();
     matchIconName = /^[a-z0-9]+(-[a-z0-9]+)*$/;
     stringToIcon = (value, validate, allowSimpleName, provider = "") => {
       const colonSeparated = value.split(":");
@@ -9836,18 +9910,18 @@ var init_store = __esm({
         return null;
       }
       if (colonSeparated.length > 1) {
-        const name2 = colonSeparated.pop();
+        const name22 = colonSeparated.pop();
         const prefix = colonSeparated.pop();
         const result = {
           // Allow provider without '@': "provider:prefix:name"
           provider: colonSeparated.length > 0 ? colonSeparated[0] : provider,
           prefix,
-          name: name2
+          name: name22
         };
         return validate && !validateIconName(result) ? null : result;
       }
-      const name = colonSeparated[0];
-      const dashSeparated = name.split("-");
+      const name2 = colonSeparated[0];
+      const dashSeparated = name2.split("-");
       if (dashSeparated.length > 1) {
         const result = {
           provider,
@@ -9860,7 +9934,7 @@ var init_store = __esm({
         const result = {
           provider,
           prefix: "",
-          name
+          name: name2
         };
         return validate && !validateIconName(result, allowSimpleName) ? null : result;
       }
@@ -9961,9 +10035,9 @@ var init_store = __esm({
         icons: []
       };
       let length = 0;
-      icons.forEach((name, index6) => {
-        length += name.length + 1;
-        if (length >= maxLength && index6 > 0) {
+      icons.forEach((name2, index13) => {
+        length += name2.length + 1;
+        if (length >= maxLength && index13 > 0) {
           results.push(item);
           item = {
             type,
@@ -9971,9 +10045,9 @@ var init_store = __esm({
             prefix,
             icons: []
           };
-          length = name.length;
+          length = name2.length;
         }
-        item.icons.push(name);
+        item.icons.push(name2);
       });
       results.push(item);
       return results;
@@ -10102,12 +10176,12 @@ var init_store = __esm({
         }
       });
       sortedIcons.pending.forEach((icon) => {
-        const { provider, prefix, name } = icon;
+        const { provider, prefix, name: name2 } = icon;
         const storage2 = getStorage(provider, prefix);
         const pendingQueue = storage2.pendingIcons || (storage2.pendingIcons = /* @__PURE__ */ new Set());
-        if (!pendingQueue.has(name)) {
-          pendingQueue.add(name);
-          newIcons[provider][prefix].push(name);
+        if (!pendingQueue.has(name2)) {
+          pendingQueue.add(name2);
+          newIcons[provider][prefix].push(name2);
         }
       });
       sources.forEach((storage2) => {
@@ -10199,12 +10273,6 @@ var init_store = __esm({
         }
       }
     }
-    stores = {};
-    localStorageStore("modeOsPrefers", false);
-    localStorageStore("modeUserPrefers", void 0);
-    modeCurrent = localStorageStore("modeCurrent", false);
-    readable(prefersReducedMotion(), (set) => {
-    });
     lighttoggle = writable(false);
     localStorageStore(
       "tagicon",
@@ -10263,6 +10331,16 @@ var init_Icon = __esm({
   }
 });
 
+// .svelte-kit/output/server/chunks/supabaseClient.js
+var supabase;
+var init_supabaseClient = __esm({
+  ".svelte-kit/output/server/chunks/supabaseClient.js"() {
+    init_module6();
+    init_public();
+    supabase = createClient(PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY);
+  }
+});
+
 // node_modules/.pnpm/highlight.js@11.9.0/node_modules/highlight.js/lib/core.js
 var require_core = __commonJS({
   "node_modules/.pnpm/highlight.js@11.9.0/node_modules/highlight.js/lib/core.js"(exports, module) {
@@ -10277,8 +10355,8 @@ var require_core = __commonJS({
         };
       }
       Object.freeze(obj);
-      Object.getOwnPropertyNames(obj).forEach((name) => {
-        const prop = obj[name];
+      Object.getOwnPropertyNames(obj).forEach((name2) => {
+        const prop = obj[name2];
         const type = typeof prop;
         if ((type === "object" || type === "function") && !Object.isFrozen(prop)) {
           deepFreeze(prop);
@@ -10322,18 +10400,18 @@ var require_core = __commonJS({
     var emitsWrappingTags = (node) => {
       return !!node.scope;
     };
-    var scopeToCSSClass = (name, { prefix }) => {
-      if (name.startsWith("language:")) {
-        return name.replace("language:", "language-");
+    var scopeToCSSClass = (name2, { prefix }) => {
+      if (name2.startsWith("language:")) {
+        return name2.replace("language:", "language-");
       }
-      if (name.includes(".")) {
-        const pieces = name.split(".");
+      if (name2.includes(".")) {
+        const pieces = name2.split(".");
         return [
           `${prefix}${pieces.shift()}`,
           ...pieces.map((x2, i) => `${x2}${"_".repeat(i + 1)}`)
         ].join(" ");
       }
-      return `${prefix}${name}`;
+      return `${prefix}${name2}`;
     };
     var HTMLRenderer = class {
       /**
@@ -10496,10 +10574,10 @@ var require_core = __commonJS({
        * @param {Emitter & {root: DataNode}} emitter
        * @param {string} name
        */
-      __addSublanguage(emitter, name) {
+      __addSublanguage(emitter, name2) {
         const node = emitter.root;
-        if (name)
-          node.scope = `language:${name}`;
+        if (name2)
+          node.scope = `language:${name2}`;
         this.add(node);
       }
       toHTML() {
@@ -11024,13 +11102,13 @@ var require_core = __commonJS({
           this.regexIndex = 0;
         }
         // @ts-ignore
-        getMatcher(index6) {
-          if (this.multiRegexes[index6])
-            return this.multiRegexes[index6];
+        getMatcher(index13) {
+          if (this.multiRegexes[index13])
+            return this.multiRegexes[index13];
           const matcher = new MultiRegex();
-          this.rules.slice(index6).forEach(([re, opts]) => matcher.addRule(re, opts));
+          this.rules.slice(index13).forEach(([re, opts]) => matcher.addRule(re, opts));
           matcher.compile();
-          this.multiRegexes[index6] = matcher;
+          this.multiRegexes[index13] = matcher;
           return matcher;
         }
         resumingScanAtSamePosition() {
@@ -11527,7 +11605,7 @@ var require_core = __commonJS({
         processContinuations();
         let modeBuffer = "";
         let relevance = 0;
-        let index6 = 0;
+        let index13 = 0;
         let iterations = 0;
         let resumeScanAtSamePosition = false;
         try {
@@ -11540,15 +11618,15 @@ var require_core = __commonJS({
               } else {
                 top.matcher.considerAll();
               }
-              top.matcher.lastIndex = index6;
+              top.matcher.lastIndex = index13;
               const match = top.matcher.exec(codeToHighlight);
               if (!match)
                 break;
-              const beforeMatch = codeToHighlight.substring(index6, match.index);
+              const beforeMatch = codeToHighlight.substring(index13, match.index);
               const processedCount = processLexeme(beforeMatch, match);
-              index6 = match.index + processedCount;
+              index13 = match.index + processedCount;
             }
-            processLexeme(codeToHighlight.substring(index6));
+            processLexeme(codeToHighlight.substring(index13));
           } else {
             language.__emitTokens(codeToHighlight, emitter);
           }
@@ -11571,8 +11649,8 @@ var require_core = __commonJS({
               relevance: 0,
               _illegalBy: {
                 message: err.message,
-                index: index6,
-                context: codeToHighlight.slice(index6 - 100, index6 + 100),
+                index: index13,
+                context: codeToHighlight.slice(index13 - 100, index13 + 100),
                 mode: err.mode,
                 resultSoFar: result
               },
@@ -11608,7 +11686,7 @@ var require_core = __commonJS({
         languageSubset = languageSubset || options3.languages || Object.keys(languages);
         const plaintext = justTextHighlightResult(code);
         const results = languageSubset.filter(getLanguage).filter(autoDetection).map(
-          (name) => _highlight(name, code, false)
+          (name2) => _highlight(name2, code, false)
         );
         results.unshift(plaintext);
         const sorted = results.sort((a2, b) => {
@@ -11740,9 +11818,9 @@ var require_core = __commonJS({
       function listLanguages() {
         return Object.keys(languages);
       }
-      function getLanguage(name) {
-        name = (name || "").toLowerCase();
-        return languages[name] || languages[aliases[name]];
+      function getLanguage(name2) {
+        name2 = (name2 || "").toLowerCase();
+        return languages[name2] || languages[aliases[name2]];
       }
       function registerAliases(aliasList, { languageName }) {
         if (typeof aliasList === "string") {
@@ -11752,8 +11830,8 @@ var require_core = __commonJS({
           aliases[alias.toLowerCase()] = languageName;
         });
       }
-      function autoDetection(name) {
-        const lang = getLanguage(name);
+      function autoDetection(name2) {
+        const lang = getLanguage(name2);
         return lang && !lang.disableAutodetect;
       }
       function upgradePluginAPI(plugin) {
@@ -11777,9 +11855,9 @@ var require_core = __commonJS({
         plugins.push(plugin);
       }
       function removePlugin(plugin) {
-        const index6 = plugins.indexOf(plugin);
-        if (index6 !== -1) {
-          plugins.splice(index6, 1);
+        const index13 = plugins.indexOf(plugin);
+        if (index13 !== -1) {
+          plugins.splice(index13, 1);
         }
       }
       function fire(event, args) {
@@ -14617,7 +14695,7 @@ var init_floating_ui_core = __esm({
       let resetCount = 0;
       for (let i = 0; i < validMiddleware.length; i++) {
         const {
-          name,
+          name: name2,
           fn
         } = validMiddleware[i];
         const {
@@ -14643,8 +14721,8 @@ var init_floating_ui_core = __esm({
         y = nextY != null ? nextY : y;
         middlewareData = {
           ...middlewareData,
-          [name]: {
-            ...middlewareData[name],
+          [name2]: {
+            ...middlewareData[name2],
             ...data
           }
         };
@@ -15613,13 +15691,15 @@ var layout_svelte_exports = {};
 __export(layout_svelte_exports, {
   default: () => Layout
 });
-var storeHighlightJs, storePopup, cBase, cRowMain, cRowHeadline, cSlotLead, cSlotDefault, cSlotTrail, AppBar, cBaseAppShell, cContentArea, cPage, cSidebarLeft, cSidebarRight, AppShell, cTrack, cThumb, cIcon, LightSwitch, Footer, Layout;
+var storeHighlightJs, storePopup, cBase, cRowMain, cRowHeadline, cSlotLead, cSlotDefault, cSlotTrail, AppBar, cBaseAppShell, cContentArea, cPage, cSidebarLeft, cSidebarRight, AppShell, cTrack, cThumb, cIcon, LightSwitch, Footer, Searchbar, Layout;
 var init_layout_svelte = __esm({
   ".svelte-kit/output/server/entries/pages/_layout.svelte.js"() {
     init_ssr();
     init_Icon();
     init_store();
+    init_supabaseClient();
     init_chunks();
+    init_ProgressBar_svelte_svelte_type_style_lang();
     init_core();
     init_xml();
     init_css();
@@ -15805,11 +15885,17 @@ var init_layout_svelte = __esm({
       $$unsubscribe_lighttoggle = subscribe(lighttoggle, (value) => $lighttoggle = value);
       lightswitch = $lighttoggle;
       $$unsubscribe_lighttoggle();
-      return `<footer class="bg-white dark:bg-gray-900"><div class="mx-auto w-full max-w-screen-[1920] p-4 py-6 lg:py-8 lg:px-32"><div class="md:flex md:justify-between"><div class="mb-6 md:mb-0"><a href="/">${lightswitch ? `<img class="w-56" src="/assets/logo/horizontal-white.svg" alt="AI FLUENTLY logo">` : `<img class="w-56" src="/assets/logo/horizontal-black.svg" alt="AI FLUENTLY logo">`}</a> <p class="mb-3 max-w-lg pt-4 text-gray-600 dark:text-gray-400" data-svelte-h="svelte-43xhde">Individuater leverages 8 cognitive functions to deliver comprehensive and personalized
-					personality profiles. Built on a data-driven algorithm, the platform is designed for those
-					seeking deeper self-understanding for personal development, enhancing relationships, and
-					making informed career choices.</p></div> <div class="grid grid-cols-2 gap-8 sm:grid-cols-3 sm:gap-6" data-svelte-h="svelte-11ume95"><div><h2 class="mb-6 text-sm font-semibold uppercase text-gray-900 dark:text-white">Resources</h2> <ul class="font-medium text-gray-500 dark:text-gray-400"><li class="mb-4"><a href="/our-mission" class="hover:underline">Our Mission</a></li> <li class="mb-4"><a href="/contact-us" class="hover:underline">Contact Us</a></li> <li><a href="/theory" class="hover:underline">Theory</a></li></ul></div> <div><h2 class="mb-6 text-sm font-semibold uppercase text-gray-900 dark:text-white">Follow us</h2> <ul class="font-medium text-gray-500 dark:text-gray-400"><li class="mb-4"><a href="https://github.com/themesberg/Individuater" class="hover:underline">Twitter</a></li> <li class="mb-4"><a href="https://github.com/themesberg/Individuater" class="hover:underline">Instagram</a></li> <li class="mb-4"><a href="https://discord.gg/4eeurUVvTy" class="hover:underline">Youtube</a></li> <li><a href="https://discord.gg/4eeurUVvTy" class="hover:underline">Discord</a></li></ul></div> <div><h2 class="mb-6 text-sm font-semibold uppercase text-gray-900 dark:text-white">Legal</h2> <ul class="font-medium text-gray-500 dark:text-gray-400"><li class="mb-4"><a href="/privacy-policy" class="hover:underline">Privacy Policy</a></li> <li><a href="/terms-and-conditions" class="hover:underline">Terms &amp; Conditions</a></li></ul></div></div></div> <hr class="my-6 border-gray-200 dark:border-gray-700 sm:mx-auto lg:my-8"> <div class="sm:flex sm:items-center sm:justify-between"><span class="text-sm text-gray-500 dark:text-gray-400 sm:text-center" data-svelte-h="svelte-11zgfn">\xA9 2023 <a href="https://Individuater.com/" class="hover:underline">Individuater\u2122</a>. All
+      return `<footer class="bg-white dark:bg-gray-900"><div class="mx-auto w-full max-w-screen-[1920] p-4 py-6 lg:py-8 lg:px-32"><div class="md:flex md:justify-between"><div class="mb-6 md:mb-0"><a href="/">${lightswitch ? `<img class="w-56" src="/assets/logo/horizontal-white.svg" alt="AI FLUENTLY logo">` : `<img class="w-56" src="/assets/logo/horizontal-black.svg" alt="AI FLUENTLY logo">`}</a> <p class="mb-3 max-w-lg pt-4 text-gray-600 dark:text-gray-400" data-svelte-h="svelte-1nbj4ho">Aifluently offers a handpicked collection of artificial intelligence tools, providing a
+					refined and expertly curated selection to users. Unlike broader, user-generated
+					directories, Aifluently focuses on quality over quantity, ensuring that each tool meets a
+					high standard of utility and performance. The site is designed for discerning users
+					seeking reliable and effective AI solutions, without the need to sift through the
+					overwhelming noise of the rapidly growing AI market.</p></div> <div class="grid grid-cols-2 gap-8 sm:grid-cols-3 sm:gap-6" data-svelte-h="svelte-1wtgd3c"><div><h2 class="mb-6 text-sm font-semibold uppercase text-gray-900 dark:text-white">Company</h2> <ul class="font-medium text-gray-500 dark:text-gray-400"><li class="mb-4"><a href="/company/our-mission" class="hover:underline">Our Mission</a></li> <li class="mb-4"><a href="/company/contact-us" class="hover:underline">Contact Us</a></li></ul></div> <div><h2 class="mb-6 text-sm font-semibold uppercase text-gray-900 dark:text-white">Follow us</h2> <ul class="font-medium text-gray-500 dark:text-gray-400"><li class="mb-4"><a href="https://github.com/themesberg/Individuater" class="hover:underline">Twitter</a></li>  <li class="mb-4"><a href="https://discord.gg/4eeurUVvTy" class="hover:underline">Youtube</a></li> <li><a href="https://discord.gg/4eeurUVvTy" class="hover:underline">Discord</a></li></ul></div> <div><h2 class="mb-6 text-sm font-semibold uppercase text-gray-900 dark:text-white">Legal</h2> <ul class="font-medium text-gray-500 dark:text-gray-400"><li class="mb-4"><a href="/legal/privacy-policy" class="hover:underline">Privacy Policy</a></li> <li><a href="/legal/terms-and-conditions" class="hover:underline">Terms &amp; Conditions</a></li></ul></div></div></div> <hr class="my-6 border-gray-200 dark:border-gray-700 sm:mx-auto lg:my-8"> <div class="sm:flex sm:items-center sm:justify-between"><span class="text-sm text-gray-500 dark:text-gray-400 sm:text-center" data-svelte-h="svelte-11zgfn">\xA9 2023 <a href="https://Individuater.com/" class="hover:underline">Individuater\u2122</a>. All
 				Rights Reserved.</span> <div class="mt-4 flex space-x-5 sm:mt-0 sm:justify-center"><a href="/" class="text-gray-500 hover:text-gray-900 dark:hover:text-white" data-svelte-h="svelte-18cvty4"><svg class="h-4 w-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 8 19"><path fill-rule="evenodd" d="M6.135 3H8V0H6.135a4.147 4.147 0 0 0-4.142 4.142V6H0v3h2v9.938h3V9h2.021l.592-3H5V3.591A.6.6 0 0 1 5.592 3h.543Z" clip-rule="evenodd"></path></svg> <span class="sr-only">Facebook page</span></a> <a href="/" class="text-gray-500 hover:text-gray-900 dark:hover:text-white" data-svelte-h="svelte-1ldgx7g"><svg class="h-4 w-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 21 16"><path d="M16.942 1.556a16.3 16.3 0 0 0-4.126-1.3 12.04 12.04 0 0 0-.529 1.1 15.175 15.175 0 0 0-4.573 0 11.585 11.585 0 0 0-.535-1.1 16.274 16.274 0 0 0-4.129 1.3A17.392 17.392 0 0 0 .182 13.218a15.785 15.785 0 0 0 4.963 2.521c.41-.564.773-1.16 1.084-1.785a10.63 10.63 0 0 1-1.706-.83c.143-.106.283-.217.418-.33a11.664 11.664 0 0 0 10.118 0c.137.113.277.224.418.33-.544.328-1.116.606-1.71.832a12.52 12.52 0 0 0 1.084 1.785 16.46 16.46 0 0 0 5.064-2.595 17.286 17.286 0 0 0-2.973-11.59ZM6.678 10.813a1.941 1.941 0 0 1-1.8-2.045 1.93 1.93 0 0 1 1.8-2.047 1.919 1.919 0 0 1 1.8 2.047 1.93 1.93 0 0 1-1.8 2.045Zm6.644 0a1.94 1.94 0 0 1-1.8-2.045 1.93 1.93 0 0 1 1.8-2.047 1.918 1.918 0 0 1 1.8 2.047 1.93 1.93 0 0 1-1.8 2.045Z"></path></svg> <span class="sr-only">Discord community</span></a> <a href="/" class="text-gray-500 hover:text-gray-900 dark:hover:text-white" data-svelte-h="svelte-1e5ccz1"><svg class="h-4 w-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 17"><path fill-rule="evenodd" d="M20 1.892a8.178 8.178 0 0 1-2.355.635 4.074 4.074 0 0 0 1.8-2.235 8.344 8.344 0 0 1-2.605.98A4.13 4.13 0 0 0 13.85 0a4.068 4.068 0 0 0-4.1 4.038 4 4 0 0 0 .105.919A11.705 11.705 0 0 1 1.4.734a4.006 4.006 0 0 0 1.268 5.392 4.165 4.165 0 0 1-1.859-.5v.05A4.057 4.057 0 0 0 4.1 9.635a4.19 4.19 0 0 1-1.856.07 4.108 4.108 0 0 0 3.831 2.807A8.36 8.36 0 0 1 0 14.184 11.732 11.732 0 0 0 6.291 16 11.502 11.502 0 0 0 17.964 4.5c0-.177 0-.35-.012-.523A8.143 8.143 0 0 0 20 1.892Z" clip-rule="evenodd"></path></svg> <span class="sr-only">Twitter page</span></a> <a href="/" class="text-gray-500 hover:text-gray-900 dark:hover:text-white">${validate_component(Icon, "Icon").$$render($$result, { icon: "mdi:youtube" }, {}, {})} <span class="sr-only" data-svelte-h="svelte-5lmzox">Youtube Channel</span></a></div></div></div></footer>`;
+    });
+    Searchbar = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+      let userInput = "";
+      return `<div class="search-container"><input class="w-full max-w-xs rounded-md border border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50" type="search" name="custom-autocomplete-search" placeholder="Search..."${add_attribute("value", userInput, 0)}>  ${``}</div>`;
     });
     Layout = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       let lightswitch;
@@ -15840,10 +15926,13 @@ var init_layout_svelte = __esm({
         header: () => {
           return ` ${validate_component(AppBar, "AppBar").$$render($$result, {}, {}, {
             trail: () => {
-              return `<a class="btn btn-sm variant-ghost-surface" href="https://discord.gg/EXqV7W8MtY" target="_blank" rel="noreferrer" data-svelte-h="svelte-4wjuuv">Discord</a> <a class="btn btn-sm variant-ghost-surface" href="https://twitter.com/SkeletonUI" target="_blank" rel="noreferrer" data-svelte-h="svelte-ufv96n">Twitter</a> <a class="btn btn-sm variant-ghost-surface" href="https://github.com/skeletonlabs/skeleton" target="_blank" rel="noreferrer" data-svelte-h="svelte-yebxv7">GitHub</a> ${validate_component(LightSwitch, "LightSwitch").$$render($$result, {}, {}, {})} `;
+              return `<a class="btn btn-sm variant-ghost-surface hidden md:block" href="https://discord.gg/EXqV7W8MtY" target="_blank" rel="noreferrer" data-svelte-h="svelte-1p1zshh">Discord</a> <a class="btn btn-sm variant-ghost-surface hidden md:block" href="https://twitter.com/SkeletonUI" target="_blank" rel="noreferrer" data-svelte-h="svelte-1j1hzx9">Twitter</a> <a class="btn btn-sm variant-ghost-surface hidden md:block" href="https://github.com/skeletonlabs/skeleton" target="_blank" rel="noreferrer" data-svelte-h="svelte-1ycd26p">GitHub</a> ${validate_component(LightSwitch, "LightSwitch").$$render($$result, {}, {}, {})} `;
             },
             lead: () => {
-              return `<a href="/">${lightswitch ? `<img class="h-full w-10" src="/assets/logo/logomark-black-circle.svg" alt="AI FLUENTLY logo">` : `<img class="h-full w-10" src="/assets/logo/logomark-white-circle.svg" alt="AI FLUENTLY logo">`}</a>`;
+              return `<a href="/">${lightswitch ? `<img class="h-full w-10" src="/assets/logo/logomark-black-circle.svg" alt="AI FLUENTLY logo">` : `<img class="h-full w-10" src="/assets/logo/logomark-white-circle.svg" alt="AI FLUENTLY logo">`}</a> `;
+            },
+            default: () => {
+              return `${validate_component(Searchbar, "Searchbar").$$render($$result, {}, {}, {})}`;
             }
           })} `;
         },
@@ -15877,8 +15966,8 @@ var init__ = __esm({
     component = async () => component_cache ?? (component_cache = (await Promise.resolve().then(() => (init_layout_svelte(), layout_svelte_exports))).default);
     universal_id = "src/routes/+layout.ts";
     server_id = "src/routes/+layout.server.ts";
-    imports = ["_app/immutable/nodes/0.tT3xOBpk.js", "_app/immutable/chunks/public.03yuBydq.js", "_app/immutable/chunks/scheduler.qoUjChkd.js", "_app/immutable/chunks/index.HRC4UyyR.js", "_app/immutable/chunks/Icon.m_HsgSM1.js", "_app/immutable/chunks/store.xV9Yk6LI.js", "_app/immutable/chunks/index.xMhwf18p.js", "_app/immutable/chunks/navigation.FSAbujlm.js", "_app/immutable/chunks/singletons.ikxw4e4w.js", "_app/immutable/chunks/popup.ApYA23B2.js"];
-    stylesheets = ["_app/immutable/assets/0.__fHi0ex.css", "_app/immutable/assets/store.oq5aOWfL.css"];
+    imports = ["_app/immutable/nodes/0.rrePUA4r.js", "_app/immutable/chunks/supabaseClient.4znO2Jyt.js", "_app/immutable/chunks/scheduler.QZSgJ5Dp.js", "_app/immutable/chunks/index.lCWGoTYW.js", "_app/immutable/chunks/Icon.AEPHH59z.js", "_app/immutable/chunks/spread.rEx3vLA9.js", "_app/immutable/chunks/store.Jk9-US9L.js", "_app/immutable/chunks/index.CsFU67jq.js", "_app/immutable/chunks/ProgressBar.svelte_svelte_type_style_lang.Pju_nDia.js", "_app/immutable/chunks/singletons.h2LHnNSw.js", "_app/immutable/chunks/each.-oqiv04n.js", "_app/immutable/chunks/navigation.2TzIb17z.js", "_app/immutable/chunks/popup.6phc2dhV.js"];
+    stylesheets = ["_app/immutable/assets/0.cDkfJf_Q.css", "_app/immutable/assets/ProgressBar.oq5aOWfL.css"];
     fonts = [];
   }
 });
@@ -15924,6 +16013,7 @@ var init_error_svelte = __esm({
     init_Icon();
     init_stores();
     init_store();
+    init_ProgressBar_svelte_svelte_type_style_lang();
     Error2 = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       let $page, $$unsubscribe_page;
       $$unsubscribe_page = subscribe(page, (value) => $page = value);
@@ -15958,8 +16048,8 @@ var init__2 = __esm({
   ".svelte-kit/output/server/nodes/1.js"() {
     index2 = 1;
     component2 = async () => component_cache2 ?? (component_cache2 = (await Promise.resolve().then(() => (init_error_svelte(), error_svelte_exports))).default);
-    imports2 = ["_app/immutable/nodes/1.Tyvhb-fN.js", "_app/immutable/chunks/scheduler.qoUjChkd.js", "_app/immutable/chunks/index.HRC4UyyR.js", "_app/immutable/chunks/Icon.m_HsgSM1.js", "_app/immutable/chunks/store.xV9Yk6LI.js", "_app/immutable/chunks/index.xMhwf18p.js", "_app/immutable/chunks/stores.yr-DxOwW.js", "_app/immutable/chunks/singletons.ikxw4e4w.js"];
-    stylesheets2 = ["_app/immutable/assets/store.oq5aOWfL.css"];
+    imports2 = ["_app/immutable/nodes/1.51596A6Y.js", "_app/immutable/chunks/scheduler.QZSgJ5Dp.js", "_app/immutable/chunks/index.lCWGoTYW.js", "_app/immutable/chunks/Icon.AEPHH59z.js", "_app/immutable/chunks/spread.rEx3vLA9.js", "_app/immutable/chunks/store.Jk9-US9L.js", "_app/immutable/chunks/index.CsFU67jq.js", "_app/immutable/chunks/ProgressBar.svelte_svelte_type_style_lang.Pju_nDia.js", "_app/immutable/chunks/stores.9ia0fE76.js", "_app/immutable/chunks/singletons.h2LHnNSw.js"];
+    stylesheets2 = ["_app/immutable/assets/ProgressBar.oq5aOWfL.css"];
     fonts2 = [];
   }
 });
@@ -15968,16 +16058,6 @@ var init__2 = __esm({
 var page_ts_exports = {};
 var init_page_ts = __esm({
   ".svelte-kit/output/server/entries/pages/_page.ts.js"() {
-  }
-});
-
-// .svelte-kit/output/server/chunks/supabaseClient.js
-var supabase;
-var init_supabaseClient = __esm({
-  ".svelte-kit/output/server/chunks/supabaseClient.js"() {
-    init_module6();
-    init_public();
-    supabase = createClient(PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY);
   }
 });
 
@@ -16008,17 +16088,17 @@ var init_page_server_ts = __esm({
 });
 
 // .svelte-kit/output/server/chunks/productStore.js
-function isFull(value2, index6) {
-  return Math.floor(value2) >= index6 + 1;
+function isFull(value2, index13) {
+  return Math.floor(value2) >= index13 + 1;
 }
-function isHalf(value2, index6) {
-  return value2 === index6 + 0.5;
+function isHalf(value2, index13) {
+  return value2 === index13 + 0.5;
 }
 var cBase2, Ratings, Stars, productReviewCache, categoryProductData, main, business, education, entertainment, technology, creative, lifestyle;
 var init_productStore = __esm({
   ".svelte-kit/output/server/chunks/productStore.js"() {
     init_ssr();
-    init_store();
+    init_ProgressBar_svelte_svelte_type_style_lang();
     cBase2 = "w-full flex";
     Ratings = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       let classesBase;
@@ -16122,13 +16202,35 @@ var init_productStore = __esm({
 });
 
 // .svelte-kit/output/server/chunks/cardlist.js
+function tagToCategory(tag2) {
+  if (tag2 <= 14) {
+    return 1;
+  } else if (tag2 <= 44) {
+    return 2;
+  } else if (tag2 <= 74) {
+    return 3;
+  } else if (tag2 <= 104) {
+    return 4;
+  } else if (tag2 <= 134) {
+    return 5;
+  } else if (tag2 <= 164) {
+    return 6;
+  } else if (tag2 <= 194) {
+    return 7;
+  }
+}
+function sluglify(slug) {
+  return slug.replace(/\s/g, "");
+}
 var css2, cTrack2, cMeter, ProgressBar, Cardlist;
 var init_cardlist = __esm({
   ".svelte-kit/output/server/chunks/cardlist.js"() {
     init_ssr();
+    init_supabaseClient();
     init_chunks();
-    init_store();
+    init_ProgressBar_svelte_svelte_type_style_lang();
     init_productStore();
+    init_store();
     init_Icon();
     css2 = {
       code: ".anim-indeterminate.svelte-12wvf64{transform-origin:0% 50%;animation:svelte-12wvf64-anim-indeterminate 2s infinite linear}@keyframes svelte-12wvf64-anim-indeterminate{0%{transform:translateX(0) scaleX(0)}40%{transform:translateX(0) scaleX(0.4)}100%{transform:translateX(100%) scaleX(0.5)}}",
@@ -16190,16 +16292,22 @@ var init_cardlist = __esm({
       $$unsubscribe_lighttoggle = subscribe(lighttoggle, (value) => $lighttoggle = value);
       let { tag: tag2 } = $$props;
       let { icon } = $$props;
+      let { category } = $$props;
       let { product_data } = $$props;
       let { outer_height = "200px" } = $$props;
       let { inner_height = "150px" } = $$props;
       let isMounted = writable(false);
       $$unsubscribe_isMounted = subscribe(isMounted, (value) => $isMounted = value);
       let tag_name = "";
+      if (category === 0) {
+        category = tagToCategory(tag2);
+      }
       if ($$props.tag === void 0 && $$bindings.tag && tag2 !== void 0)
         $$bindings.tag(tag2);
       if ($$props.icon === void 0 && $$bindings.icon && icon !== void 0)
         $$bindings.icon(icon);
+      if ($$props.category === void 0 && $$bindings.category && category !== void 0)
+        $$bindings.category(category);
       if ($$props.product_data === void 0 && $$bindings.product_data && product_data !== void 0)
         $$bindings.product_data(product_data);
       if ($$props.outer_height === void 0 && $$bindings.outer_height && outer_height !== void 0)
@@ -16209,9 +16317,11 @@ var init_cardlist = __esm({
       tag_name = product_data?.aggregated_data[tag2].tag_name;
       aggregated_data = product_data?.aggregated_data[tag2];
       lightswitch = $lighttoggle;
+      sluglify(tag_name);
+      product_data?.aggregated_data[tag2].tag_array;
       $$unsubscribe_lighttoggle();
       $$unsubscribe_isMounted();
-      return ` ${product_data && $isMounted ? `<div><div class="card grid grid-cols-1 relative card-hover"${add_attribute("style", `height: ${outer_height};`, 0)}><header class="card-header text-center pr-6"><span class="badge text-4xl p-0 m-0 translate-y-2">${validate_component(Icon, "Icon").$$render($$result, { icon }, {}, {})}</span> <span class="text-2xl font-bold uppercase">${escape(tag_name)}</span></header> ${validate_component(ProgressBar, "ProgressBar").$$render(
+      return `    ${product_data && $isMounted ? `<div><div class="card grid grid-cols-1 relative card-hover"${add_attribute("style", `height: ${outer_height};`, 0)}><header class="card-header text-center pr-6"><span class="badge text-4xl p-0 m-0 translate-y-2">${validate_component(Icon, "Icon").$$render($$result, { icon }, {}, {})}</span> <span class="text-2xl font-bold uppercase">${escape(tag_name)}</span></header> ${validate_component(ProgressBar, "ProgressBar").$$render(
         $$result,
         {
           animIndeterminate: "anim-progress-bar",
@@ -16239,9 +16349,9 @@ var init_cardlist = __esm({
               return `${validate_component(Stars, "Stars").$$render($$result, { type: "empty" }, {}, {})}`;
             }
           }
-        )}</div> <p class="p-1 text-sm opacity-80 text-ellipsis overflow-hidden h-16"> ${aggregated_data.product_table[i].product_description ? `${escape(aggregated_data.product_table[i].product_description)}` : ``}</p> ${`  <a${add_attribute("href", aggregated_data.product_table[i].product_name.replace(/\s/g, ""), 0)}><div class="flex justify-center" data-svelte-h="svelte-1f6z1o6"><button class="btn btn-sm w-[50%] bg-warning-500 border-2 border-black h-6 absolute bottom-2 left-0 right-0 mx-auto">Learn More
+        )}</div> <p class="p-1 text-sm opacity-80 text-ellipsis overflow-hidden h-16"> ${aggregated_data.product_table[i].product_description ? `${escape(aggregated_data.product_table[i].product_description)}` : ``}</p> ${`   <a${add_attribute("href", "product/" + aggregated_data.product_table[i].product_name.replace(/\s/g, ""), 0)}><div class="flex justify-center" data-svelte-h="svelte-1f6z1o6"><button class="btn btn-sm w-[50%] bg-warning-500 border-2 border-black h-6 absolute bottom-2 left-0 right-0 mx-auto">Learn More
 														</button></div> </a>`} <div class="arrow variant-filled-secondary"></div></div>  ${` <ol class="flex justify-between"><button class="[&>*]:pointer-events-none min-w-[80%] group/item"><div class="flex w-full min-w-[66%]"><div class="mt-1"> ${escape(i + 1)}.</div> <div class="px-3"> ${aggregated_data.product_table[i].product_logo ? `<img class="rounded-full h-8 w-8 object-cover"${add_attribute("src", aggregated_data.product_table[i].product_logo, 0)} alt="AI FLUENTLY logo">` : `<img class="rounded-full h-8 w-8 object-cover" src="/assets/logo/logomark-black-circle.svg" alt="AI FLUENTLY logo">`}</div> <div class="pt-1 group-hover/item:underline group-active/item:underline"> ${escape(aggregated_data.product_table[i].product_name)}</div> </div></button> <a${add_attribute("href", aggregated_data.product_table[i].product_url, 0)} target="_blank" class="flex opacity-50 hover:opacity-100 text-3xl p-1">${validate_component(Icon, "Icon").$$render($$result, { icon: "system-uicons:jump-up" }, {}, {})}</a>  </ol>`}`;
-      })}</ol></section></div></div>`}</div> ${lightswitch ? `<div class="pointer-events-none h-16 absolute w-full bottom-10 bg-gradient-to-t from-surface-800 to-surface-800/0"></div>` : `<div class="pointer-events-none h-16 absolute w-full bottom-10 bg-gradient-to-t from-surface-50 to-white/0"></div>`} <div class="btn btn-sm w-full h-8 opacity-0 bg-warning-500 border-2 border-black z-[5]"></div> <button class="btn btn-sm w-[85%] h-8 bg-warning-500 border-2 border-black z-[0] absolute bottom-2 left-0 right-0 mx-auto" data-svelte-h="svelte-1i73027">More</button></div></div>` : `<div class="card grid grid-cols-1 relative card-hover"${add_attribute("style", `height: ${outer_height};`, 0)}></div>`}`;
+      })}</ol></section></div></div>`}</div> ${lightswitch ? `<div class="pointer-events-none h-16 absolute w-full bottom-10 bg-gradient-to-t from-surface-800 to-surface-800/0"></div>` : `<div class="pointer-events-none h-16 absolute w-full bottom-10 bg-gradient-to-t from-surface-50 to-white/0"></div>`} <div class="btn btn-sm w-full h-8 opacity-0 bg-warning-500 border-2 border-black z-[5]"></div> <button class="btn btn-sm w-[85%] h-8 bg-warning-500 border-2 border-black z-20 absolute bottom-2 left-0 right-0 mx-auto" data-svelte-h="svelte-couxcs">More</button></div></div>` : `<div class="card grid grid-cols-1 relative card-hover"${add_attribute("style", `height: ${outer_height};`, 0)}></div>`}`;
     });
   }
 });
@@ -16331,6 +16441,7 @@ var init_page_svelte = __esm({
       })}</div></div>    ${data ? `${`<div><section class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-5 lg:gap-5 mb-5 mx-10 lg:mx-32 xl:mx-32"> <div class="h-full parent-element">${validate_component(Cardlist, "Cardlist").$$render(
         $$result,
         {
+          category,
           tag: 0,
           product_data,
           outer_height: "810px",
@@ -16342,6 +16453,7 @@ var init_page_svelte = __esm({
       )}</div>  <div class="h-full grid gap-5"><div class="parent-element">${validate_component(Cardlist, "Cardlist").$$render(
         $$result,
         {
+          category,
           tag: 1,
           product_data,
           outer_height: "290px",
@@ -16353,6 +16465,7 @@ var init_page_svelte = __esm({
       )}</div> <div class="parent-element">${validate_component(Cardlist, "Cardlist").$$render(
         $$result,
         {
+          category,
           tag: 2,
           product_data,
           outer_height: "500px",
@@ -16364,6 +16477,7 @@ var init_page_svelte = __esm({
       )}</div></div>  <div class="h-full grid gap-5"><div class="parent-element">${validate_component(Cardlist, "Cardlist").$$render(
         $$result,
         {
+          category,
           tag: 3,
           product_data,
           outer_height: "500px",
@@ -16375,6 +16489,7 @@ var init_page_svelte = __esm({
       )}</div> <div class="parent-element">${validate_component(Cardlist, "Cardlist").$$render(
         $$result,
         {
+          category,
           tag: 4,
           product_data,
           outer_height: "290px",
@@ -16386,6 +16501,7 @@ var init_page_svelte = __esm({
       )}</div></div>  <div class="h-full parent-element">${validate_component(Cardlist, "Cardlist").$$render(
         $$result,
         {
+          category,
           tag: 5,
           product_data,
           outer_height: "810px",
@@ -16397,6 +16513,7 @@ var init_page_svelte = __esm({
       )}</div></section> <section class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-5 mb-5 mx-10 lg:gap-5 lg:mx-32 xl:mx-32"> <div class="h-full grid gap-5"><div class="parent-element">${validate_component(Cardlist, "Cardlist").$$render(
         $$result,
         {
+          category,
           tag: 6,
           product_data,
           outer_height: "500px",
@@ -16408,6 +16525,7 @@ var init_page_svelte = __esm({
       )}</div> <div class="parent-element">${validate_component(Cardlist, "Cardlist").$$render(
         $$result,
         {
+          category,
           tag: 7,
           product_data,
           outer_height: "290px",
@@ -16419,6 +16537,7 @@ var init_page_svelte = __esm({
       )}</div></div>  <div class="h-full grid gap-5"><div class="parent-element">${validate_component(Cardlist, "Cardlist").$$render(
         $$result,
         {
+          category,
           tag: 8,
           product_data,
           outer_height: "290px",
@@ -16430,6 +16549,7 @@ var init_page_svelte = __esm({
       )}</div> <div class="parent-element">${validate_component(Cardlist, "Cardlist").$$render(
         $$result,
         {
+          category,
           tag: 9,
           product_data,
           outer_height: "500px",
@@ -16441,6 +16561,7 @@ var init_page_svelte = __esm({
       )}</div></div>  <div class="h-full grid gap-5"><div class="parent-element">${validate_component(Cardlist, "Cardlist").$$render(
         $$result,
         {
+          category,
           tag: 10,
           product_data,
           outer_height: "500px",
@@ -16452,6 +16573,7 @@ var init_page_svelte = __esm({
       )}</div> <div class="parent-element">${validate_component(Cardlist, "Cardlist").$$render(
         $$result,
         {
+          category,
           tag: 11,
           product_data,
           outer_height: "290px",
@@ -16463,6 +16585,7 @@ var init_page_svelte = __esm({
       )}</div></div>  <div class="h-full grid gap-5"><div class="parent-element">${validate_component(Cardlist, "Cardlist").$$render(
         $$result,
         {
+          category,
           tag: 12,
           product_data,
           outer_height: "290px",
@@ -16474,6 +16597,7 @@ var init_page_svelte = __esm({
       )}</div> <div class="parent-element">${validate_component(Cardlist, "Cardlist").$$render(
         $$result,
         {
+          category,
           tag: 12,
           product_data,
           outer_height: "500px",
@@ -16509,130 +16633,1427 @@ var init__3 = __esm({
     component3 = async () => component_cache3 ?? (component_cache3 = (await Promise.resolve().then(() => (init_page_svelte(), page_svelte_exports))).default);
     universal_id2 = "src/routes/+page.ts";
     server_id2 = "src/routes/+page.server.ts";
-    imports3 = ["_app/immutable/nodes/2.t4QAxH5W.js", "_app/immutable/chunks/scheduler.qoUjChkd.js", "_app/immutable/chunks/index.HRC4UyyR.js", "_app/immutable/chunks/productStore.1ET5QMgR.js", "_app/immutable/chunks/store.xV9Yk6LI.js", "_app/immutable/chunks/index.xMhwf18p.js", "_app/immutable/chunks/cardlist.mMBOxlWg.js", "_app/immutable/chunks/popup.ApYA23B2.js", "_app/immutable/chunks/Icon.m_HsgSM1.js", "_app/immutable/chunks/supabaseClient.V3wEEveg.js", "_app/immutable/chunks/public.03yuBydq.js"];
-    stylesheets3 = ["_app/immutable/assets/2.nr8xzUJT.css", "_app/immutable/assets/store.oq5aOWfL.css"];
+    imports3 = ["_app/immutable/nodes/2.yXLKv-hp.js", "_app/immutable/chunks/scheduler.QZSgJ5Dp.js", "_app/immutable/chunks/index.lCWGoTYW.js", "_app/immutable/chunks/each.-oqiv04n.js", "_app/immutable/chunks/cardlist.eyGsbhGw.js", "_app/immutable/chunks/supabaseClient.4znO2Jyt.js", "_app/immutable/chunks/sluglify.yqzTTa5I.js", "_app/immutable/chunks/navigation.2TzIb17z.js", "_app/immutable/chunks/singletons.h2LHnNSw.js", "_app/immutable/chunks/index.CsFU67jq.js", "_app/immutable/chunks/index.RhRIcdz5.js", "_app/immutable/chunks/popup.6phc2dhV.js", "_app/immutable/chunks/ProgressBar.svelte_svelte_type_style_lang.Pju_nDia.js", "_app/immutable/chunks/productStore.DYc5Lv1C.js", "_app/immutable/chunks/spread.rEx3vLA9.js", "_app/immutable/chunks/store.Jk9-US9L.js", "_app/immutable/chunks/Icon.AEPHH59z.js"];
+    stylesheets3 = ["_app/immutable/assets/2.nr8xzUJT.css", "_app/immutable/assets/ProgressBar.oq5aOWfL.css"];
     fonts3 = [];
   }
 });
 
-// node_modules/.pnpm/blurhash@2.0.5/node_modules/blurhash/dist/esm/index.js
-var q, x, f, h, F, M, d, C, z, L, U, j;
-var init_esm = __esm({
-  "node_modules/.pnpm/blurhash@2.0.5/node_modules/blurhash/dist/esm/index.js"() {
-    q = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "#", "$", "%", "*", "+", ",", "-", ".", ":", ";", "=", "?", "@", "[", "]", "^", "_", "{", "|", "}", "~"];
-    x = (t) => {
-      let e = 0;
-      for (let r2 = 0; r2 < t.length; r2++) {
-        let n = t[r2], l = q.indexOf(n);
-        e = e * 83 + l;
-      }
-      return e;
-    };
-    f = (t) => {
-      let e = t / 255;
-      return e <= 0.04045 ? e / 12.92 : Math.pow((e + 0.055) / 1.055, 2.4);
-    };
-    h = (t) => {
-      let e = Math.max(0, Math.min(1, t));
-      return e <= 31308e-7 ? Math.trunc(e * 12.92 * 255 + 0.5) : Math.trunc((1.055 * Math.pow(e, 0.4166666666666667) - 0.055) * 255 + 0.5);
-    };
-    F = (t) => t < 0 ? -1 : 1;
-    M = (t, e) => F(t) * Math.pow(Math.abs(t), e);
-    d = class extends Error {
-      constructor(e) {
-        super(e), this.name = "ValidationError", this.message = e;
-      }
-    };
-    C = (t) => {
-      if (!t || t.length < 6)
-        throw new d("The blurhash string must be at least 6 characters");
-      let e = x(t[0]), r2 = Math.floor(e / 9) + 1, n = e % 9 + 1;
-      if (t.length !== 4 + 2 * n * r2)
-        throw new d(`blurhash length mismatch: length is ${t.length} but it should be ${4 + 2 * n * r2}`);
-    };
-    z = (t) => {
-      let e = t >> 16, r2 = t >> 8 & 255, n = t & 255;
-      return [f(e), f(r2), f(n)];
-    };
-    L = (t, e) => {
-      let r2 = Math.floor(t / 361), n = Math.floor(t / 19) % 19, l = t % 19;
-      return [M((r2 - 9) / 9, 2) * e, M((n - 9) / 9, 2) * e, M((l - 9) / 9, 2) * e];
-    };
-    U = (t, e, r2, n) => {
-      C(t), n = n | 1;
-      let l = x(t[0]), m = Math.floor(l / 9) + 1, b = l % 9 + 1, i = (x(t[1]) + 1) / 166, u = new Array(b * m);
-      for (let o = 0; o < u.length; o++)
-        if (o === 0) {
-          let a2 = x(t.substring(2, 6));
-          u[o] = z(a2);
-        } else {
-          let a2 = x(t.substring(4 + o * 2, 6 + o * 2));
-          u[o] = L(a2, i * n);
-        }
-      let c2 = e * 4, s2 = new Uint8ClampedArray(c2 * r2);
-      for (let o = 0; o < r2; o++)
-        for (let a2 = 0; a2 < e; a2++) {
-          let y = 0, B = 0, R = 0;
-          for (let w = 0; w < m; w++)
-            for (let P = 0; P < b; P++) {
-              let G = Math.cos(Math.PI * a2 * P / e) * Math.cos(Math.PI * o * w / r2), T = u[P + w * b];
-              y += T[0] * G, B += T[1] * G, R += T[2] * G;
-            }
-          let V = h(y), I = h(B), E = h(R);
-          s2[4 * a2 + 0 + o * c2] = V, s2[4 * a2 + 1 + o * c2] = I, s2[4 * a2 + 2 + o * c2] = E, s2[4 * a2 + 3 + o * c2] = 255;
-        }
-      return s2;
-    };
-    j = U;
+// .svelte-kit/output/server/entries/pages/articles/_page.server.ts.js
+var page_server_ts_exports2 = {};
+__export(page_server_ts_exports2, {
+  load: () => load4
+});
+async function load4() {
+  const { data: article, error: articleError } = await supabase.from("articles").select("*").order("published_date", { ascending: false });
+  if (articleError) {
+    console.error(articleError);
+    return { status: 500, error: new Error("Failed to fetch the article") };
+  }
+  return {
+    article
+  };
+}
+var init_page_server_ts2 = __esm({
+  ".svelte-kit/output/server/entries/pages/articles/_page.server.ts.js"() {
+    init_supabaseClient();
   }
 });
 
-// node_modules/.pnpm/@unpic+placeholder@0.1.2/node_modules/@unpic/placeholder/dist/index.mjs
-function percentOrZero(num) {
-  if (num === 0)
-    return 0;
-  return `${num}%`;
-}
-function pixelsToCssGradients(pixels, columns, rows) {
-  const stops = [];
-  for (let i = 0, j2 = 0; i < pixels.length; i += 4, j2++) {
-    const col = j2 % columns;
-    const row = Math.floor(j2 / columns);
-    const percentX = Math.round(col / (columns - 1) * 100);
-    const percentY = Math.round(row / (rows - 1) * 100);
-    const r2 = pixels[i];
-    const g = pixels[i + 1];
-    const b = pixels[i + 2];
-    const color = `radial-gradient(at ${percentOrZero(
-      percentX
-      // Hex is smaller than rgba. #00000000 = transparent
-    )} ${percentOrZero(percentY)},${rgbToHex(r2, g, b)},#00000000 50%)`;
-    stops.push(color);
+// .svelte-kit/output/server/chunks/tagToTagName.js
+function tagToTagName(tagId) {
+  switch (tagId) {
+    case 1:
+      return "Ai Chatbot";
+    case 2:
+      return "Ai Image Generators";
+    case 3:
+      return "Image Editors";
+    case 4:
+      return "Voice Generators ";
+    case 5:
+      return "Machine Learning platforms ";
+    case 6:
+      return "Featured ";
+    case 7:
+      return "Fun";
+    case 8:
+      return "Discounts";
+    case 9:
+      return "Best GPTs";
+    case 10:
+      return "Best Free tools";
+    case 11:
+      return "Best Ai Google Extensions";
+    case 12:
+      return "Best Ai Gadgets";
+    case 13:
+      return "Best Placeholder";
+    case 14:
+      return "Best Placeholder";
+    case 15:
+      return "AI Marketing";
+    case 16:
+      return "AI Business Intelligence";
+    case 17:
+      return "AI Developer";
+    case 18:
+      return "AI Project Management";
+    case 19:
+      return "AI Finance Analyzers";
+    case 20:
+      return "AI SEO";
+    case 21:
+      return "AI Content Creator";
+    case 22:
+      return "AI e-Commerce";
+    case 23:
+      return "AI Operations";
+    case 24:
+      return "AI HR Tools";
+    case 25:
+      return "AI Copywriter";
+    case 26:
+      return "AI Social Manager";
+    case 27:
+      return "AI Real Estate";
+    case 28:
+      return "AI Email Integration";
+    case 29:
+      return "AI Multilingual";
+    case 30:
+      return "AI Timekeeping";
+    case 31:
+      return "AI Document Analyzer";
+    case 32:
+      return "AI Presenters";
+    case 33:
+      return "AI Resumes Optimizer";
+    case 34:
+      return "AI Logo Makers";
+    case 35:
+      return "AI Slides";
+    case 36:
+      return "AI Jobs";
+    case 37:
+      return "AI Lead Generations";
+    case 38:
+      return "AI Assistant";
+    case 39:
+      return "AI Headshots";
+    case 40:
+      return "AI Forms";
+    case 41:
+      return "AI Spreadsheets";
+    case 42:
+      return "AI for Crypto";
+    case 43:
+      return "Ai Scrapers";
+    case 44:
+      return "AI Professionals";
+    case 45:
+      return "AI Research Tools";
+    case 46:
+      return "AI Data Visualization";
+    case 47:
+      return "AI for Data";
+    case 48:
+      return "AI LLMs (Large Language Models)";
+    case 49:
+      return "AI Cloud";
+    case 50:
+      return "AI Language Learning";
+    case 51:
+      return "AI Research";
+    case 52:
+      return "AI Classes";
+    case 53:
+      return "AI Teachers";
+    case 54:
+      return "AI Educational Institutions";
+    case 55:
+      return "AI Summarizer";
+    case 56:
+      return "AI Document Chat";
+    case 57:
+      return "AI PDF";
+    case 58:
+      return "AI Note Taker";
+    case 59:
+      return "AI Prompt Generators";
+    case 60:
+      return "AI Editor";
+    case 61:
+      return "AI Video Summarizers";
+    case 62:
+      return "AI Course Builders";
+    case 63:
+      return "AI Plagiarism Detector";
+    case 64:
+      return "AI Research Paper Tools";
+    case 65:
+      return "AI Cheatsheets";
+    case 66:
+      return "AI Books";
+    case 67:
+      return "AI Flashcards";
+    case 68:
+      return "AI Quizlet";
+    case 69:
+      return "AI Learn Tools";
+    case 70:
+      return "AI Communities";
+    case 71:
+      return "AI Discord Communities";
+    case 72:
+      return "AI Prompting";
+    case 73:
+      return "AI Attribution";
+    case 74:
+      return "AI Tuning";
+    case 75:
+      return "AI Social Media Tools";
+    case 76:
+      return "AI Podcast";
+    case 77:
+      return "AI Youtubers";
+    case 78:
+      return "AI Music";
+    case 79:
+      return "AI Games";
+    case 80:
+      return "AI Blogs";
+    case 81:
+      return "AI Twitter";
+    case 82:
+      return "AI TikTok";
+    case 83:
+      return "AI Conversations";
+    case 84:
+      return "AI Companions";
+    case 85:
+      return "AI Celebrities";
+    case 86:
+      return "AI Sports";
+    case 87:
+      return "AI Voice Chat";
+    case 88:
+      return "AI Chess";
+    case 89:
+      return "AI Novels";
+    case 90:
+      return "AI Stories";
+    case 91:
+      return "AI Comedy";
+    case 92:
+      return "AI Memes";
+    case 93:
+      return "AI Anime";
+    case 94:
+      return "AI Friends";
+    case 95:
+      return "AI Style Editor";
+    case 96:
+      return "AI 3D Avatar";
+    case 97:
+      return "AI Self Avatars";
+    case 98:
+      return "AI Image Rating";
+    case 99:
+      return "AI Deepfakes";
+    case 100:
+      return "AI Faceswap";
+    case 101:
+      return "AI Fun";
+    case 102:
+      return "AI Toys";
+    case 103:
+      return "AI Gambling";
+    case 104:
+      return "AI Animations";
+    case 105:
+      return "AI Translators";
+    case 106:
+      return "AI Robots";
+    case 107:
+      return "AI Website Builder";
+    case 108:
+      return "AI Chatbot UI";
+    case 109:
+      return "AI for UI/UX";
+    case 110:
+      return "AI Gadgets";
+    case 111:
+      return "AI Authenticators";
+    case 112:
+      return "AI Summarizers";
+    case 113:
+      return "AI Voice Trainers";
+    case 114:
+      return "AI Search Engines";
+    case 115:
+      return "AI Code Generator";
+    case 116:
+      return "AI Image Filtering";
+    case 117:
+      return "AI Object Detection";
+    case 118:
+      return "AI APIs";
+    case 119:
+      return "AI Libraries";
+    case 120:
+      return "AI Agents";
+    case 121:
+      return "AI Debuggers";
+    case 122:
+      return "AI Automators";
+    case 123:
+      return "AI Wearables";
+    case 124:
+      return "AI Augmentation";
+    case 125:
+      return "AI Hybrids";
+    case 126:
+      return "AI Specialization";
+    case 127:
+      return "AI Scrapping";
+    case 128:
+      return "AI Posing";
+    case 129:
+      return "AI for AR";
+    case 130:
+      return "AI Motion Capture";
+    case 131:
+      return "AI Amazon Products";
+    case 132:
+      return "AI Spotting";
+    case 133:
+      return "AI Builders";
+    case 134:
+      return "AI Leaders";
+    case 135:
+      return "AI Video Editor";
+    case 136:
+      return "AI 3D Animation";
+    case 137:
+      return "AI Video Generators";
+    case 138:
+      return "AI Writing Tools";
+    case 139:
+      return "AI Audio Enhancer";
+    case 140:
+      return "AI Voice Changer";
+    case 141:
+      return "AI Image Enhancer";
+    case 142:
+      return "AI Podcasting";
+    case 143:
+      return "AI Script Writers";
+    case 144:
+      return "AI Sound Effects";
+    case 145:
+      return "AI Upscalers";
+    case 146:
+      return "AI Studio";
+    case 147:
+      return "AI Image Toolsets";
+    case 148:
+      return "AI Generative Fill";
+    case 149:
+      return "AI Image Transformers";
+    case 150:
+      return "AI Background Remover";
+    case 151:
+      return "AI Vocal Remover";
+    case 152:
+      return "AI Talking Head";
+    case 153:
+      return "AI Galleries";
+    case 154:
+      return "AI Clips";
+    case 155:
+      return "AI Portraits";
+    case 156:
+      return "AI 3D Worlds";
+    case 157:
+      return "AI Replicators";
+    case 158:
+      return "AI Bring to Life";
+    case 159:
+      return "AI Image Scanners";
+    case 160:
+      return "AI Image Mixers";
+    case 161:
+      return "AI QR Codes";
+    case 162:
+      return "AI Assets";
+    case 163:
+      return "AI Covers";
+    case 164:
+      return "AI Discord Apps";
+    case 165:
+      return "AI Medical Assistant";
+    case 166:
+      return "AI Productivity";
+    case 167:
+      return "AI Workflow";
+    case 168:
+      return "AI Fitness";
+    case 169:
+      return "AI Home Devices";
+    case 170:
+      return "AI News Sites";
+    case 171:
+      return "AI Social Network";
+    case 172:
+      return "AI Coach";
+    case 173:
+      return "AI Travel Advisor";
+    case 174:
+      return "AI Self-Help";
+    case 175:
+      return "AI Memory Assistants";
+    case 176:
+      return "AI Fashion";
+    case 177:
+      return "AI Interior Designs";
+    case 178:
+      return "AI Calendar";
+    case 179:
+      return "AI Dating";
+    case 180:
+      return "AI for Kids";
+    case 181:
+      return "AI Cook";
+    case 182:
+      return "AI Life Manager";
+    case 183:
+      return "AI Idea Builder";
+    case 184:
+      return "AI Career Path";
+    case 185:
+      return "AI Naming";
+    case 186:
+      return "AI Note Manager";
+    case 187:
+      return "AI Events and Activities";
+    case 188:
+      return "AI Inspiration";
+    case 189:
+      return "AI Automated Messaging";
+    case 190:
+      return "AI Preference Curators";
+    case 191:
+      return "AI Powered Appliances";
+    case 192:
+      return "AI Body Art";
+    case 193:
+      return "AI Religion";
+    case 194:
+      return "AI Divination";
+    default:
+      return "Unknown Category";
   }
-  return stops;
 }
-function blurhashToCssGradients(blurhash, columns = 4, rows = 3) {
-  const pixels = j(blurhash, columns, rows);
-  return pixelsToCssGradients(pixels, columns, rows);
+var tag_table;
+var init_tagToTagName = __esm({
+  ".svelte-kit/output/server/chunks/tagToTagName.js"() {
+    tag_table = [
+      {
+        "tag_id": 1,
+        "tag_name": "Ai Chatbot"
+      },
+      {
+        "tag_id": 2,
+        "tag_name": "Ai Image Generators"
+      },
+      {
+        "tag_id": 3,
+        "tag_name": "Image Editors"
+      },
+      {
+        "tag_id": 4,
+        "tag_name": "Voice Generators"
+      },
+      {
+        "tag_id": 5,
+        "tag_name": "Machine Learning platforms"
+      },
+      {
+        "tag_id": 6,
+        "tag_name": "Featured"
+      },
+      {
+        "tag_id": 7,
+        "tag_name": "Fun"
+      },
+      {
+        "tag_id": 8,
+        "tag_name": "Discounts"
+      },
+      {
+        "tag_id": 9,
+        "tag_name": "Best GPTs"
+      },
+      {
+        "tag_id": 10,
+        "tag_name": "Best Free tools"
+      },
+      {
+        "tag_id": 11,
+        "tag_name": "Best Ai Google Extensions"
+      },
+      {
+        "tag_id": 12,
+        "tag_name": "Best Ai Gadgets"
+      },
+      {
+        "tag_id": 13,
+        "tag_name": "Best Placeholder"
+      },
+      {
+        "tag_id": 14,
+        "tag_name": "Best Placeholder"
+      },
+      {
+        "tag_id": 15,
+        "tag_name": "AI Marketing"
+      },
+      {
+        "tag_id": 16,
+        "tag_name": "AI Business Intelligence"
+      },
+      {
+        "tag_id": 17,
+        "tag_name": "AI Developer"
+      },
+      {
+        "tag_id": 18,
+        "tag_name": "AI Project Management"
+      },
+      {
+        "tag_id": 19,
+        "tag_name": "AI Finance Analyzers"
+      },
+      {
+        "tag_id": 20,
+        "tag_name": "AI SEO"
+      },
+      {
+        "tag_id": 21,
+        "tag_name": "AI Content Creator"
+      },
+      {
+        "tag_id": 22,
+        "tag_name": "AI e-Commerce"
+      },
+      {
+        "tag_id": 23,
+        "tag_name": "AI Operations"
+      },
+      {
+        "tag_id": 24,
+        "tag_name": "AI HR Tools"
+      },
+      {
+        "tag_id": 25,
+        "tag_name": "AI Copywriter"
+      },
+      {
+        "tag_id": 26,
+        "tag_name": "AI Social Manager"
+      },
+      {
+        "tag_id": 27,
+        "tag_name": "AI Real Estate"
+      },
+      {
+        "tag_id": 28,
+        "tag_name": "AI Email Integration"
+      },
+      {
+        "tag_id": 29,
+        "tag_name": "AI Multilingual"
+      },
+      {
+        "tag_id": 30,
+        "tag_name": "AI Timekeeping"
+      },
+      {
+        "tag_id": 31,
+        "tag_name": "AI Document Analyzer"
+      },
+      {
+        "tag_id": 32,
+        "tag_name": "AI Presenters"
+      },
+      {
+        "tag_id": 33,
+        "tag_name": "AI Resumes Optimizer"
+      },
+      {
+        "tag_id": 34,
+        "tag_name": "AI Logo Makers"
+      },
+      {
+        "tag_id": 35,
+        "tag_name": "AI Slides"
+      },
+      {
+        "tag_id": 36,
+        "tag_name": "AI Jobs"
+      },
+      {
+        "tag_id": 37,
+        "tag_name": "AI Lead Generations"
+      },
+      {
+        "tag_id": 38,
+        "tag_name": "AI Assistant"
+      },
+      {
+        "tag_id": 39,
+        "tag_name": "AI Headshots"
+      },
+      {
+        "tag_id": 40,
+        "tag_name": "AI Forms"
+      },
+      {
+        "tag_id": 41,
+        "tag_name": "AI Spreadsheets"
+      },
+      {
+        "tag_id": 42,
+        "tag_name": "AI for Crypto"
+      },
+      {
+        "tag_id": 43,
+        "tag_name": "Ai Scrapers"
+      },
+      {
+        "tag_id": 44,
+        "tag_name": "AI Professionals"
+      },
+      {
+        "tag_id": 45,
+        "tag_name": "AI Research Tools"
+      },
+      {
+        "tag_id": 46,
+        "tag_name": "AI Data Visualization"
+      },
+      {
+        "tag_id": 47,
+        "tag_name": "AI for Data"
+      },
+      {
+        "tag_id": 48,
+        "tag_name": "AI LLMs (Large Language Models)"
+      },
+      {
+        "tag_id": 49,
+        "tag_name": "AI Cloud"
+      },
+      {
+        "tag_id": 50,
+        "tag_name": "AI Language Learning"
+      },
+      {
+        "tag_id": 51,
+        "tag_name": "AI Research"
+      },
+      {
+        "tag_id": 52,
+        "tag_name": "AI Classes"
+      },
+      {
+        "tag_id": 53,
+        "tag_name": "AI Teachers"
+      },
+      {
+        "tag_id": 54,
+        "tag_name": "AI Educational Institutions"
+      },
+      {
+        "tag_id": 55,
+        "tag_name": "AI Summarizer"
+      },
+      {
+        "tag_id": 56,
+        "tag_name": "AI Document Chat"
+      },
+      {
+        "tag_id": 57,
+        "tag_name": "AI PDF"
+      },
+      {
+        "tag_id": 58,
+        "tag_name": "AI Note Taker"
+      },
+      {
+        "tag_id": 59,
+        "tag_name": "AI Prompt Generators"
+      },
+      {
+        "tag_id": 60,
+        "tag_name": "AI Editor"
+      },
+      {
+        "tag_id": 61,
+        "tag_name": "AI Video Summarizers"
+      },
+      {
+        "tag_id": 62,
+        "tag_name": "AI Course Builders"
+      },
+      {
+        "tag_id": 63,
+        "tag_name": "AI Plagiarism Detector"
+      },
+      {
+        "tag_id": 64,
+        "tag_name": "AI Research Paper Tools"
+      },
+      {
+        "tag_id": 65,
+        "tag_name": "AI Cheatsheets"
+      },
+      {
+        "tag_id": 66,
+        "tag_name": "AI Books"
+      },
+      {
+        "tag_id": 67,
+        "tag_name": "AI Flashcards"
+      },
+      {
+        "tag_id": 68,
+        "tag_name": "AI Quizlet"
+      },
+      {
+        "tag_id": 69,
+        "tag_name": "AI Learn Tools"
+      },
+      {
+        "tag_id": 70,
+        "tag_name": "AI Communities"
+      },
+      {
+        "tag_id": 71,
+        "tag_name": "AI Discord Communities"
+      },
+      {
+        "tag_id": 72,
+        "tag_name": "AI Prompting"
+      },
+      {
+        "tag_id": 73,
+        "tag_name": "AI Attribution"
+      },
+      {
+        "tag_id": 74,
+        "tag_name": "AI Tuning"
+      },
+      {
+        "tag_id": 75,
+        "tag_name": "AI Social Media Tools"
+      },
+      {
+        "tag_id": 76,
+        "tag_name": "AI Podcast"
+      },
+      {
+        "tag_id": 77,
+        "tag_name": "AI Youtubers"
+      },
+      {
+        "tag_id": 78,
+        "tag_name": "AI Music"
+      },
+      {
+        "tag_id": 79,
+        "tag_name": "AI Games"
+      },
+      {
+        "tag_id": 80,
+        "tag_name": "AI Blogs"
+      },
+      {
+        "tag_id": 81,
+        "tag_name": "AI Twitter"
+      },
+      {
+        "tag_id": 82,
+        "tag_name": "AI TikTok"
+      },
+      {
+        "tag_id": 83,
+        "tag_name": "AI Conversations"
+      },
+      {
+        "tag_id": 84,
+        "tag_name": "AI Companions"
+      },
+      {
+        "tag_id": 85,
+        "tag_name": "AI Celebrities"
+      },
+      {
+        "tag_id": 86,
+        "tag_name": "AI Sports"
+      },
+      {
+        "tag_id": 87,
+        "tag_name": "AI Voice Chat"
+      },
+      {
+        "tag_id": 88,
+        "tag_name": "AI Chess"
+      },
+      {
+        "tag_id": 89,
+        "tag_name": "AI Novels"
+      },
+      {
+        "tag_id": 90,
+        "tag_name": "AI Stories"
+      },
+      {
+        "tag_id": 91,
+        "tag_name": "AI Comedy"
+      },
+      {
+        "tag_id": 92,
+        "tag_name": "AI Memes"
+      },
+      {
+        "tag_id": 93,
+        "tag_name": "AI Anime"
+      },
+      {
+        "tag_id": 94,
+        "tag_name": "AI Friends"
+      },
+      {
+        "tag_id": 95,
+        "tag_name": "AI Style Editor"
+      },
+      {
+        "tag_id": 96,
+        "tag_name": "AI 3D Avatar"
+      },
+      {
+        "tag_id": 97,
+        "tag_name": "AI Self Avatars"
+      },
+      {
+        "tag_id": 98,
+        "tag_name": "AI Image Rating"
+      },
+      {
+        "tag_id": 99,
+        "tag_name": "AI Deepfakes"
+      },
+      {
+        "tag_id": 100,
+        "tag_name": "AI Faceswap"
+      },
+      {
+        "tag_id": 101,
+        "tag_name": "AI Fun"
+      },
+      {
+        "tag_id": 102,
+        "tag_name": "AI Toys"
+      },
+      {
+        "tag_id": 103,
+        "tag_name": "AI Gambling"
+      },
+      {
+        "tag_id": 104,
+        "tag_name": "AI Animations"
+      },
+      {
+        "tag_id": 105,
+        "tag_name": "AI Translators"
+      },
+      {
+        "tag_id": 106,
+        "tag_name": "AI Robots"
+      },
+      {
+        "tag_id": 107,
+        "tag_name": "AI Website Builder"
+      },
+      {
+        "tag_id": 108,
+        "tag_name": "AI Chatbot UI"
+      },
+      {
+        "tag_id": 109,
+        "tag_name": "AI for UI/UX"
+      },
+      {
+        "tag_id": 110,
+        "tag_name": "AI Gadgets"
+      },
+      {
+        "tag_id": 111,
+        "tag_name": "AI Authenticators"
+      },
+      {
+        "tag_id": 112,
+        "tag_name": "AI Summarizers"
+      },
+      {
+        "tag_id": 113,
+        "tag_name": "AI Voice Trainers"
+      },
+      {
+        "tag_id": 114,
+        "tag_name": "AI Search Engines"
+      },
+      {
+        "tag_id": 115,
+        "tag_name": "AI Code Generator"
+      },
+      {
+        "tag_id": 116,
+        "tag_name": "AI Image Filtering"
+      },
+      {
+        "tag_id": 117,
+        "tag_name": "AI Object Detection"
+      },
+      {
+        "tag_id": 118,
+        "tag_name": "AI APIs"
+      },
+      {
+        "tag_id": 119,
+        "tag_name": "AI Libraries"
+      },
+      {
+        "tag_id": 120,
+        "tag_name": "AI Agents"
+      },
+      {
+        "tag_id": 121,
+        "tag_name": "AI Debuggers"
+      },
+      {
+        "tag_id": 122,
+        "tag_name": "AI Automators"
+      },
+      {
+        "tag_id": 123,
+        "tag_name": "AI Wearables"
+      },
+      {
+        "tag_id": 124,
+        "tag_name": "AI Augmentation"
+      },
+      {
+        "tag_id": 125,
+        "tag_name": "AI Hybrids"
+      },
+      {
+        "tag_id": 126,
+        "tag_name": "AI Specialization"
+      },
+      {
+        "tag_id": 127,
+        "tag_name": "AI Scrapping"
+      },
+      {
+        "tag_id": 128,
+        "tag_name": "AI Posing"
+      },
+      {
+        "tag_id": 129,
+        "tag_name": "AI for AR"
+      },
+      {
+        "tag_id": 130,
+        "tag_name": "AI Motion Capture"
+      },
+      {
+        "tag_id": 131,
+        "tag_name": "AI Amazon Products"
+      },
+      {
+        "tag_id": 132,
+        "tag_name": "AI Spotting"
+      },
+      {
+        "tag_id": 133,
+        "tag_name": "AI Builders"
+      },
+      {
+        "tag_id": 134,
+        "tag_name": "AI Leaders"
+      },
+      {
+        "tag_id": 135,
+        "tag_name": "AI Video Editor"
+      },
+      {
+        "tag_id": 136,
+        "tag_name": "AI 3D Animation"
+      },
+      {
+        "tag_id": 137,
+        "tag_name": "AI Video Generators"
+      },
+      {
+        "tag_id": 138,
+        "tag_name": "AI Writing Tools"
+      },
+      {
+        "tag_id": 139,
+        "tag_name": "AI Audio Enhancer"
+      },
+      {
+        "tag_id": 140,
+        "tag_name": "AI Voice Changer"
+      },
+      {
+        "tag_id": 141,
+        "tag_name": "AI Image Enhancer"
+      },
+      {
+        "tag_id": 142,
+        "tag_name": "AI Podcasting"
+      },
+      {
+        "tag_id": 143,
+        "tag_name": "AI Script Writers"
+      },
+      {
+        "tag_id": 144,
+        "tag_name": "AI Sound Effects"
+      },
+      {
+        "tag_id": 145,
+        "tag_name": "AI Upscalers"
+      },
+      {
+        "tag_id": 146,
+        "tag_name": "AI Studio"
+      },
+      {
+        "tag_id": 147,
+        "tag_name": "AI Image Toolsets"
+      },
+      {
+        "tag_id": 148,
+        "tag_name": "AI Generative Fill"
+      },
+      {
+        "tag_id": 149,
+        "tag_name": "AI Image Transformers"
+      },
+      {
+        "tag_id": 150,
+        "tag_name": "AI Background Remover"
+      },
+      {
+        "tag_id": 151,
+        "tag_name": "AI Vocal Remover"
+      },
+      {
+        "tag_id": 152,
+        "tag_name": "AI Talking Head"
+      },
+      {
+        "tag_id": 153,
+        "tag_name": "AI Galleries"
+      },
+      {
+        "tag_id": 154,
+        "tag_name": "AI Clips"
+      },
+      {
+        "tag_id": 155,
+        "tag_name": "AI Portraits"
+      },
+      {
+        "tag_id": 156,
+        "tag_name": "AI 3D Worlds"
+      },
+      {
+        "tag_id": 157,
+        "tag_name": "AI Replicators"
+      },
+      {
+        "tag_id": 158,
+        "tag_name": "AI Bring to Life"
+      },
+      {
+        "tag_id": 159,
+        "tag_name": "AI Image Scanners"
+      },
+      {
+        "tag_id": 160,
+        "tag_name": "AI Image Mixers"
+      },
+      {
+        "tag_id": 161,
+        "tag_name": "AI QR Codes"
+      },
+      {
+        "tag_id": 162,
+        "tag_name": "AI Assets"
+      },
+      {
+        "tag_id": 163,
+        "tag_name": "AI Covers"
+      },
+      {
+        "tag_id": 164,
+        "tag_name": "AI Discord Apps"
+      },
+      {
+        "tag_id": 165,
+        "tag_name": "AI Medical Assistant"
+      },
+      {
+        "tag_id": 166,
+        "tag_name": "AI Productivity"
+      },
+      {
+        "tag_id": 167,
+        "tag_name": "AI Workflow"
+      },
+      {
+        "tag_id": 168,
+        "tag_name": "AI Fitness"
+      },
+      {
+        "tag_id": 169,
+        "tag_name": "AI Home Devices"
+      },
+      {
+        "tag_id": 170,
+        "tag_name": "AI News Sites"
+      },
+      {
+        "tag_id": 171,
+        "tag_name": "AI Social Network"
+      },
+      {
+        "tag_id": 172,
+        "tag_name": "AI Coach"
+      },
+      {
+        "tag_id": 173,
+        "tag_name": "AI Travel Advisor"
+      },
+      {
+        "tag_id": 174,
+        "tag_name": "AI Self-Help"
+      },
+      {
+        "tag_id": 175,
+        "tag_name": "AI Memory Assistants"
+      },
+      {
+        "tag_id": 176,
+        "tag_name": "AI Fashion"
+      },
+      {
+        "tag_id": 177,
+        "tag_name": "AI Interior Designs"
+      },
+      {
+        "tag_id": 178,
+        "tag_name": "AI Calendar"
+      },
+      {
+        "tag_id": 179,
+        "tag_name": "AI Dating"
+      },
+      {
+        "tag_id": 180,
+        "tag_name": "AI for Kids"
+      },
+      {
+        "tag_id": 181,
+        "tag_name": "AI Cook"
+      },
+      {
+        "tag_id": 182,
+        "tag_name": "AI Life Manager"
+      },
+      {
+        "tag_id": 183,
+        "tag_name": "AI Idea Builder"
+      },
+      {
+        "tag_id": 184,
+        "tag_name": "AI Career Path"
+      },
+      {
+        "tag_id": 185,
+        "tag_name": "AI Naming"
+      },
+      {
+        "tag_id": 186,
+        "tag_name": "AI Note Manager"
+      },
+      {
+        "tag_id": 187,
+        "tag_name": "AI Events and Activities"
+      },
+      {
+        "tag_id": 188,
+        "tag_name": "AI Inspiration"
+      },
+      {
+        "tag_id": 189,
+        "tag_name": "AI Automated Messaging"
+      },
+      {
+        "tag_id": 190,
+        "tag_name": "AI Preference Curators"
+      },
+      {
+        "tag_id": 191,
+        "tag_name": "AI Powered Appliances"
+      },
+      {
+        "tag_id": 192,
+        "tag_name": "AI Body Art"
+      },
+      {
+        "tag_id": 193,
+        "tag_name": "AI Religion"
+      },
+      {
+        "tag_id": 194,
+        "tag_name": "AI Divination"
+      }
+    ];
+  }
+});
+
+// .svelte-kit/output/server/entries/pages/articles/_page.svelte.js
+var page_svelte_exports2 = {};
+__export(page_svelte_exports2, {
+  default: () => Page2
+});
+var Newslettersubscribe, Page2;
+var init_page_svelte2 = __esm({
+  ".svelte-kit/output/server/entries/pages/articles/_page.svelte.js"() {
+    init_ssr();
+    init_tagToTagName();
+    init_supabaseClient();
+    init_chunks();
+    Newslettersubscribe = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+      let $$unsubscribe_recaptchaToken;
+      let $email, $$unsubscribe_email;
+      let $success, $$unsubscribe_success;
+      let $errorMessage, $$unsubscribe_errorMessage;
+      const email = writable("");
+      $$unsubscribe_email = subscribe(email, (value) => $email = value);
+      const errorMessage = writable("");
+      $$unsubscribe_errorMessage = subscribe(errorMessage, (value) => $errorMessage = value);
+      const success = writable(false);
+      $$unsubscribe_success = subscribe(success, (value) => $success = value);
+      const recaptchaToken = writable("");
+      $$unsubscribe_recaptchaToken = subscribe(recaptchaToken, (value) => value);
+      $$unsubscribe_recaptchaToken();
+      $$unsubscribe_email();
+      $$unsubscribe_success();
+      $$unsubscribe_errorMessage();
+      return `${$$result.head += `<!-- HEAD_svelte-83dfy2_START --><script src="https://www.google.com/recaptcha/api.js?render=6Lc7MIQpAAAAADJWdUF7m6lcDKXpc9iT2jiyUc7Z
+    " data-svelte-h="svelte-9yb1kq"><\/script><!-- HEAD_svelte-83dfy2_END -->`, ""} <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 w-full"><div class="col-span-1 sm:col-span-2 relative"><input type="email" class="rounded-lg shadow-sm w-full px-4 py-3 focus:outline-none focus:shadow-outline text-gray-600 font-medium" placeholder="Your email address" autocomplete="email"${add_attribute("value", $email, 0)}></div> <button class="btn w-full sm:w-auto bg-indigo-600 text-white px-10 py-3 rounded-lg hover:bg-indigo-500">${!$success && !$errorMessage ? `Subscribe` : `${$errorMessage ? `<p class="text-error-500 font-bold ml-4">${escape($errorMessage)}</p>` : `${$success ? `<p class="text-success-500 font-bold ml-4" data-svelte-h="svelte-1gkupg">Subscribed successfully</p>` : ``}`}`}</button></div> <p class="text-gray-600/30 text-xs ml-4 w-full" data-svelte-h="svelte-1n84saf">This site is protected by reCAPTCHA and the Google
+	<a href="https://policies.google.com/privacy">Privacy Policy</a> and
+	<a href="https://policies.google.com/terms">Terms of Service</a> apply.</p>`;
+    });
+    Page2 = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+      let { data } = $$props;
+      let articles = data.article;
+      if ($$props.data === void 0 && $$bindings.data && data !== void 0)
+        $$bindings.data(data);
+      return ` <div class="p-5"><div class="max-w-6xl mx-auto"><h1 class="text-4xl font-bold mb-4" data-svelte-h="svelte-we7rf5">Articles</h1> <h2 class="text-xl font-bold text-gray-700 mb-4" data-svelte-h="svelte-1h2wa4k">Test, test, test and test</h2>  <div class="flex flex-wrap items-center mb-8"><div class="flex items-center text-gray-600 text-sm min-w-[300px] pr-5" data-svelte-h="svelte-1riwwhn"><p class="text-gray-600 text-lg">Subscribe and stay up to date with the latest Ai tips and news.</p></div>  ${validate_component(Newslettersubscribe, "Newslettersubscribe").$$render($$result, {}, {}, {})}</div></div></div> <div class="bg-gray-100 min-h-screen p-5"><div class="max-w-6xl mx-auto"><div class="grid grid-cols-1 md:grid-cols-2 lg:grid-rows-5 lg:grid-cols-3 gap-4">${each(articles || [], (article, i) => {
+        return `${i == 0 ? `<div class="row-span-2 col-span-2 w-full card card-hover bg-white rounded-lg shadow hover:shadow-md transition duration-300 overflow-hidden"><button class="p-5 text-left w-full"><h2 class="font-bold text-3xl mb-2 text-gray-800">${escape(article.title)}</h2> <p class="text-gray-600 text-sm mb-4">${escape(article.excerpt)}</p> <div class="flex items-center text-gray-500 text-xs"> <div class="flex items-center"><img class="w-8 h-8 rounded-full mr-2 object-cover"${add_attribute("src", article.author?.avatar_url || "https://via.placeholder.com/30", 0)} alt="Author avatar"> <span>${escape(article.author?.username || "Unknown Author")}</span></div> <span class="mx-2" data-svelte-h="svelte-jbleqq">\xB7</span>  <span>${escape(article.read_time)} min read</span> <span class="mx-2" data-svelte-h="svelte-jbleqq">\xB7</span> <time${add_attribute("datetime", article.published_date, 0)}>${escape(new Date(article.published_date).toLocaleDateString())} </time></div> </button> <div class="ml-4 mb-2">${each(article.tag || [], (tag2, i2) => {
+          return `<button class="bg-gray-200 text-gray-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded z-10">${escape(tagToTagName(article.tag[i2]))} </button>`;
+        })}</div>  ${article.featured_image ? `<img class="w-full h-96 object-cover"${add_attribute("src", article.featured_image, 0)} alt="Article ">` : `<img class="w-full h-96 object-cover" src="https://via.placeholder.com/800x400" alt="Article ">`} </div>` : `<div class="col-span-2 md:col-span-1 card-hover card grid bg-white rounded-lg text-left shadow hover:shadow-md transition duration-300 overflow-hidden"><button class="p-5 grid gap-1 grid-cols-2 text-left"><div class="items-center text-gray-500 text-xs"><h2 class="font-bold text-2xl mb-2 text-gray-800">${escape(article.title)}</h2> <p class="text-gray-600 text-sm mb-4">${escape(article.excerpt)}</p>  <div class="flex items-center"><img class="w-8 h-8 rounded-full mr-2 object-cover"${add_attribute("src", article.author?.avatar_url || "https://via.placeholder.com/30", 0)} alt="Author avatar"> <span>${escape(article.author?.username || "Unknown Author")}</span></div>   <div class="grid"><span>${escape(article.read_time)} min read</span>  <time${add_attribute("datetime", article.published_date, 0)}>${escape(new Date(article.published_date).toLocaleDateString())}</time> </div></div>  ${article.featured_image ? `<img class="w-full h-full object-contain"${add_attribute("src", article.featured_image, 0)} alt="Article">` : ``}</button>  <div class="pl-5 pb-4">${each(article.tag || [1, 2, 3, 4, 5, 6, 7, 8, 9], (tag2, i2) => {
+          return `<button class="bg-gray-200 text-gray-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded z-20">${escape(tagToTagName(article.tag[i2]))} </button>`;
+        })}</div> </div>`}`;
+      })}</div></div> </div>`;
+    });
+  }
+});
+
+// .svelte-kit/output/server/nodes/3.js
+var __exports4 = {};
+__export(__exports4, {
+  component: () => component4,
+  fonts: () => fonts4,
+  imports: () => imports4,
+  index: () => index4,
+  server: () => page_server_ts_exports2,
+  server_id: () => server_id3,
+  stylesheets: () => stylesheets4
+});
+var index4, component_cache4, component4, server_id3, imports4, stylesheets4, fonts4;
+var init__4 = __esm({
+  ".svelte-kit/output/server/nodes/3.js"() {
+    init_page_server_ts2();
+    index4 = 3;
+    component4 = async () => component_cache4 ?? (component_cache4 = (await Promise.resolve().then(() => (init_page_svelte2(), page_svelte_exports2))).default);
+    server_id3 = "src/routes/articles/+page.server.ts";
+    imports4 = ["_app/immutable/nodes/3.gySrOzJk.js", "_app/immutable/chunks/scheduler.QZSgJ5Dp.js", "_app/immutable/chunks/index.lCWGoTYW.js", "_app/immutable/chunks/each.-oqiv04n.js", "_app/immutable/chunks/tagToTagName.L90_iJjR.js", "_app/immutable/chunks/sluglify.yqzTTa5I.js", "_app/immutable/chunks/navigation.2TzIb17z.js", "_app/immutable/chunks/singletons.h2LHnNSw.js", "_app/immutable/chunks/index.CsFU67jq.js", "_app/immutable/chunks/supabaseClient.4znO2Jyt.js"];
+    stylesheets4 = [];
+    fonts4 = [];
+  }
+});
+
+// .svelte-kit/output/server/entries/pages/articles/_article_name_/_page.ts.js
+var page_ts_exports2 = {};
+var init_page_ts2 = __esm({
+  ".svelte-kit/output/server/entries/pages/articles/_article_name_/_page.ts.js"() {
+  }
+});
+
+// .svelte-kit/output/server/entries/pages/articles/_article_name_/_page.server.ts.js
+var page_server_ts_exports3 = {};
+__export(page_server_ts_exports3, {
+  load: () => load5
+});
+async function load5({ params }) {
+  const { article_name } = params;
+  const { data: article, error: articleError } = await supabase.from("articles").select("*").match({ slug: article_name }).limit(1).single();
+  if (articleError) {
+    console.error(articleError);
+    return { status: 500, error: new Error("Failed to fetch the article") };
+  }
+  const { data: user, error: userError } = await supabase.from("user_profiles").select("*").match({ id: article.author_id }).limit(1).single();
+  if (userError) {
+    console.error(userError);
+    return { status: 500, error: new Error("Failed to fetch the user") };
+  }
+  return {
+    article,
+    user,
+    article_name
+  };
 }
-function blurhashToCssGradientString(blurhash, columns = 4, rows = 3) {
-  return blurhashToCssGradients(blurhash, columns, rows).join(",");
-}
-var toHex, rgbToHex;
-var init_dist3 = __esm({
-  "node_modules/.pnpm/@unpic+placeholder@0.1.2/node_modules/@unpic/placeholder/dist/index.mjs"() {
-    init_esm();
-    toHex = (n) => {
-      const hex = n.toString(16);
-      return hex.length === 1 ? "0" + hex : hex;
-    };
-    rgbToHex = (r2, g, b) => {
-      return "#" + toHex(r2) + toHex(g) + toHex(b);
+var init_page_server_ts3 = __esm({
+  ".svelte-kit/output/server/entries/pages/articles/_article_name_/_page.server.ts.js"() {
+    init_supabaseClient();
+  }
+});
+
+// .svelte-kit/output/server/chunks/backbtn.js
+var Backbtn;
+var init_backbtn = __esm({
+  ".svelte-kit/output/server/chunks/backbtn.js"() {
+    init_ssr();
+    Backbtn = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+      return `<svg${spread(
+        [
+          { xmlns: "http://www.w3.org/2000/svg" },
+          { width: "20" },
+          { height: "20" },
+          { viewBox: "0 0 48 48" },
+          escape_object($$props)
+        ],
+        {}
+      )}><path fill="currentColor" fill-rule="evenodd" stroke="currentColor" stroke-linejoin="round" stroke-width="4.6" d="M44 40.836c-4.893-5.973-9.238-9.362-13.036-10.168c-3.797-.805-7.412-.927-10.846-.365V41L4 23.545L20.118 7v10.167c6.349.05 11.746 2.328 16.192 6.833c4.445 4.505 7.009 10.117 7.69 16.836Z" clip-rule="evenodd"></path></svg>`;
+    });
+  }
+});
+
+// .svelte-kit/output/server/entries/pages/articles/_article_name_/_page.svelte.js
+var page_svelte_exports3 = {};
+__export(page_svelte_exports3, {
+  default: () => Page3
+});
+var Page3;
+var init_page_svelte3 = __esm({
+  ".svelte-kit/output/server/entries/pages/articles/_article_name_/_page.svelte.js"() {
+    init_ssr();
+    init_backbtn();
+    Page3 = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+      let article;
+      let username;
+      let { data } = $$props;
+      if ($$props.data === void 0 && $$bindings.data && data !== void 0)
+        $$bindings.data(data);
+      article = data.article;
+      username = data.user?.username;
+      return ` ${article && username ? `<div class="max-w-xl mx-auto px-4 py-8 sm:max-w-2xl md:max-w-3xl"><button class="py-6">${validate_component(Backbtn, "Backbtn").$$render($$result, {}, {}, {})}</button> <h1 class="text-xl font-serif font-extrabold mb-4 leading-tight sm:text-4xl md:text-5xl lg:text-6xl">${escape(article.title)}</h1> <div class="flex items-center text-gray-600 text-sm mb-8"><img${add_attribute("src", article.author?.avatar_url || "https://via.placeholder.com/40", 0)} alt="Author" class="rounded-full mr-2"> <div><span class="font-semibold">${escape(username || "Unknown Author")}</span><br> <span class="text-xs sm:text-sm">${escape(new Date(article.published_date).toLocaleDateString())}</span></div></div> <img${add_attribute("src", article.featured_image || "https://via.placeholder.com/800x400", 0)} alt="Article Image" class="w-full h-auto mb-8"> <p class="text-base mb-6 leading-relaxed font-serif sm:text-lg md:text-xl">${escape(article.content)}</p> </div>` : ``}`;
+    });
+  }
+});
+
+// .svelte-kit/output/server/nodes/4.js
+var __exports5 = {};
+__export(__exports5, {
+  component: () => component5,
+  fonts: () => fonts5,
+  imports: () => imports5,
+  index: () => index5,
+  server: () => page_server_ts_exports3,
+  server_id: () => server_id4,
+  stylesheets: () => stylesheets5,
+  universal: () => page_ts_exports2,
+  universal_id: () => universal_id3
+});
+var index5, component_cache5, component5, universal_id3, server_id4, imports5, stylesheets5, fonts5;
+var init__5 = __esm({
+  ".svelte-kit/output/server/nodes/4.js"() {
+    init_page_ts2();
+    init_page_server_ts3();
+    index5 = 4;
+    component5 = async () => component_cache5 ?? (component_cache5 = (await Promise.resolve().then(() => (init_page_svelte3(), page_svelte_exports3))).default);
+    universal_id3 = "src/routes/articles/[article_name]/+page.ts";
+    server_id4 = "src/routes/articles/[article_name]/+page.server.ts";
+    imports5 = ["_app/immutable/nodes/4.16d9RnfD.js", "_app/immutable/chunks/scheduler.QZSgJ5Dp.js", "_app/immutable/chunks/index.lCWGoTYW.js", "_app/immutable/chunks/navigation.2TzIb17z.js", "_app/immutable/chunks/singletons.h2LHnNSw.js", "_app/immutable/chunks/index.CsFU67jq.js", "_app/immutable/chunks/backbtn.ovB9PlmV.js", "_app/immutable/chunks/spread.rEx3vLA9.js"];
+    stylesheets5 = [];
+    fonts5 = [];
+  }
+});
+
+// .svelte-kit/output/server/entries/pages/category/_category_id_/_tag_slug_/_page.ts.js
+var page_ts_exports3 = {};
+var init_page_ts3 = __esm({
+  ".svelte-kit/output/server/entries/pages/category/_category_id_/_tag_slug_/_page.ts.js"() {
+  }
+});
+
+// .svelte-kit/output/server/entries/pages/category/_category_id_/_tag_slug_/_page.server.ts.js
+var page_server_ts_exports4 = {};
+__export(page_server_ts_exports4, {
+  load: () => load6
+});
+var load6;
+var init_page_server_ts4 = __esm({
+  ".svelte-kit/output/server/entries/pages/category/_category_id_/_tag_slug_/_page.server.ts.js"() {
+    init_supabaseClient();
+    load6 = async ({ params }) => {
+      const { tag_slug: productSlug, category_id: categoryId } = params;
+      const { data: categoryData, error: categoryError } = await supabase.from("aggregated_category_info").select("*").eq("category_id", categoryId).maybeSingle();
+      if (categoryError) {
+        console.error(`Failed to fetch category ${categoryId} data`, categoryError);
+        return { props: { error: `Failed to fetch category ${categoryId} data` } };
+      }
+      return {
+        props: {
+          categoryData,
+          tag_slug: productSlug
+        }
+      };
     };
   }
 });
 
-// .svelte-kit/output/server/chunks/imagecard.js
+// .svelte-kit/output/server/chunks/linkicon.js
 function getImageCdnForUrl(url) {
   return getImageCdnForUrlByDomain(url) || getImageCdnForUrlByPath(url);
 }
@@ -16904,11 +18325,11 @@ function transformProps(props) {
   };
 }
 function a(t, o) {
-  const r2 = RegExp(t, "g");
+  const r22 = RegExp(t, "g");
   return (e) => {
     if (typeof e != "string")
       throw new TypeError(`expected an argument of type string, but got ${typeof e}`);
-    return e.match(r2) ? e.replace(r2, o) : e;
+    return e.match(r22) ? e.replace(r22, o) : e;
   };
 }
 function c(o, r$1 = r) {
@@ -16917,13 +18338,10 @@ function c(o, r$1 = r) {
   return Object.keys(o).map((e) => `${r$1(e)}: ${o[e]};`).join(`
 `);
 }
-var domains, subdomains, paths, roundIfNumeric, setParamIfDefined, setParamIfUndefined, getNumericParam, toRelativeUrl, toCanonicalUrlString, toUrl, cdnDomains, cdnSubdomains, transform$n, transform$m, transform$l, shopifyRegex, parse$7, generate$8, transform$k, transform$j, transform$i, cloudinaryRegex, parseTransforms$2, formatUrl$3, parse$6, generate$7, transform$h, cloudflareRegex, parseTransforms$1, formatUrl$2, parse$5, generate$6, transform$g, transform$f, storyBlokAssets, storyBlokImg2, splitFilters, generateFilters, parse$4, generate$5, transform$e, transform$d, delegateUrl, generate$4, transform$c, transform$b, transform$a, transform$9, transform$8, OBJECT_TO_DIRECTIVES_MAP, transform$7, transform$6, cloudflareImagesRegex, parseTransforms, formatUrl$1, parse$3, generate$3, transform$5, parse$2, generate$2, transform$4, transform$3, skippedParams, parse$12, generate$1, transform$2, getTransformParams, transform$1, uploadcareRegex, normalizeCdnOperation, parseOperations, formatUrl, parse2, generate, transform, delegators, getTransformer, getSizes, pixelate, getStyle, DEFAULT_RESOLUTIONS, LOW_RES_WIDTH, getBreakpoints, getSrcSetEntries, getSrcSet, r, Image, Linkicon, Imagecard;
-var init_imagecard = __esm({
-  ".svelte-kit/output/server/chunks/imagecard.js"() {
+var domains, subdomains, paths, roundIfNumeric, setParamIfDefined, setParamIfUndefined, getNumericParam, toRelativeUrl, toCanonicalUrlString, toUrl, cdnDomains, cdnSubdomains, transform$n, transform$m, transform$l, shopifyRegex, parse$7, generate$8, transform$k, transform$j, transform$i, cloudinaryRegex, parseTransforms$2, formatUrl$3, parse$6, generate$7, transform$h, cloudflareRegex, parseTransforms$1, formatUrl$2, parse$5, generate$6, transform$g, transform$f, storyBlokAssets, storyBlokImg2, splitFilters, generateFilters, parse$4, generate$5, transform$e, transform$d, delegateUrl, generate$4, transform$c, transform$b, transform$a, transform$9, transform$8, OBJECT_TO_DIRECTIVES_MAP, transform$7, transform$6, cloudflareImagesRegex, parseTransforms, formatUrl$1, parse$3, generate$3, transform$5, parse$2, generate$2, transform$4, transform$3, skippedParams, parse$12, generate$1, transform$2, getTransformParams, transform$1, uploadcareRegex, normalizeCdnOperation, parseOperations, formatUrl, parse2, generate, transform, delegators, getTransformer, getSizes, pixelate, getStyle, DEFAULT_RESOLUTIONS, LOW_RES_WIDTH, getBreakpoints, getSrcSetEntries, getSrcSet, r, Image, Linkicon;
+var init_linkicon = __esm({
+  ".svelte-kit/output/server/chunks/linkicon.js"() {
     init_ssr();
-    init_productStore();
-    init_store();
-    init_dist3();
     domains = {
       "images.ctfassets.net": "contentful",
       "cdn.builder.io": "builder.io",
@@ -18087,13 +19505,3585 @@ var init_imagecard = __esm({
         {}
       )}><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path stroke-dasharray="42" stroke-dashoffset="42" d="M11 5H5V19H19V13"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.6s" values="42;0"></animate></path><path stroke-dasharray="12" stroke-dashoffset="12" d="M13 11L20 4"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.6s" dur="0.3s" values="12;0"></animate></path><path stroke-dasharray="8" stroke-dashoffset="8" d="M21 3H15M21 3V9"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.9s" dur="0.2s" values="8;0"></animate></path></g></svg>`;
     });
+  }
+});
+
+// node_modules/.pnpm/blurhash@2.0.5/node_modules/blurhash/dist/esm/index.js
+var q, x, f, h, F, M, d, C, z, L, U, j;
+var init_esm = __esm({
+  "node_modules/.pnpm/blurhash@2.0.5/node_modules/blurhash/dist/esm/index.js"() {
+    q = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "#", "$", "%", "*", "+", ",", "-", ".", ":", ";", "=", "?", "@", "[", "]", "^", "_", "{", "|", "}", "~"];
+    x = (t) => {
+      let e = 0;
+      for (let r3 = 0; r3 < t.length; r3++) {
+        let n = t[r3], l = q.indexOf(n);
+        e = e * 83 + l;
+      }
+      return e;
+    };
+    f = (t) => {
+      let e = t / 255;
+      return e <= 0.04045 ? e / 12.92 : Math.pow((e + 0.055) / 1.055, 2.4);
+    };
+    h = (t) => {
+      let e = Math.max(0, Math.min(1, t));
+      return e <= 31308e-7 ? Math.trunc(e * 12.92 * 255 + 0.5) : Math.trunc((1.055 * Math.pow(e, 0.4166666666666667) - 0.055) * 255 + 0.5);
+    };
+    F = (t) => t < 0 ? -1 : 1;
+    M = (t, e) => F(t) * Math.pow(Math.abs(t), e);
+    d = class extends Error {
+      constructor(e) {
+        super(e), this.name = "ValidationError", this.message = e;
+      }
+    };
+    C = (t) => {
+      if (!t || t.length < 6)
+        throw new d("The blurhash string must be at least 6 characters");
+      let e = x(t[0]), r3 = Math.floor(e / 9) + 1, n = e % 9 + 1;
+      if (t.length !== 4 + 2 * n * r3)
+        throw new d(`blurhash length mismatch: length is ${t.length} but it should be ${4 + 2 * n * r3}`);
+    };
+    z = (t) => {
+      let e = t >> 16, r3 = t >> 8 & 255, n = t & 255;
+      return [f(e), f(r3), f(n)];
+    };
+    L = (t, e) => {
+      let r3 = Math.floor(t / 361), n = Math.floor(t / 19) % 19, l = t % 19;
+      return [M((r3 - 9) / 9, 2) * e, M((n - 9) / 9, 2) * e, M((l - 9) / 9, 2) * e];
+    };
+    U = (t, e, r3, n) => {
+      C(t), n = n | 1;
+      let l = x(t[0]), m = Math.floor(l / 9) + 1, b = l % 9 + 1, i = (x(t[1]) + 1) / 166, u = new Array(b * m);
+      for (let o = 0; o < u.length; o++)
+        if (o === 0) {
+          let a2 = x(t.substring(2, 6));
+          u[o] = z(a2);
+        } else {
+          let a2 = x(t.substring(4 + o * 2, 6 + o * 2));
+          u[o] = L(a2, i * n);
+        }
+      let c2 = e * 4, s2 = new Uint8ClampedArray(c2 * r3);
+      for (let o = 0; o < r3; o++)
+        for (let a2 = 0; a2 < e; a2++) {
+          let y = 0, B = 0, R = 0;
+          for (let w = 0; w < m; w++)
+            for (let P = 0; P < b; P++) {
+              let G = Math.cos(Math.PI * a2 * P / e) * Math.cos(Math.PI * o * w / r3), T = u[P + w * b];
+              y += T[0] * G, B += T[1] * G, R += T[2] * G;
+            }
+          let V = h(y), I = h(B), E = h(R);
+          s2[4 * a2 + 0 + o * c2] = V, s2[4 * a2 + 1 + o * c2] = I, s2[4 * a2 + 2 + o * c2] = E, s2[4 * a2 + 3 + o * c2] = 255;
+        }
+      return s2;
+    };
+    j = U;
+  }
+});
+
+// node_modules/.pnpm/@unpic+placeholder@0.1.2/node_modules/@unpic/placeholder/dist/index.mjs
+function percentOrZero(num) {
+  if (num === 0)
+    return 0;
+  return `${num}%`;
+}
+function pixelsToCssGradients(pixels, columns, rows) {
+  const stops = [];
+  for (let i = 0, j2 = 0; i < pixels.length; i += 4, j2++) {
+    const col = j2 % columns;
+    const row = Math.floor(j2 / columns);
+    const percentX = Math.round(col / (columns - 1) * 100);
+    const percentY = Math.round(row / (rows - 1) * 100);
+    const r3 = pixels[i];
+    const g = pixels[i + 1];
+    const b = pixels[i + 2];
+    const color = `radial-gradient(at ${percentOrZero(
+      percentX
+      // Hex is smaller than rgba. #00000000 = transparent
+    )} ${percentOrZero(percentY)},${rgbToHex(r3, g, b)},#00000000 50%)`;
+    stops.push(color);
+  }
+  return stops;
+}
+function blurhashToCssGradients(blurhash, columns = 4, rows = 3) {
+  const pixels = j(blurhash, columns, rows);
+  return pixelsToCssGradients(pixels, columns, rows);
+}
+function blurhashToCssGradientString(blurhash, columns = 4, rows = 3) {
+  return blurhashToCssGradients(blurhash, columns, rows).join(",");
+}
+var toHex, rgbToHex;
+var init_dist3 = __esm({
+  "node_modules/.pnpm/@unpic+placeholder@0.1.2/node_modules/@unpic/placeholder/dist/index.mjs"() {
+    init_esm();
+    toHex = (n) => {
+      const hex = n.toString(16);
+      return hex.length === 1 ? "0" + hex : hex;
+    };
+    rgbToHex = (r3, g, b) => {
+      return "#" + toHex(r3) + toHex(g) + toHex(b);
+    };
+  }
+});
+
+// .svelte-kit/output/server/entries/pages/category/_category_id_/_tag_slug_/_page.svelte.js
+var page_svelte_exports4 = {};
+__export(page_svelte_exports4, {
+  default: () => Page4
+});
+function filterAndOrganizeBySlug(data2, slug) {
+  if (!data2)
+    return [];
+  const slugIndex = data2.findIndex((item) => item.tag_name.replace(/\s/g, "") === slug);
+  if (slugIndex === -1)
+    return data2;
+  const [slugItem] = data2.splice(slugIndex, 1);
+  return [slugItem, ...data2];
+}
+function groupTagsIntoCategories(tags, clickedTagId) {
+  const categoryRanges = [
+    { category_id: 1, max_tag_id: 14 },
+    { category_id: 2, max_tag_id: 44 },
+    { category_id: 3, max_tag_id: 74 },
+    { category_id: 4, max_tag_id: 104 },
+    { category_id: 5, max_tag_id: 134 },
+    { category_id: 6, max_tag_id: 164 },
+    { category_id: 7, max_tag_id: 194 }
+  ];
+  const categories = categoryRanges.map((range) => ({ category_id: range.category_id, tags: [] }));
+  for (const tag2 of tags) {
+    const category = categories.find((category2) => tag2.tag_id <= categoryRanges[category2.category_id - 1].max_tag_id);
+    if (category) {
+      category.tags.push(tag2);
+    }
+  }
+  if (clickedTagId !== void 0) {
+    const clickedTag = tags.find((tag2) => tag2.tag_id === clickedTagId);
+    if (clickedTag) {
+      const clickedCategoryIndex = categories.findIndex((category) => clickedTag.tag_id <= categoryRanges[category.category_id - 1].max_tag_id);
+      if (clickedCategoryIndex > -1) {
+        const [clickedCategory] = categories.splice(clickedCategoryIndex, 1);
+        categories.unshift(clickedCategory);
+      }
+    }
+  }
+  return categories;
+}
+var Tagimagecard, Page4;
+var init_page_svelte4 = __esm({
+  ".svelte-kit/output/server/entries/pages/category/_category_id_/_tag_slug_/_page.svelte.js"() {
+    init_ssr();
+    init_productStore();
+    init_linkicon();
+    init_ProgressBar_svelte_svelte_type_style_lang();
+    init_dist3();
+    init_tagToTagName();
+    Tagimagecard = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+      let { data = {} } = $$props;
+      get_store_value(productReviewCache);
+      const placeholder = blurhashToCssGradientString("L48W{f-p00E0~pWBs.s:?cNGRjWB");
+      let slugFiltered;
+      let aggregated_data;
+      if ($$props.data === void 0 && $$bindings.data && data !== void 0)
+        $$bindings.data(data);
+      data.props?.tag_slug;
+      {
+        {
+          aggregated_data = data.props?.categoryData?.aggregated_data?.filter((item) => item.tag_name !== "Uncategorized") || [];
+          let tag_slug2 = data.props?.tag_slug;
+          slugFiltered = filterAndOrganizeBySlug(aggregated_data, tag_slug2);
+        }
+      }
+      groupTagsIntoCategories(tag_table, 5);
+      return `   ${data ? `<div class="flex mx-1 md:mx-4">${`<div></div>`} <div>${each(slugFiltered, (_, i) => {
+        return `<div class="card mb-4 p-1 md:p-8 relative">${i === 0 ? `<button class="absolute rounded-full hover:ring-2 ring-black z-20" data-svelte-h="svelte-1rvbcdb"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24"><path fill="currentColor" d="M9.29 6.71a.996.996 0 0 0 0 1.41L13.17 12l-3.88 3.88a.996.996 0 1 0 1.41 1.41l4.59-4.59a.996.996 0 0 0 0-1.41L10.7 6.7c-.38-.38-1.02-.38-1.41.01"></path></svg></button>` : ``} <div class="w-full text-center text-2xl lg:text-3xl xl:text-4xl pb-8">${escape(slugFiltered[i].tag_name)}</div> ${data ? `<div class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 p-2">${each(slugFiltered[i].product_table || [], (_2, j2) => {
+          return `<div id="product-image" class="max-w-full rounded-lg relative card parent-hover"><div id="images" class="flex h-full justify-center fade-in">${validate_component(Image, "Image").$$render(
+            $$result,
+            {
+              class: "fade-in rounded-t-md rounded-b-sm",
+              src: slugFiltered[i].product_table[j2].product_screenshot,
+              layout: "constrained",
+              priority: "true",
+              width: 1e3,
+              height: 500,
+              background: placeholder,
+              alt: slugFiltered[i].product_table[j2].product_screenshot_alt
+            },
+            {},
+            {}
+          )}  <div id="overlay-hover" class="w-full absolute h-full parent-hover overlay-fade rounded-t-lg top-0 z-10 blur-lg bg-slate-300/40"></div> <div class="absolute w-full h-full top-[30%] z-10"><div id="name-comp" class="parent-hover overlay-fade"><h1 class="text-xl sm:text-2xl md:text-2xl lg:text-3xl text-center sm:text-center"><div class="flex justify-center">${escape(slugFiltered[i].product_table[j2].product_name || "Product Name")} ${slugFiltered[i].product_table[j2].product_logo ? `${validate_component(Image, "Image").$$render(
+            $$result,
+            {
+              class: "ml-4 fade-in rounded-full ",
+              src: slugFiltered[i].product_table[j2].product_logo,
+              priority: "true",
+              width: 32,
+              height: 32,
+              background: placeholder,
+              alt: slugFiltered[i].product_table[j2].product_logo_alt
+            },
+            {},
+            {}
+          )}` : `<div></div>`} </div></h1>  ${validate_component(Ratings, "Ratings").$$render(
+            $$result,
+            {
+              value: Math.round((+slugFiltered[i].product_table[j2].product_rating || 0) / 20 * 2) / 2,
+              max: 5
+            },
+            {},
+            {
+              full: () => {
+                return `${validate_component(Stars, "Stars").$$render($$result, { type: "full" }, {}, {})}`;
+              },
+              half: () => {
+                return `${validate_component(Stars, "Stars").$$render($$result, { type: "half" }, {}, {})}`;
+              },
+              empty: () => {
+                return `${validate_component(Stars, "Stars").$$render($$result, { type: "empty" }, {}, {})}`;
+              }
+            }
+          )}  </div></div> <div class="absolute w-full top-1/2 left-1/2 ml-[-75px] lg:ml-[-100px] xl:ml-[-150px] mt-[-40px] h-full"><div class="grid grid-cols-1 gap-1"><button class="parent-hover overlay-show btn variant-ghost-primary w-[150px] lg:w-[200px] xl:w-[300px] h-[40px] text-white text-base text-md md:text-xl lg:text-2xl z-30 opacity-0"><span data-svelte-h="svelte-ytzi6a">Review</span>${validate_component(Linkicon, "Linkicon").$$render($$result, {}, {}, {})}</button> <button class="parent-hover overlay-show btn variant-ghost-primary w-[150px] lg:w-[200px] xl:w-[300px] h-[40px] text-white text-base text-md md:text-xl lg:text-2xl z-30 opacity-0"><span data-svelte-h="svelte-11bf9kr">Visit</span>${validate_component(Linkicon, "Linkicon").$$render($$result, {}, {}, {})} </button></div> </div></div> </div>`;
+        })} </div>` : ``} </div>`;
+      })}</div></div>` : ``}`;
+    });
+    Page4 = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+      let { data } = $$props;
+      if ($$props.data === void 0 && $$bindings.data && data !== void 0)
+        $$bindings.data(data);
+      return ` ${validate_component(Tagimagecard, "Tagimagecard").$$render($$result, { data }, {}, {})}`;
+    });
+  }
+});
+
+// .svelte-kit/output/server/nodes/5.js
+var __exports6 = {};
+__export(__exports6, {
+  component: () => component6,
+  fonts: () => fonts6,
+  imports: () => imports6,
+  index: () => index6,
+  server: () => page_server_ts_exports4,
+  server_id: () => server_id5,
+  stylesheets: () => stylesheets6,
+  universal: () => page_ts_exports3,
+  universal_id: () => universal_id4
+});
+var index6, component_cache6, component6, universal_id4, server_id5, imports6, stylesheets6, fonts6;
+var init__6 = __esm({
+  ".svelte-kit/output/server/nodes/5.js"() {
+    init_page_ts3();
+    init_page_server_ts4();
+    index6 = 5;
+    component6 = async () => component_cache6 ?? (component_cache6 = (await Promise.resolve().then(() => (init_page_svelte4(), page_svelte_exports4))).default);
+    universal_id4 = "src/routes/category/[category_id]/[tag_slug]/+page.ts";
+    server_id5 = "src/routes/category/[category_id]/[tag_slug]/+page.server.ts";
+    imports6 = ["_app/immutable/nodes/5.AgdSjCDr.js", "_app/immutable/chunks/scheduler.QZSgJ5Dp.js", "_app/immutable/chunks/index.lCWGoTYW.js", "_app/immutable/chunks/each.-oqiv04n.js", "_app/immutable/chunks/productStore.DYc5Lv1C.js", "_app/immutable/chunks/spread.rEx3vLA9.js", "_app/immutable/chunks/ProgressBar.svelte_svelte_type_style_lang.Pju_nDia.js", "_app/immutable/chunks/index.CsFU67jq.js", "_app/immutable/chunks/sluglify.yqzTTa5I.js", "_app/immutable/chunks/linkicon.0J3LsioI.js", "_app/immutable/chunks/index.RhRIcdz5.js", "_app/immutable/chunks/navigation.2TzIb17z.js", "_app/immutable/chunks/singletons.h2LHnNSw.js", "_app/immutable/chunks/tagToTagName.L90_iJjR.js"];
+    stylesheets6 = ["_app/immutable/assets/ProgressBar.oq5aOWfL.css"];
+    fonts6 = [];
+  }
+});
+
+// node_modules/.pnpm/clsx@2.1.0/node_modules/clsx/dist/clsx.mjs
+function r2(e) {
+  var t, f2, n = "";
+  if ("string" == typeof e || "number" == typeof e)
+    n += e;
+  else if ("object" == typeof e)
+    if (Array.isArray(e)) {
+      var o = e.length;
+      for (t = 0; t < o; t++)
+        e[t] && (f2 = r2(e[t])) && (n && (n += " "), n += f2);
+    } else
+      for (f2 in e)
+        e[f2] && (n && (n += " "), n += f2);
+  return n;
+}
+function clsx() {
+  for (var e, t, f2 = 0, n = "", o = arguments.length; f2 < o; f2++)
+    (e = arguments[f2]) && (t = r2(e)) && (n && (n += " "), n += t);
+  return n;
+}
+var init_clsx = __esm({
+  "node_modules/.pnpm/clsx@2.1.0/node_modules/clsx/dist/clsx.mjs"() {
+  }
+});
+
+// node_modules/.pnpm/tailwind-merge@2.2.1/node_modules/tailwind-merge/dist/bundle-mjs.mjs
+function createClassUtils(config2) {
+  const classMap = createClassMap(config2);
+  const {
+    conflictingClassGroups,
+    conflictingClassGroupModifiers
+  } = config2;
+  function getClassGroupId(className) {
+    const classParts = className.split(CLASS_PART_SEPARATOR);
+    if (classParts[0] === "" && classParts.length !== 1) {
+      classParts.shift();
+    }
+    return getGroupRecursive(classParts, classMap) || getGroupIdForArbitraryProperty(className);
+  }
+  function getConflictingClassGroupIds(classGroupId, hasPostfixModifier) {
+    const conflicts = conflictingClassGroups[classGroupId] || [];
+    if (hasPostfixModifier && conflictingClassGroupModifiers[classGroupId]) {
+      return [...conflicts, ...conflictingClassGroupModifiers[classGroupId]];
+    }
+    return conflicts;
+  }
+  return {
+    getClassGroupId,
+    getConflictingClassGroupIds
+  };
+}
+function getGroupRecursive(classParts, classPartObject) {
+  if (classParts.length === 0) {
+    return classPartObject.classGroupId;
+  }
+  const currentClassPart = classParts[0];
+  const nextClassPartObject = classPartObject.nextPart.get(currentClassPart);
+  const classGroupFromNextClassPart = nextClassPartObject ? getGroupRecursive(classParts.slice(1), nextClassPartObject) : void 0;
+  if (classGroupFromNextClassPart) {
+    return classGroupFromNextClassPart;
+  }
+  if (classPartObject.validators.length === 0) {
+    return void 0;
+  }
+  const classRest = classParts.join(CLASS_PART_SEPARATOR);
+  return classPartObject.validators.find(({
+    validator: validator2
+  }) => validator2(classRest))?.classGroupId;
+}
+function getGroupIdForArbitraryProperty(className) {
+  if (arbitraryPropertyRegex.test(className)) {
+    const arbitraryPropertyClassName = arbitraryPropertyRegex.exec(className)[1];
+    const property = arbitraryPropertyClassName?.substring(0, arbitraryPropertyClassName.indexOf(":"));
+    if (property) {
+      return "arbitrary.." + property;
+    }
+  }
+}
+function createClassMap(config2) {
+  const {
+    theme,
+    prefix
+  } = config2;
+  const classMap = {
+    nextPart: /* @__PURE__ */ new Map(),
+    validators: []
+  };
+  const prefixedClassGroupEntries = getPrefixedClassGroupEntries(Object.entries(config2.classGroups), prefix);
+  prefixedClassGroupEntries.forEach(([classGroupId, classGroup]) => {
+    processClassesRecursively(classGroup, classMap, classGroupId, theme);
+  });
+  return classMap;
+}
+function processClassesRecursively(classGroup, classPartObject, classGroupId, theme) {
+  classGroup.forEach((classDefinition) => {
+    if (typeof classDefinition === "string") {
+      const classPartObjectToEdit = classDefinition === "" ? classPartObject : getPart(classPartObject, classDefinition);
+      classPartObjectToEdit.classGroupId = classGroupId;
+      return;
+    }
+    if (typeof classDefinition === "function") {
+      if (isThemeGetter(classDefinition)) {
+        processClassesRecursively(classDefinition(theme), classPartObject, classGroupId, theme);
+        return;
+      }
+      classPartObject.validators.push({
+        validator: classDefinition,
+        classGroupId
+      });
+      return;
+    }
+    Object.entries(classDefinition).forEach(([key2, classGroup2]) => {
+      processClassesRecursively(classGroup2, getPart(classPartObject, key2), classGroupId, theme);
+    });
+  });
+}
+function getPart(classPartObject, path) {
+  let currentClassPartObject = classPartObject;
+  path.split(CLASS_PART_SEPARATOR).forEach((pathPart) => {
+    if (!currentClassPartObject.nextPart.has(pathPart)) {
+      currentClassPartObject.nextPart.set(pathPart, {
+        nextPart: /* @__PURE__ */ new Map(),
+        validators: []
+      });
+    }
+    currentClassPartObject = currentClassPartObject.nextPart.get(pathPart);
+  });
+  return currentClassPartObject;
+}
+function isThemeGetter(func) {
+  return func.isThemeGetter;
+}
+function getPrefixedClassGroupEntries(classGroupEntries, prefix) {
+  if (!prefix) {
+    return classGroupEntries;
+  }
+  return classGroupEntries.map(([classGroupId, classGroup]) => {
+    const prefixedClassGroup = classGroup.map((classDefinition) => {
+      if (typeof classDefinition === "string") {
+        return prefix + classDefinition;
+      }
+      if (typeof classDefinition === "object") {
+        return Object.fromEntries(Object.entries(classDefinition).map(([key2, value]) => [prefix + key2, value]));
+      }
+      return classDefinition;
+    });
+    return [classGroupId, prefixedClassGroup];
+  });
+}
+function createLruCache(maxCacheSize) {
+  if (maxCacheSize < 1) {
+    return {
+      get: () => void 0,
+      set: () => {
+      }
+    };
+  }
+  let cacheSize = 0;
+  let cache = /* @__PURE__ */ new Map();
+  let previousCache = /* @__PURE__ */ new Map();
+  function update(key2, value) {
+    cache.set(key2, value);
+    cacheSize++;
+    if (cacheSize > maxCacheSize) {
+      cacheSize = 0;
+      previousCache = cache;
+      cache = /* @__PURE__ */ new Map();
+    }
+  }
+  return {
+    get(key2) {
+      let value = cache.get(key2);
+      if (value !== void 0) {
+        return value;
+      }
+      if ((value = previousCache.get(key2)) !== void 0) {
+        update(key2, value);
+        return value;
+      }
+    },
+    set(key2, value) {
+      if (cache.has(key2)) {
+        cache.set(key2, value);
+      } else {
+        update(key2, value);
+      }
+    }
+  };
+}
+function createSplitModifiers(config2) {
+  const separator2 = config2.separator;
+  const isSeparatorSingleCharacter = separator2.length === 1;
+  const firstSeparatorCharacter = separator2[0];
+  const separatorLength = separator2.length;
+  return function splitModifiers(className) {
+    const modifiers = [];
+    let bracketDepth = 0;
+    let modifierStart = 0;
+    let postfixModifierPosition;
+    for (let index13 = 0; index13 < className.length; index13++) {
+      let currentCharacter = className[index13];
+      if (bracketDepth === 0) {
+        if (currentCharacter === firstSeparatorCharacter && (isSeparatorSingleCharacter || className.slice(index13, index13 + separatorLength) === separator2)) {
+          modifiers.push(className.slice(modifierStart, index13));
+          modifierStart = index13 + separatorLength;
+          continue;
+        }
+        if (currentCharacter === "/") {
+          postfixModifierPosition = index13;
+          continue;
+        }
+      }
+      if (currentCharacter === "[") {
+        bracketDepth++;
+      } else if (currentCharacter === "]") {
+        bracketDepth--;
+      }
+    }
+    const baseClassNameWithImportantModifier = modifiers.length === 0 ? className : className.substring(modifierStart);
+    const hasImportantModifier = baseClassNameWithImportantModifier.startsWith(IMPORTANT_MODIFIER);
+    const baseClassName = hasImportantModifier ? baseClassNameWithImportantModifier.substring(1) : baseClassNameWithImportantModifier;
+    const maybePostfixModifierPosition = postfixModifierPosition && postfixModifierPosition > modifierStart ? postfixModifierPosition - modifierStart : void 0;
+    return {
+      modifiers,
+      hasImportantModifier,
+      baseClassName,
+      maybePostfixModifierPosition
+    };
+  };
+}
+function sortModifiers(modifiers) {
+  if (modifiers.length <= 1) {
+    return modifiers;
+  }
+  const sortedModifiers = [];
+  let unsortedModifiers = [];
+  modifiers.forEach((modifier) => {
+    const isArbitraryVariant = modifier[0] === "[";
+    if (isArbitraryVariant) {
+      sortedModifiers.push(...unsortedModifiers.sort(), modifier);
+      unsortedModifiers = [];
+    } else {
+      unsortedModifiers.push(modifier);
+    }
+  });
+  sortedModifiers.push(...unsortedModifiers.sort());
+  return sortedModifiers;
+}
+function createConfigUtils(config2) {
+  return {
+    cache: createLruCache(config2.cacheSize),
+    splitModifiers: createSplitModifiers(config2),
+    ...createClassUtils(config2)
+  };
+}
+function mergeClassList(classList, configUtils) {
+  const {
+    splitModifiers,
+    getClassGroupId,
+    getConflictingClassGroupIds
+  } = configUtils;
+  const classGroupsInConflict = /* @__PURE__ */ new Set();
+  return classList.trim().split(SPLIT_CLASSES_REGEX).map((originalClassName) => {
+    const {
+      modifiers,
+      hasImportantModifier,
+      baseClassName,
+      maybePostfixModifierPosition
+    } = splitModifiers(originalClassName);
+    let classGroupId = getClassGroupId(maybePostfixModifierPosition ? baseClassName.substring(0, maybePostfixModifierPosition) : baseClassName);
+    let hasPostfixModifier = Boolean(maybePostfixModifierPosition);
+    if (!classGroupId) {
+      if (!maybePostfixModifierPosition) {
+        return {
+          isTailwindClass: false,
+          originalClassName
+        };
+      }
+      classGroupId = getClassGroupId(baseClassName);
+      if (!classGroupId) {
+        return {
+          isTailwindClass: false,
+          originalClassName
+        };
+      }
+      hasPostfixModifier = false;
+    }
+    const variantModifier = sortModifiers(modifiers).join(":");
+    const modifierId = hasImportantModifier ? variantModifier + IMPORTANT_MODIFIER : variantModifier;
+    return {
+      isTailwindClass: true,
+      modifierId,
+      classGroupId,
+      originalClassName,
+      hasPostfixModifier
+    };
+  }).reverse().filter((parsed) => {
+    if (!parsed.isTailwindClass) {
+      return true;
+    }
+    const {
+      modifierId,
+      classGroupId,
+      hasPostfixModifier
+    } = parsed;
+    const classId = modifierId + classGroupId;
+    if (classGroupsInConflict.has(classId)) {
+      return false;
+    }
+    classGroupsInConflict.add(classId);
+    getConflictingClassGroupIds(classGroupId, hasPostfixModifier).forEach((group) => classGroupsInConflict.add(modifierId + group));
+    return true;
+  }).reverse().map((parsed) => parsed.originalClassName).join(" ");
+}
+function twJoin() {
+  let index13 = 0;
+  let argument;
+  let resolvedValue;
+  let string = "";
+  while (index13 < arguments.length) {
+    if (argument = arguments[index13++]) {
+      if (resolvedValue = toValue(argument)) {
+        string && (string += " ");
+        string += resolvedValue;
+      }
+    }
+  }
+  return string;
+}
+function toValue(mix) {
+  if (typeof mix === "string") {
+    return mix;
+  }
+  let resolvedValue;
+  let string = "";
+  for (let k = 0; k < mix.length; k++) {
+    if (mix[k]) {
+      if (resolvedValue = toValue(mix[k])) {
+        string && (string += " ");
+        string += resolvedValue;
+      }
+    }
+  }
+  return string;
+}
+function createTailwindMerge(createConfigFirst, ...createConfigRest) {
+  let configUtils;
+  let cacheGet;
+  let cacheSet;
+  let functionToCall = initTailwindMerge;
+  function initTailwindMerge(classList) {
+    const config2 = createConfigRest.reduce((previousConfig, createConfigCurrent) => createConfigCurrent(previousConfig), createConfigFirst());
+    configUtils = createConfigUtils(config2);
+    cacheGet = configUtils.cache.get;
+    cacheSet = configUtils.cache.set;
+    functionToCall = tailwindMerge;
+    return tailwindMerge(classList);
+  }
+  function tailwindMerge(classList) {
+    const cachedResult = cacheGet(classList);
+    if (cachedResult) {
+      return cachedResult;
+    }
+    const result = mergeClassList(classList, configUtils);
+    cacheSet(classList, result);
+    return result;
+  }
+  return function callTailwindMerge() {
+    return functionToCall(twJoin.apply(null, arguments));
+  };
+}
+function fromTheme(key2) {
+  const themeGetter = (theme) => theme[key2] || [];
+  themeGetter.isThemeGetter = true;
+  return themeGetter;
+}
+function isLength(value) {
+  return isNumber(value) || stringLengths.has(value) || fractionRegex.test(value);
+}
+function isArbitraryLength(value) {
+  return getIsArbitraryValue(value, "length", isLengthOnly);
+}
+function isNumber(value) {
+  return Boolean(value) && !Number.isNaN(Number(value));
+}
+function isArbitraryNumber(value) {
+  return getIsArbitraryValue(value, "number", isNumber);
+}
+function isInteger(value) {
+  return Boolean(value) && Number.isInteger(Number(value));
+}
+function isPercent(value) {
+  return value.endsWith("%") && isNumber(value.slice(0, -1));
+}
+function isArbitraryValue(value) {
+  return arbitraryValueRegex.test(value);
+}
+function isTshirtSize(value) {
+  return tshirtUnitRegex.test(value);
+}
+function isArbitrarySize(value) {
+  return getIsArbitraryValue(value, sizeLabels, isNever);
+}
+function isArbitraryPosition(value) {
+  return getIsArbitraryValue(value, "position", isNever);
+}
+function isArbitraryImage(value) {
+  return getIsArbitraryValue(value, imageLabels, isImage);
+}
+function isArbitraryShadow(value) {
+  return getIsArbitraryValue(value, "", isShadow);
+}
+function isAny() {
+  return true;
+}
+function getIsArbitraryValue(value, label, testValue) {
+  const result = arbitraryValueRegex.exec(value);
+  if (result) {
+    if (result[1]) {
+      return typeof label === "string" ? result[1] === label : label.has(result[1]);
+    }
+    return testValue(result[2]);
+  }
+  return false;
+}
+function isLengthOnly(value) {
+  return lengthUnitRegex.test(value) && !colorFunctionRegex.test(value);
+}
+function isNever() {
+  return false;
+}
+function isShadow(value) {
+  return shadowRegex.test(value);
+}
+function isImage(value) {
+  return imageRegex.test(value);
+}
+function getDefaultConfig() {
+  const colors = fromTheme("colors");
+  const spacing = fromTheme("spacing");
+  const blur = fromTheme("blur");
+  const brightness = fromTheme("brightness");
+  const borderColor = fromTheme("borderColor");
+  const borderRadius = fromTheme("borderRadius");
+  const borderSpacing = fromTheme("borderSpacing");
+  const borderWidth = fromTheme("borderWidth");
+  const contrast = fromTheme("contrast");
+  const grayscale = fromTheme("grayscale");
+  const hueRotate = fromTheme("hueRotate");
+  const invert = fromTheme("invert");
+  const gap = fromTheme("gap");
+  const gradientColorStops = fromTheme("gradientColorStops");
+  const gradientColorStopPositions = fromTheme("gradientColorStopPositions");
+  const inset = fromTheme("inset");
+  const margin = fromTheme("margin");
+  const opacity = fromTheme("opacity");
+  const padding = fromTheme("padding");
+  const saturate = fromTheme("saturate");
+  const scale = fromTheme("scale");
+  const sepia = fromTheme("sepia");
+  const skew = fromTheme("skew");
+  const space = fromTheme("space");
+  const translate = fromTheme("translate");
+  const getOverscroll = () => ["auto", "contain", "none"];
+  const getOverflow = () => ["auto", "hidden", "clip", "visible", "scroll"];
+  const getSpacingWithAutoAndArbitrary = () => ["auto", isArbitraryValue, spacing];
+  const getSpacingWithArbitrary = () => [isArbitraryValue, spacing];
+  const getLengthWithEmptyAndArbitrary = () => ["", isLength, isArbitraryLength];
+  const getNumberWithAutoAndArbitrary = () => ["auto", isNumber, isArbitraryValue];
+  const getPositions = () => ["bottom", "center", "left", "left-bottom", "left-top", "right", "right-bottom", "right-top", "top"];
+  const getLineStyles = () => ["solid", "dashed", "dotted", "double", "none"];
+  const getBlendModes = () => ["normal", "multiply", "screen", "overlay", "darken", "lighten", "color-dodge", "color-burn", "hard-light", "soft-light", "difference", "exclusion", "hue", "saturation", "color", "luminosity", "plus-lighter"];
+  const getAlign = () => ["start", "end", "center", "between", "around", "evenly", "stretch"];
+  const getZeroAndEmpty = () => ["", "0", isArbitraryValue];
+  const getBreaks = () => ["auto", "avoid", "all", "avoid-page", "page", "left", "right", "column"];
+  const getNumber = () => [isNumber, isArbitraryNumber];
+  const getNumberAndArbitrary = () => [isNumber, isArbitraryValue];
+  return {
+    cacheSize: 500,
+    separator: ":",
+    theme: {
+      colors: [isAny],
+      spacing: [isLength, isArbitraryLength],
+      blur: ["none", "", isTshirtSize, isArbitraryValue],
+      brightness: getNumber(),
+      borderColor: [colors],
+      borderRadius: ["none", "", "full", isTshirtSize, isArbitraryValue],
+      borderSpacing: getSpacingWithArbitrary(),
+      borderWidth: getLengthWithEmptyAndArbitrary(),
+      contrast: getNumber(),
+      grayscale: getZeroAndEmpty(),
+      hueRotate: getNumberAndArbitrary(),
+      invert: getZeroAndEmpty(),
+      gap: getSpacingWithArbitrary(),
+      gradientColorStops: [colors],
+      gradientColorStopPositions: [isPercent, isArbitraryLength],
+      inset: getSpacingWithAutoAndArbitrary(),
+      margin: getSpacingWithAutoAndArbitrary(),
+      opacity: getNumber(),
+      padding: getSpacingWithArbitrary(),
+      saturate: getNumber(),
+      scale: getNumber(),
+      sepia: getZeroAndEmpty(),
+      skew: getNumberAndArbitrary(),
+      space: getSpacingWithArbitrary(),
+      translate: getSpacingWithArbitrary()
+    },
+    classGroups: {
+      // Layout
+      /**
+       * Aspect Ratio
+       * @see https://tailwindcss.com/docs/aspect-ratio
+       */
+      aspect: [{
+        aspect: ["auto", "square", "video", isArbitraryValue]
+      }],
+      /**
+       * Container
+       * @see https://tailwindcss.com/docs/container
+       */
+      container: ["container"],
+      /**
+       * Columns
+       * @see https://tailwindcss.com/docs/columns
+       */
+      columns: [{
+        columns: [isTshirtSize]
+      }],
+      /**
+       * Break After
+       * @see https://tailwindcss.com/docs/break-after
+       */
+      "break-after": [{
+        "break-after": getBreaks()
+      }],
+      /**
+       * Break Before
+       * @see https://tailwindcss.com/docs/break-before
+       */
+      "break-before": [{
+        "break-before": getBreaks()
+      }],
+      /**
+       * Break Inside
+       * @see https://tailwindcss.com/docs/break-inside
+       */
+      "break-inside": [{
+        "break-inside": ["auto", "avoid", "avoid-page", "avoid-column"]
+      }],
+      /**
+       * Box Decoration Break
+       * @see https://tailwindcss.com/docs/box-decoration-break
+       */
+      "box-decoration": [{
+        "box-decoration": ["slice", "clone"]
+      }],
+      /**
+       * Box Sizing
+       * @see https://tailwindcss.com/docs/box-sizing
+       */
+      box: [{
+        box: ["border", "content"]
+      }],
+      /**
+       * Display
+       * @see https://tailwindcss.com/docs/display
+       */
+      display: ["block", "inline-block", "inline", "flex", "inline-flex", "table", "inline-table", "table-caption", "table-cell", "table-column", "table-column-group", "table-footer-group", "table-header-group", "table-row-group", "table-row", "flow-root", "grid", "inline-grid", "contents", "list-item", "hidden"],
+      /**
+       * Floats
+       * @see https://tailwindcss.com/docs/float
+       */
+      float: [{
+        float: ["right", "left", "none", "start", "end"]
+      }],
+      /**
+       * Clear
+       * @see https://tailwindcss.com/docs/clear
+       */
+      clear: [{
+        clear: ["left", "right", "both", "none", "start", "end"]
+      }],
+      /**
+       * Isolation
+       * @see https://tailwindcss.com/docs/isolation
+       */
+      isolation: ["isolate", "isolation-auto"],
+      /**
+       * Object Fit
+       * @see https://tailwindcss.com/docs/object-fit
+       */
+      "object-fit": [{
+        object: ["contain", "cover", "fill", "none", "scale-down"]
+      }],
+      /**
+       * Object Position
+       * @see https://tailwindcss.com/docs/object-position
+       */
+      "object-position": [{
+        object: [...getPositions(), isArbitraryValue]
+      }],
+      /**
+       * Overflow
+       * @see https://tailwindcss.com/docs/overflow
+       */
+      overflow: [{
+        overflow: getOverflow()
+      }],
+      /**
+       * Overflow X
+       * @see https://tailwindcss.com/docs/overflow
+       */
+      "overflow-x": [{
+        "overflow-x": getOverflow()
+      }],
+      /**
+       * Overflow Y
+       * @see https://tailwindcss.com/docs/overflow
+       */
+      "overflow-y": [{
+        "overflow-y": getOverflow()
+      }],
+      /**
+       * Overscroll Behavior
+       * @see https://tailwindcss.com/docs/overscroll-behavior
+       */
+      overscroll: [{
+        overscroll: getOverscroll()
+      }],
+      /**
+       * Overscroll Behavior X
+       * @see https://tailwindcss.com/docs/overscroll-behavior
+       */
+      "overscroll-x": [{
+        "overscroll-x": getOverscroll()
+      }],
+      /**
+       * Overscroll Behavior Y
+       * @see https://tailwindcss.com/docs/overscroll-behavior
+       */
+      "overscroll-y": [{
+        "overscroll-y": getOverscroll()
+      }],
+      /**
+       * Position
+       * @see https://tailwindcss.com/docs/position
+       */
+      position: ["static", "fixed", "absolute", "relative", "sticky"],
+      /**
+       * Top / Right / Bottom / Left
+       * @see https://tailwindcss.com/docs/top-right-bottom-left
+       */
+      inset: [{
+        inset: [inset]
+      }],
+      /**
+       * Right / Left
+       * @see https://tailwindcss.com/docs/top-right-bottom-left
+       */
+      "inset-x": [{
+        "inset-x": [inset]
+      }],
+      /**
+       * Top / Bottom
+       * @see https://tailwindcss.com/docs/top-right-bottom-left
+       */
+      "inset-y": [{
+        "inset-y": [inset]
+      }],
+      /**
+       * Start
+       * @see https://tailwindcss.com/docs/top-right-bottom-left
+       */
+      start: [{
+        start: [inset]
+      }],
+      /**
+       * End
+       * @see https://tailwindcss.com/docs/top-right-bottom-left
+       */
+      end: [{
+        end: [inset]
+      }],
+      /**
+       * Top
+       * @see https://tailwindcss.com/docs/top-right-bottom-left
+       */
+      top: [{
+        top: [inset]
+      }],
+      /**
+       * Right
+       * @see https://tailwindcss.com/docs/top-right-bottom-left
+       */
+      right: [{
+        right: [inset]
+      }],
+      /**
+       * Bottom
+       * @see https://tailwindcss.com/docs/top-right-bottom-left
+       */
+      bottom: [{
+        bottom: [inset]
+      }],
+      /**
+       * Left
+       * @see https://tailwindcss.com/docs/top-right-bottom-left
+       */
+      left: [{
+        left: [inset]
+      }],
+      /**
+       * Visibility
+       * @see https://tailwindcss.com/docs/visibility
+       */
+      visibility: ["visible", "invisible", "collapse"],
+      /**
+       * Z-Index
+       * @see https://tailwindcss.com/docs/z-index
+       */
+      z: [{
+        z: ["auto", isInteger, isArbitraryValue]
+      }],
+      // Flexbox and Grid
+      /**
+       * Flex Basis
+       * @see https://tailwindcss.com/docs/flex-basis
+       */
+      basis: [{
+        basis: getSpacingWithAutoAndArbitrary()
+      }],
+      /**
+       * Flex Direction
+       * @see https://tailwindcss.com/docs/flex-direction
+       */
+      "flex-direction": [{
+        flex: ["row", "row-reverse", "col", "col-reverse"]
+      }],
+      /**
+       * Flex Wrap
+       * @see https://tailwindcss.com/docs/flex-wrap
+       */
+      "flex-wrap": [{
+        flex: ["wrap", "wrap-reverse", "nowrap"]
+      }],
+      /**
+       * Flex
+       * @see https://tailwindcss.com/docs/flex
+       */
+      flex: [{
+        flex: ["1", "auto", "initial", "none", isArbitraryValue]
+      }],
+      /**
+       * Flex Grow
+       * @see https://tailwindcss.com/docs/flex-grow
+       */
+      grow: [{
+        grow: getZeroAndEmpty()
+      }],
+      /**
+       * Flex Shrink
+       * @see https://tailwindcss.com/docs/flex-shrink
+       */
+      shrink: [{
+        shrink: getZeroAndEmpty()
+      }],
+      /**
+       * Order
+       * @see https://tailwindcss.com/docs/order
+       */
+      order: [{
+        order: ["first", "last", "none", isInteger, isArbitraryValue]
+      }],
+      /**
+       * Grid Template Columns
+       * @see https://tailwindcss.com/docs/grid-template-columns
+       */
+      "grid-cols": [{
+        "grid-cols": [isAny]
+      }],
+      /**
+       * Grid Column Start / End
+       * @see https://tailwindcss.com/docs/grid-column
+       */
+      "col-start-end": [{
+        col: ["auto", {
+          span: ["full", isInteger, isArbitraryValue]
+        }, isArbitraryValue]
+      }],
+      /**
+       * Grid Column Start
+       * @see https://tailwindcss.com/docs/grid-column
+       */
+      "col-start": [{
+        "col-start": getNumberWithAutoAndArbitrary()
+      }],
+      /**
+       * Grid Column End
+       * @see https://tailwindcss.com/docs/grid-column
+       */
+      "col-end": [{
+        "col-end": getNumberWithAutoAndArbitrary()
+      }],
+      /**
+       * Grid Template Rows
+       * @see https://tailwindcss.com/docs/grid-template-rows
+       */
+      "grid-rows": [{
+        "grid-rows": [isAny]
+      }],
+      /**
+       * Grid Row Start / End
+       * @see https://tailwindcss.com/docs/grid-row
+       */
+      "row-start-end": [{
+        row: ["auto", {
+          span: [isInteger, isArbitraryValue]
+        }, isArbitraryValue]
+      }],
+      /**
+       * Grid Row Start
+       * @see https://tailwindcss.com/docs/grid-row
+       */
+      "row-start": [{
+        "row-start": getNumberWithAutoAndArbitrary()
+      }],
+      /**
+       * Grid Row End
+       * @see https://tailwindcss.com/docs/grid-row
+       */
+      "row-end": [{
+        "row-end": getNumberWithAutoAndArbitrary()
+      }],
+      /**
+       * Grid Auto Flow
+       * @see https://tailwindcss.com/docs/grid-auto-flow
+       */
+      "grid-flow": [{
+        "grid-flow": ["row", "col", "dense", "row-dense", "col-dense"]
+      }],
+      /**
+       * Grid Auto Columns
+       * @see https://tailwindcss.com/docs/grid-auto-columns
+       */
+      "auto-cols": [{
+        "auto-cols": ["auto", "min", "max", "fr", isArbitraryValue]
+      }],
+      /**
+       * Grid Auto Rows
+       * @see https://tailwindcss.com/docs/grid-auto-rows
+       */
+      "auto-rows": [{
+        "auto-rows": ["auto", "min", "max", "fr", isArbitraryValue]
+      }],
+      /**
+       * Gap
+       * @see https://tailwindcss.com/docs/gap
+       */
+      gap: [{
+        gap: [gap]
+      }],
+      /**
+       * Gap X
+       * @see https://tailwindcss.com/docs/gap
+       */
+      "gap-x": [{
+        "gap-x": [gap]
+      }],
+      /**
+       * Gap Y
+       * @see https://tailwindcss.com/docs/gap
+       */
+      "gap-y": [{
+        "gap-y": [gap]
+      }],
+      /**
+       * Justify Content
+       * @see https://tailwindcss.com/docs/justify-content
+       */
+      "justify-content": [{
+        justify: ["normal", ...getAlign()]
+      }],
+      /**
+       * Justify Items
+       * @see https://tailwindcss.com/docs/justify-items
+       */
+      "justify-items": [{
+        "justify-items": ["start", "end", "center", "stretch"]
+      }],
+      /**
+       * Justify Self
+       * @see https://tailwindcss.com/docs/justify-self
+       */
+      "justify-self": [{
+        "justify-self": ["auto", "start", "end", "center", "stretch"]
+      }],
+      /**
+       * Align Content
+       * @see https://tailwindcss.com/docs/align-content
+       */
+      "align-content": [{
+        content: ["normal", ...getAlign(), "baseline"]
+      }],
+      /**
+       * Align Items
+       * @see https://tailwindcss.com/docs/align-items
+       */
+      "align-items": [{
+        items: ["start", "end", "center", "baseline", "stretch"]
+      }],
+      /**
+       * Align Self
+       * @see https://tailwindcss.com/docs/align-self
+       */
+      "align-self": [{
+        self: ["auto", "start", "end", "center", "stretch", "baseline"]
+      }],
+      /**
+       * Place Content
+       * @see https://tailwindcss.com/docs/place-content
+       */
+      "place-content": [{
+        "place-content": [...getAlign(), "baseline"]
+      }],
+      /**
+       * Place Items
+       * @see https://tailwindcss.com/docs/place-items
+       */
+      "place-items": [{
+        "place-items": ["start", "end", "center", "baseline", "stretch"]
+      }],
+      /**
+       * Place Self
+       * @see https://tailwindcss.com/docs/place-self
+       */
+      "place-self": [{
+        "place-self": ["auto", "start", "end", "center", "stretch"]
+      }],
+      // Spacing
+      /**
+       * Padding
+       * @see https://tailwindcss.com/docs/padding
+       */
+      p: [{
+        p: [padding]
+      }],
+      /**
+       * Padding X
+       * @see https://tailwindcss.com/docs/padding
+       */
+      px: [{
+        px: [padding]
+      }],
+      /**
+       * Padding Y
+       * @see https://tailwindcss.com/docs/padding
+       */
+      py: [{
+        py: [padding]
+      }],
+      /**
+       * Padding Start
+       * @see https://tailwindcss.com/docs/padding
+       */
+      ps: [{
+        ps: [padding]
+      }],
+      /**
+       * Padding End
+       * @see https://tailwindcss.com/docs/padding
+       */
+      pe: [{
+        pe: [padding]
+      }],
+      /**
+       * Padding Top
+       * @see https://tailwindcss.com/docs/padding
+       */
+      pt: [{
+        pt: [padding]
+      }],
+      /**
+       * Padding Right
+       * @see https://tailwindcss.com/docs/padding
+       */
+      pr: [{
+        pr: [padding]
+      }],
+      /**
+       * Padding Bottom
+       * @see https://tailwindcss.com/docs/padding
+       */
+      pb: [{
+        pb: [padding]
+      }],
+      /**
+       * Padding Left
+       * @see https://tailwindcss.com/docs/padding
+       */
+      pl: [{
+        pl: [padding]
+      }],
+      /**
+       * Margin
+       * @see https://tailwindcss.com/docs/margin
+       */
+      m: [{
+        m: [margin]
+      }],
+      /**
+       * Margin X
+       * @see https://tailwindcss.com/docs/margin
+       */
+      mx: [{
+        mx: [margin]
+      }],
+      /**
+       * Margin Y
+       * @see https://tailwindcss.com/docs/margin
+       */
+      my: [{
+        my: [margin]
+      }],
+      /**
+       * Margin Start
+       * @see https://tailwindcss.com/docs/margin
+       */
+      ms: [{
+        ms: [margin]
+      }],
+      /**
+       * Margin End
+       * @see https://tailwindcss.com/docs/margin
+       */
+      me: [{
+        me: [margin]
+      }],
+      /**
+       * Margin Top
+       * @see https://tailwindcss.com/docs/margin
+       */
+      mt: [{
+        mt: [margin]
+      }],
+      /**
+       * Margin Right
+       * @see https://tailwindcss.com/docs/margin
+       */
+      mr: [{
+        mr: [margin]
+      }],
+      /**
+       * Margin Bottom
+       * @see https://tailwindcss.com/docs/margin
+       */
+      mb: [{
+        mb: [margin]
+      }],
+      /**
+       * Margin Left
+       * @see https://tailwindcss.com/docs/margin
+       */
+      ml: [{
+        ml: [margin]
+      }],
+      /**
+       * Space Between X
+       * @see https://tailwindcss.com/docs/space
+       */
+      "space-x": [{
+        "space-x": [space]
+      }],
+      /**
+       * Space Between X Reverse
+       * @see https://tailwindcss.com/docs/space
+       */
+      "space-x-reverse": ["space-x-reverse"],
+      /**
+       * Space Between Y
+       * @see https://tailwindcss.com/docs/space
+       */
+      "space-y": [{
+        "space-y": [space]
+      }],
+      /**
+       * Space Between Y Reverse
+       * @see https://tailwindcss.com/docs/space
+       */
+      "space-y-reverse": ["space-y-reverse"],
+      // Sizing
+      /**
+       * Width
+       * @see https://tailwindcss.com/docs/width
+       */
+      w: [{
+        w: ["auto", "min", "max", "fit", "svw", "lvw", "dvw", isArbitraryValue, spacing]
+      }],
+      /**
+       * Min-Width
+       * @see https://tailwindcss.com/docs/min-width
+       */
+      "min-w": [{
+        "min-w": [isArbitraryValue, spacing, "min", "max", "fit"]
+      }],
+      /**
+       * Max-Width
+       * @see https://tailwindcss.com/docs/max-width
+       */
+      "max-w": [{
+        "max-w": [isArbitraryValue, spacing, "none", "full", "min", "max", "fit", "prose", {
+          screen: [isTshirtSize]
+        }, isTshirtSize]
+      }],
+      /**
+       * Height
+       * @see https://tailwindcss.com/docs/height
+       */
+      h: [{
+        h: [isArbitraryValue, spacing, "auto", "min", "max", "fit", "svh", "lvh", "dvh"]
+      }],
+      /**
+       * Min-Height
+       * @see https://tailwindcss.com/docs/min-height
+       */
+      "min-h": [{
+        "min-h": [isArbitraryValue, spacing, "min", "max", "fit", "svh", "lvh", "dvh"]
+      }],
+      /**
+       * Max-Height
+       * @see https://tailwindcss.com/docs/max-height
+       */
+      "max-h": [{
+        "max-h": [isArbitraryValue, spacing, "min", "max", "fit", "svh", "lvh", "dvh"]
+      }],
+      /**
+       * Size
+       * @see https://tailwindcss.com/docs/size
+       */
+      size: [{
+        size: [isArbitraryValue, spacing, "auto", "min", "max", "fit"]
+      }],
+      // Typography
+      /**
+       * Font Size
+       * @see https://tailwindcss.com/docs/font-size
+       */
+      "font-size": [{
+        text: ["base", isTshirtSize, isArbitraryLength]
+      }],
+      /**
+       * Font Smoothing
+       * @see https://tailwindcss.com/docs/font-smoothing
+       */
+      "font-smoothing": ["antialiased", "subpixel-antialiased"],
+      /**
+       * Font Style
+       * @see https://tailwindcss.com/docs/font-style
+       */
+      "font-style": ["italic", "not-italic"],
+      /**
+       * Font Weight
+       * @see https://tailwindcss.com/docs/font-weight
+       */
+      "font-weight": [{
+        font: ["thin", "extralight", "light", "normal", "medium", "semibold", "bold", "extrabold", "black", isArbitraryNumber]
+      }],
+      /**
+       * Font Family
+       * @see https://tailwindcss.com/docs/font-family
+       */
+      "font-family": [{
+        font: [isAny]
+      }],
+      /**
+       * Font Variant Numeric
+       * @see https://tailwindcss.com/docs/font-variant-numeric
+       */
+      "fvn-normal": ["normal-nums"],
+      /**
+       * Font Variant Numeric
+       * @see https://tailwindcss.com/docs/font-variant-numeric
+       */
+      "fvn-ordinal": ["ordinal"],
+      /**
+       * Font Variant Numeric
+       * @see https://tailwindcss.com/docs/font-variant-numeric
+       */
+      "fvn-slashed-zero": ["slashed-zero"],
+      /**
+       * Font Variant Numeric
+       * @see https://tailwindcss.com/docs/font-variant-numeric
+       */
+      "fvn-figure": ["lining-nums", "oldstyle-nums"],
+      /**
+       * Font Variant Numeric
+       * @see https://tailwindcss.com/docs/font-variant-numeric
+       */
+      "fvn-spacing": ["proportional-nums", "tabular-nums"],
+      /**
+       * Font Variant Numeric
+       * @see https://tailwindcss.com/docs/font-variant-numeric
+       */
+      "fvn-fraction": ["diagonal-fractions", "stacked-fractons"],
+      /**
+       * Letter Spacing
+       * @see https://tailwindcss.com/docs/letter-spacing
+       */
+      tracking: [{
+        tracking: ["tighter", "tight", "normal", "wide", "wider", "widest", isArbitraryValue]
+      }],
+      /**
+       * Line Clamp
+       * @see https://tailwindcss.com/docs/line-clamp
+       */
+      "line-clamp": [{
+        "line-clamp": ["none", isNumber, isArbitraryNumber]
+      }],
+      /**
+       * Line Height
+       * @see https://tailwindcss.com/docs/line-height
+       */
+      leading: [{
+        leading: ["none", "tight", "snug", "normal", "relaxed", "loose", isLength, isArbitraryValue]
+      }],
+      /**
+       * List Style Image
+       * @see https://tailwindcss.com/docs/list-style-image
+       */
+      "list-image": [{
+        "list-image": ["none", isArbitraryValue]
+      }],
+      /**
+       * List Style Type
+       * @see https://tailwindcss.com/docs/list-style-type
+       */
+      "list-style-type": [{
+        list: ["none", "disc", "decimal", isArbitraryValue]
+      }],
+      /**
+       * List Style Position
+       * @see https://tailwindcss.com/docs/list-style-position
+       */
+      "list-style-position": [{
+        list: ["inside", "outside"]
+      }],
+      /**
+       * Placeholder Color
+       * @deprecated since Tailwind CSS v3.0.0
+       * @see https://tailwindcss.com/docs/placeholder-color
+       */
+      "placeholder-color": [{
+        placeholder: [colors]
+      }],
+      /**
+       * Placeholder Opacity
+       * @see https://tailwindcss.com/docs/placeholder-opacity
+       */
+      "placeholder-opacity": [{
+        "placeholder-opacity": [opacity]
+      }],
+      /**
+       * Text Alignment
+       * @see https://tailwindcss.com/docs/text-align
+       */
+      "text-alignment": [{
+        text: ["left", "center", "right", "justify", "start", "end"]
+      }],
+      /**
+       * Text Color
+       * @see https://tailwindcss.com/docs/text-color
+       */
+      "text-color": [{
+        text: [colors]
+      }],
+      /**
+       * Text Opacity
+       * @see https://tailwindcss.com/docs/text-opacity
+       */
+      "text-opacity": [{
+        "text-opacity": [opacity]
+      }],
+      /**
+       * Text Decoration
+       * @see https://tailwindcss.com/docs/text-decoration
+       */
+      "text-decoration": ["underline", "overline", "line-through", "no-underline"],
+      /**
+       * Text Decoration Style
+       * @see https://tailwindcss.com/docs/text-decoration-style
+       */
+      "text-decoration-style": [{
+        decoration: [...getLineStyles(), "wavy"]
+      }],
+      /**
+       * Text Decoration Thickness
+       * @see https://tailwindcss.com/docs/text-decoration-thickness
+       */
+      "text-decoration-thickness": [{
+        decoration: ["auto", "from-font", isLength, isArbitraryLength]
+      }],
+      /**
+       * Text Underline Offset
+       * @see https://tailwindcss.com/docs/text-underline-offset
+       */
+      "underline-offset": [{
+        "underline-offset": ["auto", isLength, isArbitraryValue]
+      }],
+      /**
+       * Text Decoration Color
+       * @see https://tailwindcss.com/docs/text-decoration-color
+       */
+      "text-decoration-color": [{
+        decoration: [colors]
+      }],
+      /**
+       * Text Transform
+       * @see https://tailwindcss.com/docs/text-transform
+       */
+      "text-transform": ["uppercase", "lowercase", "capitalize", "normal-case"],
+      /**
+       * Text Overflow
+       * @see https://tailwindcss.com/docs/text-overflow
+       */
+      "text-overflow": ["truncate", "text-ellipsis", "text-clip"],
+      /**
+       * Text Wrap
+       * @see https://tailwindcss.com/docs/text-wrap
+       */
+      "text-wrap": [{
+        text: ["wrap", "nowrap", "balance", "pretty"]
+      }],
+      /**
+       * Text Indent
+       * @see https://tailwindcss.com/docs/text-indent
+       */
+      indent: [{
+        indent: getSpacingWithArbitrary()
+      }],
+      /**
+       * Vertical Alignment
+       * @see https://tailwindcss.com/docs/vertical-align
+       */
+      "vertical-align": [{
+        align: ["baseline", "top", "middle", "bottom", "text-top", "text-bottom", "sub", "super", isArbitraryValue]
+      }],
+      /**
+       * Whitespace
+       * @see https://tailwindcss.com/docs/whitespace
+       */
+      whitespace: [{
+        whitespace: ["normal", "nowrap", "pre", "pre-line", "pre-wrap", "break-spaces"]
+      }],
+      /**
+       * Word Break
+       * @see https://tailwindcss.com/docs/word-break
+       */
+      break: [{
+        break: ["normal", "words", "all", "keep"]
+      }],
+      /**
+       * Hyphens
+       * @see https://tailwindcss.com/docs/hyphens
+       */
+      hyphens: [{
+        hyphens: ["none", "manual", "auto"]
+      }],
+      /**
+       * Content
+       * @see https://tailwindcss.com/docs/content
+       */
+      content: [{
+        content: ["none", isArbitraryValue]
+      }],
+      // Backgrounds
+      /**
+       * Background Attachment
+       * @see https://tailwindcss.com/docs/background-attachment
+       */
+      "bg-attachment": [{
+        bg: ["fixed", "local", "scroll"]
+      }],
+      /**
+       * Background Clip
+       * @see https://tailwindcss.com/docs/background-clip
+       */
+      "bg-clip": [{
+        "bg-clip": ["border", "padding", "content", "text"]
+      }],
+      /**
+       * Background Opacity
+       * @deprecated since Tailwind CSS v3.0.0
+       * @see https://tailwindcss.com/docs/background-opacity
+       */
+      "bg-opacity": [{
+        "bg-opacity": [opacity]
+      }],
+      /**
+       * Background Origin
+       * @see https://tailwindcss.com/docs/background-origin
+       */
+      "bg-origin": [{
+        "bg-origin": ["border", "padding", "content"]
+      }],
+      /**
+       * Background Position
+       * @see https://tailwindcss.com/docs/background-position
+       */
+      "bg-position": [{
+        bg: [...getPositions(), isArbitraryPosition]
+      }],
+      /**
+       * Background Repeat
+       * @see https://tailwindcss.com/docs/background-repeat
+       */
+      "bg-repeat": [{
+        bg: ["no-repeat", {
+          repeat: ["", "x", "y", "round", "space"]
+        }]
+      }],
+      /**
+       * Background Size
+       * @see https://tailwindcss.com/docs/background-size
+       */
+      "bg-size": [{
+        bg: ["auto", "cover", "contain", isArbitrarySize]
+      }],
+      /**
+       * Background Image
+       * @see https://tailwindcss.com/docs/background-image
+       */
+      "bg-image": [{
+        bg: ["none", {
+          "gradient-to": ["t", "tr", "r", "br", "b", "bl", "l", "tl"]
+        }, isArbitraryImage]
+      }],
+      /**
+       * Background Color
+       * @see https://tailwindcss.com/docs/background-color
+       */
+      "bg-color": [{
+        bg: [colors]
+      }],
+      /**
+       * Gradient Color Stops From Position
+       * @see https://tailwindcss.com/docs/gradient-color-stops
+       */
+      "gradient-from-pos": [{
+        from: [gradientColorStopPositions]
+      }],
+      /**
+       * Gradient Color Stops Via Position
+       * @see https://tailwindcss.com/docs/gradient-color-stops
+       */
+      "gradient-via-pos": [{
+        via: [gradientColorStopPositions]
+      }],
+      /**
+       * Gradient Color Stops To Position
+       * @see https://tailwindcss.com/docs/gradient-color-stops
+       */
+      "gradient-to-pos": [{
+        to: [gradientColorStopPositions]
+      }],
+      /**
+       * Gradient Color Stops From
+       * @see https://tailwindcss.com/docs/gradient-color-stops
+       */
+      "gradient-from": [{
+        from: [gradientColorStops]
+      }],
+      /**
+       * Gradient Color Stops Via
+       * @see https://tailwindcss.com/docs/gradient-color-stops
+       */
+      "gradient-via": [{
+        via: [gradientColorStops]
+      }],
+      /**
+       * Gradient Color Stops To
+       * @see https://tailwindcss.com/docs/gradient-color-stops
+       */
+      "gradient-to": [{
+        to: [gradientColorStops]
+      }],
+      // Borders
+      /**
+       * Border Radius
+       * @see https://tailwindcss.com/docs/border-radius
+       */
+      rounded: [{
+        rounded: [borderRadius]
+      }],
+      /**
+       * Border Radius Start
+       * @see https://tailwindcss.com/docs/border-radius
+       */
+      "rounded-s": [{
+        "rounded-s": [borderRadius]
+      }],
+      /**
+       * Border Radius End
+       * @see https://tailwindcss.com/docs/border-radius
+       */
+      "rounded-e": [{
+        "rounded-e": [borderRadius]
+      }],
+      /**
+       * Border Radius Top
+       * @see https://tailwindcss.com/docs/border-radius
+       */
+      "rounded-t": [{
+        "rounded-t": [borderRadius]
+      }],
+      /**
+       * Border Radius Right
+       * @see https://tailwindcss.com/docs/border-radius
+       */
+      "rounded-r": [{
+        "rounded-r": [borderRadius]
+      }],
+      /**
+       * Border Radius Bottom
+       * @see https://tailwindcss.com/docs/border-radius
+       */
+      "rounded-b": [{
+        "rounded-b": [borderRadius]
+      }],
+      /**
+       * Border Radius Left
+       * @see https://tailwindcss.com/docs/border-radius
+       */
+      "rounded-l": [{
+        "rounded-l": [borderRadius]
+      }],
+      /**
+       * Border Radius Start Start
+       * @see https://tailwindcss.com/docs/border-radius
+       */
+      "rounded-ss": [{
+        "rounded-ss": [borderRadius]
+      }],
+      /**
+       * Border Radius Start End
+       * @see https://tailwindcss.com/docs/border-radius
+       */
+      "rounded-se": [{
+        "rounded-se": [borderRadius]
+      }],
+      /**
+       * Border Radius End End
+       * @see https://tailwindcss.com/docs/border-radius
+       */
+      "rounded-ee": [{
+        "rounded-ee": [borderRadius]
+      }],
+      /**
+       * Border Radius End Start
+       * @see https://tailwindcss.com/docs/border-radius
+       */
+      "rounded-es": [{
+        "rounded-es": [borderRadius]
+      }],
+      /**
+       * Border Radius Top Left
+       * @see https://tailwindcss.com/docs/border-radius
+       */
+      "rounded-tl": [{
+        "rounded-tl": [borderRadius]
+      }],
+      /**
+       * Border Radius Top Right
+       * @see https://tailwindcss.com/docs/border-radius
+       */
+      "rounded-tr": [{
+        "rounded-tr": [borderRadius]
+      }],
+      /**
+       * Border Radius Bottom Right
+       * @see https://tailwindcss.com/docs/border-radius
+       */
+      "rounded-br": [{
+        "rounded-br": [borderRadius]
+      }],
+      /**
+       * Border Radius Bottom Left
+       * @see https://tailwindcss.com/docs/border-radius
+       */
+      "rounded-bl": [{
+        "rounded-bl": [borderRadius]
+      }],
+      /**
+       * Border Width
+       * @see https://tailwindcss.com/docs/border-width
+       */
+      "border-w": [{
+        border: [borderWidth]
+      }],
+      /**
+       * Border Width X
+       * @see https://tailwindcss.com/docs/border-width
+       */
+      "border-w-x": [{
+        "border-x": [borderWidth]
+      }],
+      /**
+       * Border Width Y
+       * @see https://tailwindcss.com/docs/border-width
+       */
+      "border-w-y": [{
+        "border-y": [borderWidth]
+      }],
+      /**
+       * Border Width Start
+       * @see https://tailwindcss.com/docs/border-width
+       */
+      "border-w-s": [{
+        "border-s": [borderWidth]
+      }],
+      /**
+       * Border Width End
+       * @see https://tailwindcss.com/docs/border-width
+       */
+      "border-w-e": [{
+        "border-e": [borderWidth]
+      }],
+      /**
+       * Border Width Top
+       * @see https://tailwindcss.com/docs/border-width
+       */
+      "border-w-t": [{
+        "border-t": [borderWidth]
+      }],
+      /**
+       * Border Width Right
+       * @see https://tailwindcss.com/docs/border-width
+       */
+      "border-w-r": [{
+        "border-r": [borderWidth]
+      }],
+      /**
+       * Border Width Bottom
+       * @see https://tailwindcss.com/docs/border-width
+       */
+      "border-w-b": [{
+        "border-b": [borderWidth]
+      }],
+      /**
+       * Border Width Left
+       * @see https://tailwindcss.com/docs/border-width
+       */
+      "border-w-l": [{
+        "border-l": [borderWidth]
+      }],
+      /**
+       * Border Opacity
+       * @see https://tailwindcss.com/docs/border-opacity
+       */
+      "border-opacity": [{
+        "border-opacity": [opacity]
+      }],
+      /**
+       * Border Style
+       * @see https://tailwindcss.com/docs/border-style
+       */
+      "border-style": [{
+        border: [...getLineStyles(), "hidden"]
+      }],
+      /**
+       * Divide Width X
+       * @see https://tailwindcss.com/docs/divide-width
+       */
+      "divide-x": [{
+        "divide-x": [borderWidth]
+      }],
+      /**
+       * Divide Width X Reverse
+       * @see https://tailwindcss.com/docs/divide-width
+       */
+      "divide-x-reverse": ["divide-x-reverse"],
+      /**
+       * Divide Width Y
+       * @see https://tailwindcss.com/docs/divide-width
+       */
+      "divide-y": [{
+        "divide-y": [borderWidth]
+      }],
+      /**
+       * Divide Width Y Reverse
+       * @see https://tailwindcss.com/docs/divide-width
+       */
+      "divide-y-reverse": ["divide-y-reverse"],
+      /**
+       * Divide Opacity
+       * @see https://tailwindcss.com/docs/divide-opacity
+       */
+      "divide-opacity": [{
+        "divide-opacity": [opacity]
+      }],
+      /**
+       * Divide Style
+       * @see https://tailwindcss.com/docs/divide-style
+       */
+      "divide-style": [{
+        divide: getLineStyles()
+      }],
+      /**
+       * Border Color
+       * @see https://tailwindcss.com/docs/border-color
+       */
+      "border-color": [{
+        border: [borderColor]
+      }],
+      /**
+       * Border Color X
+       * @see https://tailwindcss.com/docs/border-color
+       */
+      "border-color-x": [{
+        "border-x": [borderColor]
+      }],
+      /**
+       * Border Color Y
+       * @see https://tailwindcss.com/docs/border-color
+       */
+      "border-color-y": [{
+        "border-y": [borderColor]
+      }],
+      /**
+       * Border Color Top
+       * @see https://tailwindcss.com/docs/border-color
+       */
+      "border-color-t": [{
+        "border-t": [borderColor]
+      }],
+      /**
+       * Border Color Right
+       * @see https://tailwindcss.com/docs/border-color
+       */
+      "border-color-r": [{
+        "border-r": [borderColor]
+      }],
+      /**
+       * Border Color Bottom
+       * @see https://tailwindcss.com/docs/border-color
+       */
+      "border-color-b": [{
+        "border-b": [borderColor]
+      }],
+      /**
+       * Border Color Left
+       * @see https://tailwindcss.com/docs/border-color
+       */
+      "border-color-l": [{
+        "border-l": [borderColor]
+      }],
+      /**
+       * Divide Color
+       * @see https://tailwindcss.com/docs/divide-color
+       */
+      "divide-color": [{
+        divide: [borderColor]
+      }],
+      /**
+       * Outline Style
+       * @see https://tailwindcss.com/docs/outline-style
+       */
+      "outline-style": [{
+        outline: ["", ...getLineStyles()]
+      }],
+      /**
+       * Outline Offset
+       * @see https://tailwindcss.com/docs/outline-offset
+       */
+      "outline-offset": [{
+        "outline-offset": [isLength, isArbitraryValue]
+      }],
+      /**
+       * Outline Width
+       * @see https://tailwindcss.com/docs/outline-width
+       */
+      "outline-w": [{
+        outline: [isLength, isArbitraryLength]
+      }],
+      /**
+       * Outline Color
+       * @see https://tailwindcss.com/docs/outline-color
+       */
+      "outline-color": [{
+        outline: [colors]
+      }],
+      /**
+       * Ring Width
+       * @see https://tailwindcss.com/docs/ring-width
+       */
+      "ring-w": [{
+        ring: getLengthWithEmptyAndArbitrary()
+      }],
+      /**
+       * Ring Width Inset
+       * @see https://tailwindcss.com/docs/ring-width
+       */
+      "ring-w-inset": ["ring-inset"],
+      /**
+       * Ring Color
+       * @see https://tailwindcss.com/docs/ring-color
+       */
+      "ring-color": [{
+        ring: [colors]
+      }],
+      /**
+       * Ring Opacity
+       * @see https://tailwindcss.com/docs/ring-opacity
+       */
+      "ring-opacity": [{
+        "ring-opacity": [opacity]
+      }],
+      /**
+       * Ring Offset Width
+       * @see https://tailwindcss.com/docs/ring-offset-width
+       */
+      "ring-offset-w": [{
+        "ring-offset": [isLength, isArbitraryLength]
+      }],
+      /**
+       * Ring Offset Color
+       * @see https://tailwindcss.com/docs/ring-offset-color
+       */
+      "ring-offset-color": [{
+        "ring-offset": [colors]
+      }],
+      // Effects
+      /**
+       * Box Shadow
+       * @see https://tailwindcss.com/docs/box-shadow
+       */
+      shadow: [{
+        shadow: ["", "inner", "none", isTshirtSize, isArbitraryShadow]
+      }],
+      /**
+       * Box Shadow Color
+       * @see https://tailwindcss.com/docs/box-shadow-color
+       */
+      "shadow-color": [{
+        shadow: [isAny]
+      }],
+      /**
+       * Opacity
+       * @see https://tailwindcss.com/docs/opacity
+       */
+      opacity: [{
+        opacity: [opacity]
+      }],
+      /**
+       * Mix Blend Mode
+       * @see https://tailwindcss.com/docs/mix-blend-mode
+       */
+      "mix-blend": [{
+        "mix-blend": getBlendModes()
+      }],
+      /**
+       * Background Blend Mode
+       * @see https://tailwindcss.com/docs/background-blend-mode
+       */
+      "bg-blend": [{
+        "bg-blend": getBlendModes()
+      }],
+      // Filters
+      /**
+       * Filter
+       * @deprecated since Tailwind CSS v3.0.0
+       * @see https://tailwindcss.com/docs/filter
+       */
+      filter: [{
+        filter: ["", "none"]
+      }],
+      /**
+       * Blur
+       * @see https://tailwindcss.com/docs/blur
+       */
+      blur: [{
+        blur: [blur]
+      }],
+      /**
+       * Brightness
+       * @see https://tailwindcss.com/docs/brightness
+       */
+      brightness: [{
+        brightness: [brightness]
+      }],
+      /**
+       * Contrast
+       * @see https://tailwindcss.com/docs/contrast
+       */
+      contrast: [{
+        contrast: [contrast]
+      }],
+      /**
+       * Drop Shadow
+       * @see https://tailwindcss.com/docs/drop-shadow
+       */
+      "drop-shadow": [{
+        "drop-shadow": ["", "none", isTshirtSize, isArbitraryValue]
+      }],
+      /**
+       * Grayscale
+       * @see https://tailwindcss.com/docs/grayscale
+       */
+      grayscale: [{
+        grayscale: [grayscale]
+      }],
+      /**
+       * Hue Rotate
+       * @see https://tailwindcss.com/docs/hue-rotate
+       */
+      "hue-rotate": [{
+        "hue-rotate": [hueRotate]
+      }],
+      /**
+       * Invert
+       * @see https://tailwindcss.com/docs/invert
+       */
+      invert: [{
+        invert: [invert]
+      }],
+      /**
+       * Saturate
+       * @see https://tailwindcss.com/docs/saturate
+       */
+      saturate: [{
+        saturate: [saturate]
+      }],
+      /**
+       * Sepia
+       * @see https://tailwindcss.com/docs/sepia
+       */
+      sepia: [{
+        sepia: [sepia]
+      }],
+      /**
+       * Backdrop Filter
+       * @deprecated since Tailwind CSS v3.0.0
+       * @see https://tailwindcss.com/docs/backdrop-filter
+       */
+      "backdrop-filter": [{
+        "backdrop-filter": ["", "none"]
+      }],
+      /**
+       * Backdrop Blur
+       * @see https://tailwindcss.com/docs/backdrop-blur
+       */
+      "backdrop-blur": [{
+        "backdrop-blur": [blur]
+      }],
+      /**
+       * Backdrop Brightness
+       * @see https://tailwindcss.com/docs/backdrop-brightness
+       */
+      "backdrop-brightness": [{
+        "backdrop-brightness": [brightness]
+      }],
+      /**
+       * Backdrop Contrast
+       * @see https://tailwindcss.com/docs/backdrop-contrast
+       */
+      "backdrop-contrast": [{
+        "backdrop-contrast": [contrast]
+      }],
+      /**
+       * Backdrop Grayscale
+       * @see https://tailwindcss.com/docs/backdrop-grayscale
+       */
+      "backdrop-grayscale": [{
+        "backdrop-grayscale": [grayscale]
+      }],
+      /**
+       * Backdrop Hue Rotate
+       * @see https://tailwindcss.com/docs/backdrop-hue-rotate
+       */
+      "backdrop-hue-rotate": [{
+        "backdrop-hue-rotate": [hueRotate]
+      }],
+      /**
+       * Backdrop Invert
+       * @see https://tailwindcss.com/docs/backdrop-invert
+       */
+      "backdrop-invert": [{
+        "backdrop-invert": [invert]
+      }],
+      /**
+       * Backdrop Opacity
+       * @see https://tailwindcss.com/docs/backdrop-opacity
+       */
+      "backdrop-opacity": [{
+        "backdrop-opacity": [opacity]
+      }],
+      /**
+       * Backdrop Saturate
+       * @see https://tailwindcss.com/docs/backdrop-saturate
+       */
+      "backdrop-saturate": [{
+        "backdrop-saturate": [saturate]
+      }],
+      /**
+       * Backdrop Sepia
+       * @see https://tailwindcss.com/docs/backdrop-sepia
+       */
+      "backdrop-sepia": [{
+        "backdrop-sepia": [sepia]
+      }],
+      // Tables
+      /**
+       * Border Collapse
+       * @see https://tailwindcss.com/docs/border-collapse
+       */
+      "border-collapse": [{
+        border: ["collapse", "separate"]
+      }],
+      /**
+       * Border Spacing
+       * @see https://tailwindcss.com/docs/border-spacing
+       */
+      "border-spacing": [{
+        "border-spacing": [borderSpacing]
+      }],
+      /**
+       * Border Spacing X
+       * @see https://tailwindcss.com/docs/border-spacing
+       */
+      "border-spacing-x": [{
+        "border-spacing-x": [borderSpacing]
+      }],
+      /**
+       * Border Spacing Y
+       * @see https://tailwindcss.com/docs/border-spacing
+       */
+      "border-spacing-y": [{
+        "border-spacing-y": [borderSpacing]
+      }],
+      /**
+       * Table Layout
+       * @see https://tailwindcss.com/docs/table-layout
+       */
+      "table-layout": [{
+        table: ["auto", "fixed"]
+      }],
+      /**
+       * Caption Side
+       * @see https://tailwindcss.com/docs/caption-side
+       */
+      caption: [{
+        caption: ["top", "bottom"]
+      }],
+      // Transitions and Animation
+      /**
+       * Tranisition Property
+       * @see https://tailwindcss.com/docs/transition-property
+       */
+      transition: [{
+        transition: ["none", "all", "", "colors", "opacity", "shadow", "transform", isArbitraryValue]
+      }],
+      /**
+       * Transition Duration
+       * @see https://tailwindcss.com/docs/transition-duration
+       */
+      duration: [{
+        duration: getNumberAndArbitrary()
+      }],
+      /**
+       * Transition Timing Function
+       * @see https://tailwindcss.com/docs/transition-timing-function
+       */
+      ease: [{
+        ease: ["linear", "in", "out", "in-out", isArbitraryValue]
+      }],
+      /**
+       * Transition Delay
+       * @see https://tailwindcss.com/docs/transition-delay
+       */
+      delay: [{
+        delay: getNumberAndArbitrary()
+      }],
+      /**
+       * Animation
+       * @see https://tailwindcss.com/docs/animation
+       */
+      animate: [{
+        animate: ["none", "spin", "ping", "pulse", "bounce", isArbitraryValue]
+      }],
+      // Transforms
+      /**
+       * Transform
+       * @see https://tailwindcss.com/docs/transform
+       */
+      transform: [{
+        transform: ["", "gpu", "none"]
+      }],
+      /**
+       * Scale
+       * @see https://tailwindcss.com/docs/scale
+       */
+      scale: [{
+        scale: [scale]
+      }],
+      /**
+       * Scale X
+       * @see https://tailwindcss.com/docs/scale
+       */
+      "scale-x": [{
+        "scale-x": [scale]
+      }],
+      /**
+       * Scale Y
+       * @see https://tailwindcss.com/docs/scale
+       */
+      "scale-y": [{
+        "scale-y": [scale]
+      }],
+      /**
+       * Rotate
+       * @see https://tailwindcss.com/docs/rotate
+       */
+      rotate: [{
+        rotate: [isInteger, isArbitraryValue]
+      }],
+      /**
+       * Translate X
+       * @see https://tailwindcss.com/docs/translate
+       */
+      "translate-x": [{
+        "translate-x": [translate]
+      }],
+      /**
+       * Translate Y
+       * @see https://tailwindcss.com/docs/translate
+       */
+      "translate-y": [{
+        "translate-y": [translate]
+      }],
+      /**
+       * Skew X
+       * @see https://tailwindcss.com/docs/skew
+       */
+      "skew-x": [{
+        "skew-x": [skew]
+      }],
+      /**
+       * Skew Y
+       * @see https://tailwindcss.com/docs/skew
+       */
+      "skew-y": [{
+        "skew-y": [skew]
+      }],
+      /**
+       * Transform Origin
+       * @see https://tailwindcss.com/docs/transform-origin
+       */
+      "transform-origin": [{
+        origin: ["center", "top", "top-right", "right", "bottom-right", "bottom", "bottom-left", "left", "top-left", isArbitraryValue]
+      }],
+      // Interactivity
+      /**
+       * Accent Color
+       * @see https://tailwindcss.com/docs/accent-color
+       */
+      accent: [{
+        accent: ["auto", colors]
+      }],
+      /**
+       * Appearance
+       * @see https://tailwindcss.com/docs/appearance
+       */
+      appearance: [{
+        appearance: ["none", "auto"]
+      }],
+      /**
+       * Cursor
+       * @see https://tailwindcss.com/docs/cursor
+       */
+      cursor: [{
+        cursor: ["auto", "default", "pointer", "wait", "text", "move", "help", "not-allowed", "none", "context-menu", "progress", "cell", "crosshair", "vertical-text", "alias", "copy", "no-drop", "grab", "grabbing", "all-scroll", "col-resize", "row-resize", "n-resize", "e-resize", "s-resize", "w-resize", "ne-resize", "nw-resize", "se-resize", "sw-resize", "ew-resize", "ns-resize", "nesw-resize", "nwse-resize", "zoom-in", "zoom-out", isArbitraryValue]
+      }],
+      /**
+       * Caret Color
+       * @see https://tailwindcss.com/docs/just-in-time-mode#caret-color-utilities
+       */
+      "caret-color": [{
+        caret: [colors]
+      }],
+      /**
+       * Pointer Events
+       * @see https://tailwindcss.com/docs/pointer-events
+       */
+      "pointer-events": [{
+        "pointer-events": ["none", "auto"]
+      }],
+      /**
+       * Resize
+       * @see https://tailwindcss.com/docs/resize
+       */
+      resize: [{
+        resize: ["none", "y", "x", ""]
+      }],
+      /**
+       * Scroll Behavior
+       * @see https://tailwindcss.com/docs/scroll-behavior
+       */
+      "scroll-behavior": [{
+        scroll: ["auto", "smooth"]
+      }],
+      /**
+       * Scroll Margin
+       * @see https://tailwindcss.com/docs/scroll-margin
+       */
+      "scroll-m": [{
+        "scroll-m": getSpacingWithArbitrary()
+      }],
+      /**
+       * Scroll Margin X
+       * @see https://tailwindcss.com/docs/scroll-margin
+       */
+      "scroll-mx": [{
+        "scroll-mx": getSpacingWithArbitrary()
+      }],
+      /**
+       * Scroll Margin Y
+       * @see https://tailwindcss.com/docs/scroll-margin
+       */
+      "scroll-my": [{
+        "scroll-my": getSpacingWithArbitrary()
+      }],
+      /**
+       * Scroll Margin Start
+       * @see https://tailwindcss.com/docs/scroll-margin
+       */
+      "scroll-ms": [{
+        "scroll-ms": getSpacingWithArbitrary()
+      }],
+      /**
+       * Scroll Margin End
+       * @see https://tailwindcss.com/docs/scroll-margin
+       */
+      "scroll-me": [{
+        "scroll-me": getSpacingWithArbitrary()
+      }],
+      /**
+       * Scroll Margin Top
+       * @see https://tailwindcss.com/docs/scroll-margin
+       */
+      "scroll-mt": [{
+        "scroll-mt": getSpacingWithArbitrary()
+      }],
+      /**
+       * Scroll Margin Right
+       * @see https://tailwindcss.com/docs/scroll-margin
+       */
+      "scroll-mr": [{
+        "scroll-mr": getSpacingWithArbitrary()
+      }],
+      /**
+       * Scroll Margin Bottom
+       * @see https://tailwindcss.com/docs/scroll-margin
+       */
+      "scroll-mb": [{
+        "scroll-mb": getSpacingWithArbitrary()
+      }],
+      /**
+       * Scroll Margin Left
+       * @see https://tailwindcss.com/docs/scroll-margin
+       */
+      "scroll-ml": [{
+        "scroll-ml": getSpacingWithArbitrary()
+      }],
+      /**
+       * Scroll Padding
+       * @see https://tailwindcss.com/docs/scroll-padding
+       */
+      "scroll-p": [{
+        "scroll-p": getSpacingWithArbitrary()
+      }],
+      /**
+       * Scroll Padding X
+       * @see https://tailwindcss.com/docs/scroll-padding
+       */
+      "scroll-px": [{
+        "scroll-px": getSpacingWithArbitrary()
+      }],
+      /**
+       * Scroll Padding Y
+       * @see https://tailwindcss.com/docs/scroll-padding
+       */
+      "scroll-py": [{
+        "scroll-py": getSpacingWithArbitrary()
+      }],
+      /**
+       * Scroll Padding Start
+       * @see https://tailwindcss.com/docs/scroll-padding
+       */
+      "scroll-ps": [{
+        "scroll-ps": getSpacingWithArbitrary()
+      }],
+      /**
+       * Scroll Padding End
+       * @see https://tailwindcss.com/docs/scroll-padding
+       */
+      "scroll-pe": [{
+        "scroll-pe": getSpacingWithArbitrary()
+      }],
+      /**
+       * Scroll Padding Top
+       * @see https://tailwindcss.com/docs/scroll-padding
+       */
+      "scroll-pt": [{
+        "scroll-pt": getSpacingWithArbitrary()
+      }],
+      /**
+       * Scroll Padding Right
+       * @see https://tailwindcss.com/docs/scroll-padding
+       */
+      "scroll-pr": [{
+        "scroll-pr": getSpacingWithArbitrary()
+      }],
+      /**
+       * Scroll Padding Bottom
+       * @see https://tailwindcss.com/docs/scroll-padding
+       */
+      "scroll-pb": [{
+        "scroll-pb": getSpacingWithArbitrary()
+      }],
+      /**
+       * Scroll Padding Left
+       * @see https://tailwindcss.com/docs/scroll-padding
+       */
+      "scroll-pl": [{
+        "scroll-pl": getSpacingWithArbitrary()
+      }],
+      /**
+       * Scroll Snap Align
+       * @see https://tailwindcss.com/docs/scroll-snap-align
+       */
+      "snap-align": [{
+        snap: ["start", "end", "center", "align-none"]
+      }],
+      /**
+       * Scroll Snap Stop
+       * @see https://tailwindcss.com/docs/scroll-snap-stop
+       */
+      "snap-stop": [{
+        snap: ["normal", "always"]
+      }],
+      /**
+       * Scroll Snap Type
+       * @see https://tailwindcss.com/docs/scroll-snap-type
+       */
+      "snap-type": [{
+        snap: ["none", "x", "y", "both"]
+      }],
+      /**
+       * Scroll Snap Type Strictness
+       * @see https://tailwindcss.com/docs/scroll-snap-type
+       */
+      "snap-strictness": [{
+        snap: ["mandatory", "proximity"]
+      }],
+      /**
+       * Touch Action
+       * @see https://tailwindcss.com/docs/touch-action
+       */
+      touch: [{
+        touch: ["auto", "none", "manipulation"]
+      }],
+      /**
+       * Touch Action X
+       * @see https://tailwindcss.com/docs/touch-action
+       */
+      "touch-x": [{
+        "touch-pan": ["x", "left", "right"]
+      }],
+      /**
+       * Touch Action Y
+       * @see https://tailwindcss.com/docs/touch-action
+       */
+      "touch-y": [{
+        "touch-pan": ["y", "up", "down"]
+      }],
+      /**
+       * Touch Action Pinch Zoom
+       * @see https://tailwindcss.com/docs/touch-action
+       */
+      "touch-pz": ["touch-pinch-zoom"],
+      /**
+       * User Select
+       * @see https://tailwindcss.com/docs/user-select
+       */
+      select: [{
+        select: ["none", "text", "all", "auto"]
+      }],
+      /**
+       * Will Change
+       * @see https://tailwindcss.com/docs/will-change
+       */
+      "will-change": [{
+        "will-change": ["auto", "scroll", "contents", "transform", isArbitraryValue]
+      }],
+      // SVG
+      /**
+       * Fill
+       * @see https://tailwindcss.com/docs/fill
+       */
+      fill: [{
+        fill: [colors, "none"]
+      }],
+      /**
+       * Stroke Width
+       * @see https://tailwindcss.com/docs/stroke-width
+       */
+      "stroke-w": [{
+        stroke: [isLength, isArbitraryLength, isArbitraryNumber]
+      }],
+      /**
+       * Stroke
+       * @see https://tailwindcss.com/docs/stroke
+       */
+      stroke: [{
+        stroke: [colors, "none"]
+      }],
+      // Accessibility
+      /**
+       * Screen Readers
+       * @see https://tailwindcss.com/docs/screen-readers
+       */
+      sr: ["sr-only", "not-sr-only"],
+      /**
+       * Forced Color Adjust
+       * @see https://tailwindcss.com/docs/forced-color-adjust
+       */
+      "forced-color-adjust": [{
+        "forced-color-adjust": ["auto", "none"]
+      }]
+    },
+    conflictingClassGroups: {
+      overflow: ["overflow-x", "overflow-y"],
+      overscroll: ["overscroll-x", "overscroll-y"],
+      inset: ["inset-x", "inset-y", "start", "end", "top", "right", "bottom", "left"],
+      "inset-x": ["right", "left"],
+      "inset-y": ["top", "bottom"],
+      flex: ["basis", "grow", "shrink"],
+      gap: ["gap-x", "gap-y"],
+      p: ["px", "py", "ps", "pe", "pt", "pr", "pb", "pl"],
+      px: ["pr", "pl"],
+      py: ["pt", "pb"],
+      m: ["mx", "my", "ms", "me", "mt", "mr", "mb", "ml"],
+      mx: ["mr", "ml"],
+      my: ["mt", "mb"],
+      size: ["w", "h"],
+      "font-size": ["leading"],
+      "fvn-normal": ["fvn-ordinal", "fvn-slashed-zero", "fvn-figure", "fvn-spacing", "fvn-fraction"],
+      "fvn-ordinal": ["fvn-normal"],
+      "fvn-slashed-zero": ["fvn-normal"],
+      "fvn-figure": ["fvn-normal"],
+      "fvn-spacing": ["fvn-normal"],
+      "fvn-fraction": ["fvn-normal"],
+      "line-clamp": ["display", "overflow"],
+      rounded: ["rounded-s", "rounded-e", "rounded-t", "rounded-r", "rounded-b", "rounded-l", "rounded-ss", "rounded-se", "rounded-ee", "rounded-es", "rounded-tl", "rounded-tr", "rounded-br", "rounded-bl"],
+      "rounded-s": ["rounded-ss", "rounded-es"],
+      "rounded-e": ["rounded-se", "rounded-ee"],
+      "rounded-t": ["rounded-tl", "rounded-tr"],
+      "rounded-r": ["rounded-tr", "rounded-br"],
+      "rounded-b": ["rounded-br", "rounded-bl"],
+      "rounded-l": ["rounded-tl", "rounded-bl"],
+      "border-spacing": ["border-spacing-x", "border-spacing-y"],
+      "border-w": ["border-w-s", "border-w-e", "border-w-t", "border-w-r", "border-w-b", "border-w-l"],
+      "border-w-x": ["border-w-r", "border-w-l"],
+      "border-w-y": ["border-w-t", "border-w-b"],
+      "border-color": ["border-color-t", "border-color-r", "border-color-b", "border-color-l"],
+      "border-color-x": ["border-color-r", "border-color-l"],
+      "border-color-y": ["border-color-t", "border-color-b"],
+      "scroll-m": ["scroll-mx", "scroll-my", "scroll-ms", "scroll-me", "scroll-mt", "scroll-mr", "scroll-mb", "scroll-ml"],
+      "scroll-mx": ["scroll-mr", "scroll-ml"],
+      "scroll-my": ["scroll-mt", "scroll-mb"],
+      "scroll-p": ["scroll-px", "scroll-py", "scroll-ps", "scroll-pe", "scroll-pt", "scroll-pr", "scroll-pb", "scroll-pl"],
+      "scroll-px": ["scroll-pr", "scroll-pl"],
+      "scroll-py": ["scroll-pt", "scroll-pb"],
+      touch: ["touch-x", "touch-y", "touch-pz"],
+      "touch-x": ["touch"],
+      "touch-y": ["touch"],
+      "touch-pz": ["touch"]
+    },
+    conflictingClassGroupModifiers: {
+      "font-size": ["leading"]
+    }
+  };
+}
+var CLASS_PART_SEPARATOR, arbitraryPropertyRegex, IMPORTANT_MODIFIER, SPLIT_CLASSES_REGEX, arbitraryValueRegex, fractionRegex, stringLengths, tshirtUnitRegex, lengthUnitRegex, colorFunctionRegex, shadowRegex, imageRegex, sizeLabels, imageLabels, twMerge;
+var init_bundle_mjs = __esm({
+  "node_modules/.pnpm/tailwind-merge@2.2.1/node_modules/tailwind-merge/dist/bundle-mjs.mjs"() {
+    CLASS_PART_SEPARATOR = "-";
+    arbitraryPropertyRegex = /^\[(.+)\]$/;
+    IMPORTANT_MODIFIER = "!";
+    SPLIT_CLASSES_REGEX = /\s+/;
+    arbitraryValueRegex = /^\[(?:([a-z-]+):)?(.+)\]$/i;
+    fractionRegex = /^\d+\/\d+$/;
+    stringLengths = /* @__PURE__ */ new Set(["px", "full", "screen"]);
+    tshirtUnitRegex = /^(\d+(\.\d+)?)?(xs|sm|md|lg|xl)$/;
+    lengthUnitRegex = /\d+(%|px|r?em|[sdl]?v([hwib]|min|max)|pt|pc|in|cm|mm|cap|ch|ex|r?lh|cq(w|h|i|b|min|max))|\b(calc|min|max|clamp)\(.+\)|^0$/;
+    colorFunctionRegex = /^(rgba?|hsla?|hwb|(ok)?(lab|lch))\(.+\)$/;
+    shadowRegex = /^-?((\d+)?\.?(\d+)[a-z]+|0)_-?((\d+)?\.?(\d+)[a-z]+|0)/;
+    imageRegex = /^(url|image|image-set|cross-fade|element|(repeating-)?(linear|radial|conic)-gradient)\(.+\)$/;
+    sizeLabels = /* @__PURE__ */ new Set(["length", "size", "percentage"]);
+    imageLabels = /* @__PURE__ */ new Set(["image", "url"]);
+    twMerge = /* @__PURE__ */ createTailwindMerge(getDefaultConfig);
+  }
+});
+
+// .svelte-kit/output/server/entries/pages/company/contact-us/_page.svelte.js
+var page_svelte_exports5 = {};
+__export(page_svelte_exports5, {
+  default: () => Page5
+});
+function styleToString(style) {
+  return Object.keys(style).reduce((str, key2) => {
+    if (style[key2] === void 0)
+      return str;
+    return str + `${key2}:${style[key2]};`;
+  }, "");
+}
+function disabledAttr(disabled) {
+  return disabled ? true : void 0;
+}
+function lightable(value) {
+  function subscribe2(run2) {
+    run2(value);
+    return () => {
+    };
+  }
+  return { subscribe: subscribe2 };
+}
+function makeElement(name2, args) {
+  const { stores: stores2, action, returned } = args ?? {};
+  const derivedStore = (() => {
+    if (stores2 && returned) {
+      return derived(stores2, (values) => {
+        const result = returned(values);
+        if (isFunctionWithParams(result)) {
+          const fn = (...args2) => {
+            return hiddenAction({
+              ...result(...args2),
+              [`data-melt-${name2}`]: "",
+              action: action ?? noop4
+            });
+          };
+          fn.action = action ?? noop4;
+          return fn;
+        }
+        return hiddenAction({
+          ...result,
+          [`data-melt-${name2}`]: "",
+          action: action ?? noop4
+        });
+      });
+    } else {
+      const returnedFn = returned;
+      const result = returnedFn?.();
+      if (isFunctionWithParams(result)) {
+        const resultFn = (...args2) => {
+          return hiddenAction({
+            ...result(...args2),
+            [`data-melt-${name2}`]: "",
+            action: action ?? noop4
+          });
+        };
+        resultFn.action = action ?? noop4;
+        return lightable(resultFn);
+      }
+      return lightable(hiddenAction({
+        ...result,
+        [`data-melt-${name2}`]: "",
+        action: action ?? noop4
+      }));
+    }
+  })();
+  const actionFn = action ?? (() => {
+  });
+  actionFn.subscribe = derivedStore.subscribe;
+  return actionFn;
+}
+function createElHelpers(prefix) {
+  const name2 = (part) => part ? `${prefix}-${part}` : prefix;
+  const attribute = (part) => `data-melt-${prefix}${part ? `-${part}` : ""}`;
+  const selector = (part) => `[data-melt-${prefix}${part ? `-${part}` : ""}]`;
+  const getEl = (part) => document.querySelector(selector(part));
+  return {
+    name: name2,
+    attribute,
+    selector,
+    getEl
+  };
+}
+function isHTMLElement2(element) {
+  return element instanceof HTMLElement;
+}
+function executeCallbacks(...callbacks) {
+  return (...args) => {
+    for (const callback of callbacks) {
+      if (typeof callback === "function") {
+        callback(...args);
+      }
+    }
+  };
+}
+function noop4() {
+}
+function addEventListener(target, event, handler, options3) {
+  const events = Array.isArray(event) ? event : [event];
+  events.forEach((_event) => target.addEventListener(_event, handler, options3));
+  return () => {
+    events.forEach((_event) => target.removeEventListener(_event, handler, options3));
+  };
+}
+function addMeltEventListener(target, event, handler, options3) {
+  const events = Array.isArray(event) ? event : [event];
+  if (typeof handler === "function") {
+    const handlerWithMelt = withMelt((_event) => handler(_event));
+    events.forEach((_event) => target.addEventListener(_event, handlerWithMelt, options3));
+    return () => {
+      events.forEach((_event) => target.removeEventListener(_event, handlerWithMelt, options3));
+    };
+  }
+  return () => noop4();
+}
+function dispatchMeltEvent(originalEvent) {
+  const node = originalEvent.currentTarget;
+  if (!isHTMLElement2(node))
+    return null;
+  const customMeltEvent = new CustomEvent(`m-${originalEvent.type}`, {
+    detail: {
+      originalEvent
+    },
+    cancelable: true
+  });
+  node.dispatchEvent(customMeltEvent);
+  return customMeltEvent;
+}
+function withMelt(handler) {
+  return (event) => {
+    const customEvent = dispatchMeltEvent(event);
+    if (customEvent?.defaultPrevented)
+      return;
+    return handler(event);
+  };
+}
+function omit(obj, ...keys) {
+  const result = {};
+  for (const key2 of Object.keys(obj)) {
+    if (!keys.includes(key2)) {
+      result[key2] = obj[key2];
+    }
+  }
+  return result;
+}
+function withGet(store) {
+  return {
+    ...store,
+    get: () => get_store_value(store)
+  };
+}
+function toWritableStores(properties) {
+  const result = {};
+  Object.keys(properties).forEach((key2) => {
+    const propertyKey = key2;
+    const value = properties[propertyKey];
+    result[propertyKey] = withGet(writable(value));
+  });
+  return result;
+}
+function createSwitch(props) {
+  const propsWithDefaults = { ...defaults, ...props };
+  const options3 = toWritableStores(omit(propsWithDefaults, "checked"));
+  const { disabled, required, name: nameStore, value } = options3;
+  const checkedWritable = propsWithDefaults.checked ?? writable(propsWithDefaults.defaultChecked);
+  const checked = overridable(checkedWritable, propsWithDefaults?.onCheckedChange);
+  function toggleSwitch() {
+    if (disabled.get())
+      return;
+    checked.update((prev) => !prev);
+  }
+  const root = makeElement(name(), {
+    stores: [checked, disabled, required],
+    returned: ([$checked, $disabled, $required]) => {
+      return {
+        "data-disabled": disabledAttr($disabled),
+        disabled: disabledAttr($disabled),
+        "data-state": $checked ? "checked" : "unchecked",
+        type: "button",
+        role: "switch",
+        "aria-checked": $checked ? "true" : "false",
+        "aria-required": $required ? "true" : void 0
+      };
+    },
+    action(node) {
+      const unsub = executeCallbacks(addMeltEventListener(node, "click", () => {
+        toggleSwitch();
+      }), addMeltEventListener(node, "keydown", (e) => {
+        if (e.key !== kbd.ENTER && e.key !== kbd.SPACE)
+          return;
+        e.preventDefault();
+        toggleSwitch();
+      }));
+      return {
+        destroy: unsub
+      };
+    }
+  });
+  const input = makeElement(name("input"), {
+    stores: [checked, nameStore, required, disabled, value],
+    returned: ([$checked, $name, $required, $disabled, $value]) => {
+      return {
+        type: "checkbox",
+        "aria-hidden": true,
+        hidden: true,
+        tabindex: -1,
+        name: $name,
+        value: $value,
+        checked: $checked,
+        required: $required,
+        disabled: disabledAttr($disabled),
+        style: styleToString({
+          position: "absolute",
+          opacity: 0,
+          "pointer-events": "none",
+          margin: 0,
+          transform: "translateX(-100%)"
+        })
+      };
+    }
+  });
+  return {
+    elements: {
+      root,
+      input
+    },
+    states: {
+      checked
+    },
+    options: options3
+  };
+}
+function createBitAttrs(bit, parts) {
+  const attrs = {};
+  parts.forEach((part) => {
+    attrs[part] = {
+      [`data-${bit}-${part}`]: ""
+    };
+  });
+  return (part) => attrs[part];
+}
+function createDispatcher() {
+  const dispatch = createEventDispatcher();
+  return (e) => {
+    const { originalEvent } = e.detail;
+    const { cancelable } = e;
+    const type = originalEvent.type;
+    const shouldContinue = dispatch(type, { originalEvent, currentTarget: originalEvent.currentTarget }, { cancelable });
+    if (!shouldContinue) {
+      e.preventDefault();
+    }
+  };
+}
+function removeUndefined(obj) {
+  const result = {};
+  for (const key2 in obj) {
+    const value = obj[key2];
+    if (value !== void 0) {
+      result[key2] = value;
+    }
+  }
+  return result;
+}
+function getOptionUpdater(options3) {
+  return function(key2, value) {
+    if (value === void 0)
+      return;
+    const store = options3[key2];
+    if (store) {
+      store.set(value);
+    }
+  };
+}
+function getSwitchData() {
+  const NAME = "switch";
+  const PARTS = ["root", "input", "thumb"];
+  return {
+    NAME,
+    PARTS
+  };
+}
+function setCtx(props) {
+  const { NAME, PARTS } = getSwitchData();
+  const getAttrs = createBitAttrs(NAME, PARTS);
+  const Switch2 = { ...createSwitch(removeUndefined(props)), getAttrs };
+  setContext(NAME, Switch2);
+  return {
+    ...Switch2,
+    updateOption: getOptionUpdater(Switch2.options)
+  };
+}
+function getCtx() {
+  const { NAME } = getSwitchData();
+  return getContext(NAME);
+}
+function cn(...inputs) {
+  return twMerge(clsx(inputs));
+}
+var globals, hiddenAction, isFunctionWithParams, overridable, kbd, defaults, name, Switch_input, Object_1, Switch$1, Switch_thumb, Switch, Page5;
+var init_page_svelte5 = __esm({
+  ".svelte-kit/output/server/entries/pages/company/contact-us/_page.svelte.js"() {
+    init_ssr();
+    init_supabaseClient();
+    init_chunks();
+    init_clsx();
+    init_bundle_mjs();
+    globals = typeof window !== "undefined" ? window : typeof globalThis !== "undefined" ? globalThis : (
+      // @ts-ignore Node typings have this
+      global
+    );
+    ({
+      type: "hidden",
+      "aria-hidden": true,
+      hidden: true,
+      tabIndex: -1,
+      style: styleToString({
+        position: "absolute",
+        opacity: 0,
+        "pointer-events": "none",
+        margin: 0,
+        transform: "translateX(-100%)"
+      })
+    });
+    hiddenAction = (obj) => {
+      return new Proxy(obj, {
+        get(target, prop, receiver) {
+          return Reflect.get(target, prop, receiver);
+        },
+        ownKeys(target) {
+          return Reflect.ownKeys(target).filter((key2) => key2 !== "action");
+        }
+      });
+    };
+    isFunctionWithParams = (fn) => {
+      return typeof fn === "function";
+    };
+    makeElement("empty");
+    withGet.writable = function(initial2) {
+      const internal2 = writable(initial2);
+      let value = initial2;
+      return {
+        subscribe: internal2.subscribe,
+        set(newValue) {
+          internal2.set(newValue);
+          value = newValue;
+        },
+        update(updater) {
+          const newValue = updater(value);
+          internal2.set(newValue);
+          value = newValue;
+        },
+        get() {
+          return value;
+        }
+      };
+    };
+    withGet.derived = function(stores2, fn) {
+      const subscribers = /* @__PURE__ */ new Map();
+      const get2 = () => {
+        const values = Array.isArray(stores2) ? stores2.map((store) => store.get()) : stores2.get();
+        return fn(values);
+      };
+      const subscribe2 = (subscriber) => {
+        const unsubscribers = [];
+        const storesArr = Array.isArray(stores2) ? stores2 : [stores2];
+        storesArr.forEach((store) => {
+          unsubscribers.push(store.subscribe(() => {
+            subscriber(get2());
+          }));
+        });
+        subscriber(get2());
+        subscribers.set(subscriber, unsubscribers);
+        return () => {
+          const unsubscribers2 = subscribers.get(subscriber);
+          if (unsubscribers2) {
+            for (const unsubscribe of unsubscribers2) {
+              unsubscribe();
+            }
+          }
+          subscribers.delete(subscriber);
+        };
+      };
+      return {
+        get: get2,
+        subscribe: subscribe2
+      };
+    };
+    overridable = (_store, onChange) => {
+      const store = withGet(_store);
+      const update = (updater, sideEffect) => {
+        store.update((curr) => {
+          const next = updater(curr);
+          let res = next;
+          if (onChange) {
+            res = onChange({ curr, next });
+          }
+          sideEffect?.(res);
+          return res;
+        });
+      };
+      const set = (curr) => {
+        update(() => curr);
+      };
+      return {
+        ...store,
+        update,
+        set
+      };
+    };
+    kbd = {
+      ALT: "Alt",
+      ARROW_DOWN: "ArrowDown",
+      ARROW_LEFT: "ArrowLeft",
+      ARROW_RIGHT: "ArrowRight",
+      ARROW_UP: "ArrowUp",
+      BACKSPACE: "Backspace",
+      CAPS_LOCK: "CapsLock",
+      CONTROL: "Control",
+      DELETE: "Delete",
+      END: "End",
+      ENTER: "Enter",
+      ESCAPE: "Escape",
+      F1: "F1",
+      F10: "F10",
+      F11: "F11",
+      F12: "F12",
+      F2: "F2",
+      F3: "F3",
+      F4: "F4",
+      F5: "F5",
+      F6: "F6",
+      F7: "F7",
+      F8: "F8",
+      F9: "F9",
+      HOME: "Home",
+      META: "Meta",
+      PAGE_DOWN: "PageDown",
+      PAGE_UP: "PageUp",
+      SHIFT: "Shift",
+      SPACE: " ",
+      TAB: "Tab",
+      CTRL: "Control",
+      ASTERISK: "*",
+      A: "a",
+      P: "p"
+    };
+    readable(void 0, (set) => {
+      function clicked(event) {
+        set(event);
+        set(void 0);
+      }
+      const unsubscribe = addEventListener(document, "pointerup", clicked, {
+        passive: false,
+        capture: true
+      });
+      return unsubscribe;
+    });
+    readable(void 0, (set) => {
+      function keydown(event) {
+        if (event && event.key === kbd.ESCAPE) {
+          set(event);
+        }
+        set(void 0);
+      }
+      const unsubscribe = addEventListener(document, "keydown", keydown, {
+        passive: false
+      });
+      return unsubscribe;
+    });
+    ({
+      prefix: "",
+      disabled: readable(false),
+      required: readable(false),
+      name: readable(void 0)
+    });
+    defaults = {
+      defaultChecked: false,
+      disabled: false,
+      required: false,
+      name: "",
+      value: ""
+    };
+    ({ name } = createElHelpers("switch"));
+    Switch_input = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+      let inputValue;
+      let $$restProps = compute_rest_props($$props, ["el"]);
+      let $value, $$unsubscribe_value;
+      let $input, $$unsubscribe_input;
+      let $name, $$unsubscribe_name;
+      let $disabled, $$unsubscribe_disabled;
+      let $required, $$unsubscribe_required;
+      let { el = void 0 } = $$props;
+      const { elements: { input }, options: { value, name: name2, disabled, required } } = getCtx();
+      $$unsubscribe_input = subscribe(input, (value2) => $input = value2);
+      $$unsubscribe_value = subscribe(value, (value2) => $value = value2);
+      $$unsubscribe_name = subscribe(name2, (value2) => $name = value2);
+      $$unsubscribe_disabled = subscribe(disabled, (value2) => $disabled = value2);
+      $$unsubscribe_required = subscribe(required, (value2) => $required = value2);
+      if ($$props.el === void 0 && $$bindings.el && el !== void 0)
+        $$bindings.el(el);
+      inputValue = $value === void 0 || $value === "" ? "on" : $value;
+      $$unsubscribe_value();
+      $$unsubscribe_input();
+      $$unsubscribe_name();
+      $$unsubscribe_disabled();
+      $$unsubscribe_required();
+      return `<input${spread(
+        [
+          escape_object($input),
+          { name: escape_attribute_value($name) },
+          { disabled: $disabled || null },
+          { required: $required || null },
+          {
+            value: escape_attribute_value(inputValue)
+          },
+          escape_object($$restProps)
+        ],
+        {}
+      )}${add_attribute("this", el, 0)}>`;
+    });
+    ({ Object: Object_1 } = globals);
+    Switch$1 = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+      let builder;
+      let attrs;
+      let $$restProps = compute_rest_props($$props, [
+        "checked",
+        "onCheckedChange",
+        "disabled",
+        "name",
+        "value",
+        "includeInput",
+        "required",
+        "asChild",
+        "inputAttrs",
+        "el"
+      ]);
+      let $root, $$unsubscribe_root;
+      let { checked = void 0 } = $$props;
+      let { onCheckedChange = void 0 } = $$props;
+      let { disabled = void 0 } = $$props;
+      let { name: name2 = void 0 } = $$props;
+      let { value = void 0 } = $$props;
+      let { includeInput = true } = $$props;
+      let { required = void 0 } = $$props;
+      let { asChild = false } = $$props;
+      let { inputAttrs = void 0 } = $$props;
+      let { el = void 0 } = $$props;
+      const { elements: { root }, states: { checked: localChecked }, updateOption, getAttrs } = setCtx({
+        disabled,
+        name: name2,
+        value,
+        required,
+        defaultChecked: checked,
+        onCheckedChange: ({ next }) => {
+          if (checked !== next) {
+            onCheckedChange?.(next);
+            checked = next;
+          }
+          return next;
+        }
+      });
+      $$unsubscribe_root = subscribe(root, (value2) => $root = value2);
+      createDispatcher();
+      if ($$props.checked === void 0 && $$bindings.checked && checked !== void 0)
+        $$bindings.checked(checked);
+      if ($$props.onCheckedChange === void 0 && $$bindings.onCheckedChange && onCheckedChange !== void 0)
+        $$bindings.onCheckedChange(onCheckedChange);
+      if ($$props.disabled === void 0 && $$bindings.disabled && disabled !== void 0)
+        $$bindings.disabled(disabled);
+      if ($$props.name === void 0 && $$bindings.name && name2 !== void 0)
+        $$bindings.name(name2);
+      if ($$props.value === void 0 && $$bindings.value && value !== void 0)
+        $$bindings.value(value);
+      if ($$props.includeInput === void 0 && $$bindings.includeInput && includeInput !== void 0)
+        $$bindings.includeInput(includeInput);
+      if ($$props.required === void 0 && $$bindings.required && required !== void 0)
+        $$bindings.required(required);
+      if ($$props.asChild === void 0 && $$bindings.asChild && asChild !== void 0)
+        $$bindings.asChild(asChild);
+      if ($$props.inputAttrs === void 0 && $$bindings.inputAttrs && inputAttrs !== void 0)
+        $$bindings.inputAttrs(inputAttrs);
+      if ($$props.el === void 0 && $$bindings.el && el !== void 0)
+        $$bindings.el(el);
+      checked !== void 0 && localChecked.set(checked);
+      {
+        updateOption("disabled", disabled);
+      }
+      {
+        updateOption("name", name2);
+      }
+      {
+        updateOption("value", value);
+      }
+      {
+        updateOption("required", required);
+      }
+      builder = $root;
+      attrs = {
+        ...getAttrs("root"),
+        "data-checked": checked ? "" : void 0
+      };
+      {
+        Object.assign(builder, attrs);
+      }
+      $$unsubscribe_root();
+      return `${asChild ? `${slots.default ? slots.default({ builder }) : ``}` : `<button${spread([escape_object(builder), { type: "button" }, escape_object($$restProps)], {})}${add_attribute("this", el, 0)}>${slots.default ? slots.default({ builder }) : ``}</button>`} ${includeInput ? `${validate_component(Switch_input, "SwitchInput").$$render($$result, Object_1.assign({}, inputAttrs), {}, {})}` : ``}`;
+    });
+    Switch_thumb = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+      let attrs;
+      let $$restProps = compute_rest_props($$props, ["asChild", "el"]);
+      let $checked, $$unsubscribe_checked;
+      let { asChild = false } = $$props;
+      let { el = void 0 } = $$props;
+      const { states: { checked }, getAttrs } = getCtx();
+      $$unsubscribe_checked = subscribe(checked, (value) => $checked = value);
+      if ($$props.asChild === void 0 && $$bindings.asChild && asChild !== void 0)
+        $$bindings.asChild(asChild);
+      if ($$props.el === void 0 && $$bindings.el && el !== void 0)
+        $$bindings.el(el);
+      attrs = {
+        ...getAttrs("thumb"),
+        "data-state": $checked ? "checked" : "unchecked",
+        "data-checked": $checked ? "" : void 0
+      };
+      $$unsubscribe_checked();
+      return `${asChild ? `${slots.default ? slots.default({ attrs, checked: $checked }) : ``}` : `<span${spread([escape_object($$restProps), escape_object(attrs)], {})}${add_attribute("this", el, 0)}></span>`}`;
+    });
+    Switch = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+      let $$restProps = compute_rest_props($$props, ["class", "checked"]);
+      let { class: className = void 0 } = $$props;
+      let { checked = void 0 } = $$props;
+      if ($$props.class === void 0 && $$bindings.class && className !== void 0)
+        $$bindings.class(className);
+      if ($$props.checked === void 0 && $$bindings.checked && checked !== void 0)
+        $$bindings.checked(checked);
+      let $$settled;
+      let $$rendered;
+      let previous_head = $$result.head;
+      do {
+        $$settled = true;
+        $$result.head = previous_head;
+        $$rendered = `${validate_component(Switch$1, "SwitchPrimitive.Root").$$render(
+          $$result,
+          Object.assign(
+            {},
+            {
+              class: cn("peer inline-flex h-[24px] w-[44px] shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-black data-[state=unchecked]:bg-slate-400", className)
+            },
+            $$restProps,
+            { checked }
+          ),
+          {
+            checked: ($$value) => {
+              checked = $$value;
+              $$settled = false;
+            }
+          },
+          {
+            default: () => {
+              return `${validate_component(Switch_thumb, "SwitchPrimitive.Thumb").$$render(
+                $$result,
+                {
+                  class: cn("pointer-events-none block h-5 w-5 rounded-full bg-white shadow-lg ring-0 transition-transform data-[state=checked]:translate-x-5 data-[state=unchecked]:translate-x-0")
+                },
+                {},
+                {}
+              )}`;
+            }
+          }
+        )}`;
+      } while (!$$settled);
+      return $$rendered;
+    });
+    Page5 = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+      let $agreedToPrivacyPolicy, $$unsubscribe_agreedToPrivacyPolicy;
+      let $company, $$unsubscribe_company;
+      let $$unsubscribe_recaptchaToken;
+      let $message, $$unsubscribe_message;
+      let $email, $$unsubscribe_email;
+      let $last_name, $$unsubscribe_last_name;
+      let $first_name, $$unsubscribe_first_name;
+      let $success, $$unsubscribe_success;
+      let $errorMessage, $$unsubscribe_errorMessage;
+      const first_name = writable("");
+      $$unsubscribe_first_name = subscribe(first_name, (value) => $first_name = value);
+      const last_name = writable("");
+      $$unsubscribe_last_name = subscribe(last_name, (value) => $last_name = value);
+      const email = writable("");
+      $$unsubscribe_email = subscribe(email, (value) => $email = value);
+      const message = writable("");
+      $$unsubscribe_message = subscribe(message, (value) => $message = value);
+      const errorMessage = writable("");
+      $$unsubscribe_errorMessage = subscribe(errorMessage, (value) => $errorMessage = value);
+      const success = writable(false);
+      $$unsubscribe_success = subscribe(success, (value) => $success = value);
+      const recaptchaToken = writable("");
+      $$unsubscribe_recaptchaToken = subscribe(recaptchaToken, (value) => value);
+      const company = writable("");
+      $$unsubscribe_company = subscribe(company, (value) => $company = value);
+      const agreedToPrivacyPolicy = writable(false);
+      $$unsubscribe_agreedToPrivacyPolicy = subscribe(agreedToPrivacyPolicy, (value) => $agreedToPrivacyPolicy = value);
+      $$unsubscribe_agreedToPrivacyPolicy();
+      $$unsubscribe_company();
+      $$unsubscribe_recaptchaToken();
+      $$unsubscribe_message();
+      $$unsubscribe_email();
+      $$unsubscribe_last_name();
+      $$unsubscribe_first_name();
+      $$unsubscribe_success();
+      $$unsubscribe_errorMessage();
+      return `${$$result.head += `<!-- HEAD_svelte-1xog7u4_START --><script src="https://www.google.com/recaptcha/api.js?render=6Lc7MIQpAAAAADJWdUF7m6lcDKXpc9iT2jiyUc7Z" data-svelte-h="svelte-1ly4tzo"><\/script><!-- HEAD_svelte-1xog7u4_END -->`, ""} <div class="isolate bg-white px-6 py-24 sm:py-32 lg:px-8 grid justify-center"> <div class="card max-w-2xl p-8 md:p-16 lg:p-24 xl:p-32"><div class="mx-auto text-center" data-svelte-h="svelte-vkypvm"><h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">Contact Us</h2> <p class="mt-2 text-lg leading-8 text-gray-600">We&#39;d love to hear from you. Send us a message.</p></div> <form action="#" method="POST" class="mx-auto mt-16 sm:mt-20"><div class="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2"><div><label for="first-name" class="block text-sm font-semibold leading-6 text-gray-900" data-svelte-h="svelte-1hxk08h">First name</label> <div class="mt-2.5"><input type="text" name="first-name" id="first-name" autocomplete="given-name" class="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"${add_attribute("value", $first_name, 0)}></div></div> <div><label for="last-name" class="block text-sm font-semibold leading-6 text-gray-900" data-svelte-h="svelte-10gyywz">Last name</label> <div class="mt-2.5"><input type="text" name="last-name" id="last-name" autocomplete="family-name" class="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"${add_attribute("value", $last_name, 0)}></div></div> <div class="sm:col-span-2"><label for="company" class="block text-sm font-semibold leading-6 text-gray-900" data-svelte-h="svelte-oteuoa">Company</label> <div class="mt-2.5"><input type="text" name="company" id="company" autocomplete="organization" class="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"${add_attribute("value", $company, 0)}></div></div> <div class="sm:col-span-2"><label for="email" class="block text-sm font-semibold leading-6 text-gray-900" data-svelte-h="svelte-wsfssu">Email</label> <div class="mt-2.5"><input type="email" name="email" id="email" autocomplete="email" class="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"${add_attribute("value", $email, 0)}></div></div> <div class="sm:col-span-2"><label for="message" class="block text-sm font-semibold leading-6 text-gray-900" data-svelte-h="svelte-ih556">Message</label> <div class="mt-2.5"><textarea name="message" id="message" rows="4" class="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">${escape($message || "")}</textarea></div></div> <div class="flex gap-x-4 sm:col-span-2"><div class="flex h-6 items-center"> <button type="button" class="bg-gray-200 flex w-8 flex-none cursor-pointer rounded-full p-px ring-1 ring-inset ring-gray-900/5 transition-colors duration-200 ease-in-out focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" role="switch"${add_attribute("aria-checked", $agreedToPrivacyPolicy, 0)} aria-labelledby="switch-1-label">${validate_component(Switch, "Switch").$$render($$result, {}, {}, {})}</button></div>  <label class="text-sm leading-6 text-gray-600" id="switch-1-label" data-svelte-h="svelte-10cllaq">By selecting this, you agree to our
+						<a href="/legal/privacy-policy" class="font-semibold text-indigo-600">privacy\xA0policy</a>.</label></div></div> <div class="mt-10">${$agreedToPrivacyPolicy && !$success ? `<button type="submit" class="block w-full rounded-md bg-indigo-600 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" data-svelte-h="svelte-zj9xiq">Let&#39;s talk</button>` : `${$success ? `<button disabled type="submit" class="block w-full rounded-md bg-indigo-300 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" data-svelte-h="svelte-2bst7r">Let&#39;s talk</button>` : `<button disabled type="submit" class="block w-full rounded-md bg-indigo-300 px-3.5 py-2.5 text-center text-sm font-semibold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" data-svelte-h="svelte-2bst7r">Let&#39;s talk</button>`}`}</div> ${!$success && !$errorMessage ? `<p class="text-gray-600/30 text-xs ml-4" data-svelte-h="svelte-1faz1vq">This site is protected by reCAPTCHA and the Google
+					<a href="https://policies.google.com/privacy">Privacy Policy</a> and
+					<a href="https://policies.google.com/terms">Terms of Service</a> apply.</p>` : `${$errorMessage ? `<p class="text-error-500 ml-4">${escape($errorMessage)}</p>` : `${$success ? `<p class="text-success-500 ml-4" data-svelte-h="svelte-3uv5zt">Sent successfully</p>` : ``}`}`}</form></div></div>`;
+    });
+  }
+});
+
+// .svelte-kit/output/server/nodes/6.js
+var __exports7 = {};
+__export(__exports7, {
+  component: () => component7,
+  fonts: () => fonts7,
+  imports: () => imports7,
+  index: () => index7,
+  stylesheets: () => stylesheets7
+});
+var index7, component_cache7, component7, imports7, stylesheets7, fonts7;
+var init__7 = __esm({
+  ".svelte-kit/output/server/nodes/6.js"() {
+    index7 = 6;
+    component7 = async () => component_cache7 ?? (component_cache7 = (await Promise.resolve().then(() => (init_page_svelte5(), page_svelte_exports5))).default);
+    imports7 = ["_app/immutable/nodes/6.ZzzO-Dly.js", "_app/immutable/chunks/scheduler.QZSgJ5Dp.js", "_app/immutable/chunks/index.lCWGoTYW.js", "_app/immutable/chunks/supabaseClient.4znO2Jyt.js", "_app/immutable/chunks/index.CsFU67jq.js", "_app/immutable/chunks/spread.rEx3vLA9.js"];
+    stylesheets7 = ["_app/immutable/assets/6.DIYhB39C.css"];
+    fonts7 = [];
+  }
+});
+
+// .svelte-kit/output/server/entries/pages/company/our-mission/_page.svelte.js
+var page_svelte_exports6 = {};
+__export(page_svelte_exports6, {
+  default: () => Page6
+});
+var Page6;
+var init_page_svelte6 = __esm({
+  ".svelte-kit/output/server/entries/pages/company/our-mission/_page.svelte.js"() {
+    init_ssr();
+    Page6 = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+      return ``;
+    });
+  }
+});
+
+// .svelte-kit/output/server/nodes/7.js
+var __exports8 = {};
+__export(__exports8, {
+  component: () => component8,
+  fonts: () => fonts8,
+  imports: () => imports8,
+  index: () => index8,
+  stylesheets: () => stylesheets8
+});
+var index8, component_cache8, component8, imports8, stylesheets8, fonts8;
+var init__8 = __esm({
+  ".svelte-kit/output/server/nodes/7.js"() {
+    index8 = 7;
+    component8 = async () => component_cache8 ?? (component_cache8 = (await Promise.resolve().then(() => (init_page_svelte6(), page_svelte_exports6))).default);
+    imports8 = ["_app/immutable/nodes/7.E_PncYA6.js", "_app/immutable/chunks/scheduler.QZSgJ5Dp.js", "_app/immutable/chunks/index.lCWGoTYW.js"];
+    stylesheets8 = [];
+    fonts8 = [];
+  }
+});
+
+// .svelte-kit/output/server/chunks/imagecard.js
+var Imagecard;
+var init_imagecard = __esm({
+  ".svelte-kit/output/server/chunks/imagecard.js"() {
+    init_ssr();
+    init_productStore();
+    init_linkicon();
+    init_ProgressBar_svelte_svelte_type_style_lang();
+    init_dist3();
     Imagecard = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       let relatedProducts;
       let relatedProductsData = get_store_value(productReviewCache);
       const placeholder = blurhashToCssGradientString("L48W{f-p00E0~pWBs.s:?cNGRjWB");
       relatedProducts = relatedProductsData.props?.relatedProducts;
-      return ` ${relatedProductsData?.props?.relatedProducts ? `<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-1">${each(relatedProducts, (_, i) => {
-        return `<div id="product-image" class="max-w-full rounded-lg relative card parent-hover mb-4"><div id="images" class="flex h-full justify-center fade-in">${validate_component(Image, "Image").$$render(
+      return ` ${relatedProductsData?.props?.relatedProducts ? `<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4">${each(relatedProducts, (_, i) => {
+        return `<div id="product-image" class="max-w-full rounded-lg relative card parent-hover"><div id="images" class="flex h-full justify-center fade-in">${validate_component(Image, "Image").$$render(
           $$result,
           {
             class: "fade-in rounded-t-md rounded-b-sm",
@@ -18138,60 +23128,178 @@ var init_imagecard = __esm({
               return `${validate_component(Stars, "Stars").$$render($$result, { type: "empty" }, {}, {})}`;
             }
           }
-        )} <p class="text-center text-sm opacity-80 text-ellipsis overflow-hidden">${escape(relatedProducts[i].product_description)}</p> </div></div> <div class="absolute w-full top-1/2 left-1/2 ml-[-150px] mt-[-40px] h-full"><div class="grid grid-cols-1 gap-1"><button class="parent-hover overlay-show btn variant-ghost-primary w-[300px] h-[40px] text-white text-base md:text-xl lg:text-2xl z-30 opacity-0"><span data-svelte-h="svelte-ytzi6a">Review</span>${validate_component(Linkicon, "Linkicon").$$render($$result, {}, {}, {})}</button> <button class="parent-hover overlay-show btn variant-ghost-primary w-[300px] h-[40px] text-white text-base md:text-xl lg:text-2xl z-30 opacity-0"><span data-svelte-h="svelte-11bf9kr">Visit</span>${validate_component(Linkicon, "Linkicon").$$render($$result, {}, {}, {})} </button></div> </div></div> </div>`;
+        )} <p class="text-center text-sm opacity-80 text-ellipsis overflow-hidden">${escape(relatedProducts[i].product_highlight)}</p> </div></div> <div class="absolute w-full top-1/2 left-1/2 ml-[-150px] mt-[-40px] h-full"><div class="grid grid-cols-1 gap-1"><button class="parent-hover overlay-show btn variant-ghost-primary w-[300px] h-[40px] text-white text-base md:text-xl lg:text-2xl z-30 opacity-0"><span data-svelte-h="svelte-ytzi6a">Review</span>${validate_component(Linkicon, "Linkicon").$$render($$result, {}, {}, {})}</button> <button class="parent-hover overlay-show btn variant-ghost-primary w-[300px] h-[40px] text-white text-base md:text-xl lg:text-2xl z-30 opacity-0"><span data-svelte-h="svelte-11bf9kr">Visit</span>${validate_component(Linkicon, "Linkicon").$$render($$result, {}, {}, {})} </button></div> </div></div> </div>`;
       })}</div>` : ``}`;
     });
   }
 });
 
 // .svelte-kit/output/server/entries/pages/debug/_page.svelte.js
-var page_svelte_exports2 = {};
-__export(page_svelte_exports2, {
-  default: () => Page2
+var page_svelte_exports7 = {};
+__export(page_svelte_exports7, {
+  default: () => Page7
 });
-var Page2;
-var init_page_svelte2 = __esm({
+var Page7;
+var init_page_svelte7 = __esm({
   ".svelte-kit/output/server/entries/pages/debug/_page.svelte.js"() {
     init_ssr();
     init_productStore();
+    init_supabaseClient();
+    init_ProgressBar_svelte_svelte_type_style_lang();
     init_store();
     init_imagecard();
-    Page2 = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+    Page7 = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       return `${validate_component(Imagecard, "Imagecard").$$render($$result, {}, {}, {})}`;
     });
   }
 });
 
-// .svelte-kit/output/server/nodes/3.js
-var __exports4 = {};
-__export(__exports4, {
-  component: () => component4,
-  fonts: () => fonts4,
-  imports: () => imports4,
-  index: () => index4,
-  stylesheets: () => stylesheets4
+// .svelte-kit/output/server/nodes/8.js
+var __exports9 = {};
+__export(__exports9, {
+  component: () => component9,
+  fonts: () => fonts9,
+  imports: () => imports9,
+  index: () => index9,
+  stylesheets: () => stylesheets9
 });
-var index4, component_cache4, component4, imports4, stylesheets4, fonts4;
-var init__4 = __esm({
-  ".svelte-kit/output/server/nodes/3.js"() {
-    index4 = 3;
-    component4 = async () => component_cache4 ?? (component_cache4 = (await Promise.resolve().then(() => (init_page_svelte2(), page_svelte_exports2))).default);
-    imports4 = ["_app/immutable/nodes/3.HG_9Hai_.js", "_app/immutable/chunks/scheduler.qoUjChkd.js", "_app/immutable/chunks/index.HRC4UyyR.js", "_app/immutable/chunks/productStore.1ET5QMgR.js", "_app/immutable/chunks/store.xV9Yk6LI.js", "_app/immutable/chunks/index.xMhwf18p.js", "_app/immutable/chunks/imagecard.jaoHzBT9.js", "_app/immutable/chunks/navigation.FSAbujlm.js", "_app/immutable/chunks/singletons.ikxw4e4w.js"];
-    stylesheets4 = ["_app/immutable/assets/store.oq5aOWfL.css"];
-    fonts4 = [];
+var index9, component_cache9, component9, imports9, stylesheets9, fonts9;
+var init__9 = __esm({
+  ".svelte-kit/output/server/nodes/8.js"() {
+    index9 = 8;
+    component9 = async () => component_cache9 ?? (component_cache9 = (await Promise.resolve().then(() => (init_page_svelte7(), page_svelte_exports7))).default);
+    imports9 = ["_app/immutable/nodes/8.Yxwv05sU.js", "_app/immutable/chunks/scheduler.QZSgJ5Dp.js", "_app/immutable/chunks/index.lCWGoTYW.js", "_app/immutable/chunks/productStore.DYc5Lv1C.js", "_app/immutable/chunks/each.-oqiv04n.js", "_app/immutable/chunks/spread.rEx3vLA9.js", "_app/immutable/chunks/ProgressBar.svelte_svelte_type_style_lang.Pju_nDia.js", "_app/immutable/chunks/index.CsFU67jq.js", "_app/immutable/chunks/supabaseClient.4znO2Jyt.js", "_app/immutable/chunks/singletons.h2LHnNSw.js", "_app/immutable/chunks/store.Jk9-US9L.js", "_app/immutable/chunks/imagecard.Mrw1BRdF.js", "_app/immutable/chunks/linkicon.0J3LsioI.js", "_app/immutable/chunks/navigation.2TzIb17z.js"];
+    stylesheets9 = ["_app/immutable/assets/ProgressBar.oq5aOWfL.css"];
+    fonts9 = [];
   }
 });
 
-// .svelte-kit/output/server/entries/pages/_product_name_/_page.server.ts.js
-var page_server_ts_exports2 = {};
-__export(page_server_ts_exports2, {
-  load: () => load4
+// .svelte-kit/output/server/entries/pages/legal/privacy-policy/_page.svelte.js
+var page_svelte_exports8 = {};
+__export(page_svelte_exports8, {
+  default: () => Page8
 });
-var load4;
-var init_page_server_ts2 = __esm({
-  ".svelte-kit/output/server/entries/pages/_product_name_/_page.server.ts.js"() {
+var Page8;
+var init_page_svelte8 = __esm({
+  ".svelte-kit/output/server/entries/pages/legal/privacy-policy/_page.svelte.js"() {
+    init_ssr();
+    init_backbtn();
+    Page8 = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+      return ` <div class="max-w-xl mx-auto px-4 py-8 sm:max-w-2xl md:max-w-3xl"><button class="py-6">${validate_component(Backbtn, "Backbtn").$$render($$result, {}, {}, {})}</button> <div class="text-center" data-svelte-h="svelte-1jqkt0e"><h1 class="text-xl font-serif font-extrabold mb-4 leading-tight sm:text-4xl md:text-5xl lg:text-6xl">Privacy Policy</h1> <div class="text-gray-600 text-xs sm:text-sm mb-8">Last updated on November 12, 2023</div></div> <div class="max-w-4xl mx-auto text-sm text-gray-700" data-svelte-h="svelte-jyw71q"><p class="mt-4">This Privacy Policy (&quot;Policy&quot;) describes how Aifluently (&quot;we&quot;, &quot;us&quot;, or &quot;our&quot;) collects,
+			protects, and uses the personally identifiable information (&quot;Personal Information&quot;) you
+			(&quot;User&quot;, &quot;you&quot;, or &quot;your&quot;) may provide on the Aifluently website (aifluently.com) and any of
+			its products or services (collectively, &quot;Website&quot; or &quot;Services&quot;). It also describes the
+			choices available to you regarding our use of your Personal Information and how you can access
+			and update this information.</p> <h3 class="mt-6 text-lg font-semibold">Collection of Personal Information</h3> <p class="mt-2">We receive and store any information you knowingly provide to us when you fill any online
+			forms on the Website. This may include your name, email address, company name, and any other
+			Personal Information required for you to access our premium content and services. When
+			required, this information may include your contact details and billing information.</p> <h3 class="mt-6 text-lg font-semibold">Collection of Non-Personal Information</h3> <p class="mt-2">When you visit the Website, our servers automatically record information that your browser
+			sends. This data may include information such as your device&#39;s IP address, browser type and
+			version, operating system type and version, language preferences, or the webpage you were
+			visiting before you came to our Website, pages of our Website that you visit, the time spent
+			on those pages, information you search for on our Website, access times and dates, and other
+			statistics.</p> <h3 class="mt-6 text-lg font-semibold">Use and Processing of Collected Information</h3> <p class="mt-2">Any of the information we collect from you may be used to personalize your experience, improve
+			our Website, improve customer service, process transactions, send notification emails such as
+			password reminders, updates, etc., and operate our Website. Non-Personal Information collected
+			is used only to identify potential cases of abuse and establish statistical information
+			regarding Website usage.</p> <h3 class="mt-6 text-lg font-semibold">Managing Personal Information</h3> <p class="mt-2">You are able to update your Personal Information in your account settings on the Website. You
+			may also request that we delete your Personal Information, but this may prevent you from
+			accessing our premium content and services.</p> <h3 class="mt-6 text-lg font-semibold">Cookies</h3> <p class="mt-2">The Website uses &quot;cookies&quot; to help personalize your online experience. A cookie is a text file
+			that is placed on your hard disk by a web page server. Cookies cannot be used to run programs
+			or deliver viruses to your computer. Cookies are uniquely assigned to you, and can only be
+			read by a web server in the domain that issued the cookie to you.</p> <h3 class="mt-6 text-lg font-semibold">Changes and Amendments</h3> <p class="mt-2">We reserve the right to modify this privacy policy relating to the Website at any time,
+			effective upon posting of an updated version of this Policy on the Website. Continued use of
+			the Website after any such changes shall constitute your consent to such changes.</p> <h3 class="mt-6 text-lg font-semibold">Acceptance of This Policy</h3> <p class="mt-2">You acknowledge that you have read this Policy and agree to all its terms and conditions. By
+			using the Website, you agree to be bound by this Policy. If you do not agree to abide by the
+			terms of this Policy, you are not authorized to use or access the Website.</p> <h3 class="mt-6 text-lg font-semibold">Contacting Us</h3> <p class="mt-2">If you have any questions about this Policy, please contact us at aifluently@gmail.com.</p></div></div>`;
+    });
+  }
+});
+
+// .svelte-kit/output/server/nodes/9.js
+var __exports10 = {};
+__export(__exports10, {
+  component: () => component10,
+  fonts: () => fonts10,
+  imports: () => imports10,
+  index: () => index10,
+  stylesheets: () => stylesheets10
+});
+var index10, component_cache10, component10, imports10, stylesheets10, fonts10;
+var init__10 = __esm({
+  ".svelte-kit/output/server/nodes/9.js"() {
+    index10 = 9;
+    component10 = async () => component_cache10 ?? (component_cache10 = (await Promise.resolve().then(() => (init_page_svelte8(), page_svelte_exports8))).default);
+    imports10 = ["_app/immutable/nodes/9.fmi5tJcf.js", "_app/immutable/chunks/scheduler.QZSgJ5Dp.js", "_app/immutable/chunks/index.lCWGoTYW.js", "_app/immutable/chunks/navigation.2TzIb17z.js", "_app/immutable/chunks/singletons.h2LHnNSw.js", "_app/immutable/chunks/index.CsFU67jq.js", "_app/immutable/chunks/backbtn.ovB9PlmV.js", "_app/immutable/chunks/spread.rEx3vLA9.js"];
+    stylesheets10 = [];
+    fonts10 = [];
+  }
+});
+
+// .svelte-kit/output/server/entries/pages/legal/terms-and-conditions/_page.svelte.js
+var page_svelte_exports9 = {};
+__export(page_svelte_exports9, {
+  default: () => Page9
+});
+var Page9;
+var init_page_svelte9 = __esm({
+  ".svelte-kit/output/server/entries/pages/legal/terms-and-conditions/_page.svelte.js"() {
+    init_ssr();
+    init_backbtn();
+    Page9 = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+      return ` <div class="max-w-xl mx-auto px-4 py-8 sm:max-w-2xl md:max-w-3xl"><button class="py-6">${validate_component(Backbtn, "Backbtn").$$render($$result, {}, {}, {})}</button> <div class="text-center" data-svelte-h="svelte-iovhrj"><h1 class="text-xl font-serif font-extrabold mb-4 leading-tight sm:text-4xl md:text-5xl lg:text-6xl">Terms and Conditions</h1> <p class="text-xs sm:text-sm text-gray-600 mb-8">Effective as of January 14, 2024</p></div> <div class="max-w-4xl mx-auto text-md text-gray-700" data-svelte-h="svelte-18ru06n"><section class="mb-8"><h3 class="text-xl font-semibold mb-4">1. Agreement to Terms</h3> <p>By accessing the Aifluently website at https://www.aifluently.com, you agree to be bound by
+				these terms and conditions and accept all legal consequences. If you do not agree with any
+				of these terms, you are prohibited from using or accessing this site.</p></section> <section class="mb-8"><h3 class="text-xl font-semibold mb-4">2. Intellectual Property</h3> <p>The website and its original content, features, and functionality are owned by Aifluently
+				and are protected by international copyright and trademark laws.</p></section> <section class="mb-8"><h3 class="text-xl font-semibold mb-4">3. Use License</h3> <p>A temporary download of one copy of the materials on Aifluently&#39;s website is allowed for
+				personal, non-commercial viewing. This is a grant of a license, not a transfer of title.</p></section> <section class="mb-8"><h3 class="text-xl font-semibold mb-4">4. Disclaimer</h3> <p>The materials on Aifluently&#39;s website are provided on an &#39;as is&#39; basis. Aifluently makes no
+				warranties, expressed or implied, and hereby disclaims all other warranties.</p></section> <section class="mb-8"><h3 class="text-xl font-semibold mb-4">5. Limitations</h3> <p>In no event shall Aifluently or its suppliers be liable for any damages arising out of the
+				use or inability to use the materials on Aifluently&#39;s website.</p></section> <section class="mb-8"><h3 class="text-xl font-semibold mb-4">6. Revisions and Errata</h3> <p>The materials appearing on Aifluently&#39;s website could include technical, typographical, or
+				photographic errors. Aifluently does not warrant that any of the materials on its website
+				are accurate, complete, or current.</p></section> <section class="mb-8"><h3 class="text-xl font-semibold mb-4">7. Links</h3> <p>Aifluently has not reviewed all the sites linked to its website and is not responsible for
+				the contents of any such linked site.</p></section> <section class="mb-8"><h3 class="text-xl font-semibold mb-4">8. Site Terms of Use Modifications</h3> <p>Aifluently may revise these terms of use for its website at any time without notice.</p></section> <section class="mb-8"><h3 class="text-xl font-semibold mb-4">9. Governing Law</h3> <p>Any claim related to Aifluently&#39;s website shall be governed by the laws of the site owner&#39;s
+				home jurisdiction without regard to its conflict of law provisions.</p></section> <h3 class="text-xl font-semibold mb-4">Contact Us</h3> <p>If you have any questions about these Terms and Conditions, please contact us at
+			aifluently@gmail.com.</p></div></div>`;
+    });
+  }
+});
+
+// .svelte-kit/output/server/nodes/10.js
+var __exports11 = {};
+__export(__exports11, {
+  component: () => component11,
+  fonts: () => fonts11,
+  imports: () => imports11,
+  index: () => index11,
+  stylesheets: () => stylesheets11
+});
+var index11, component_cache11, component11, imports11, stylesheets11, fonts11;
+var init__11 = __esm({
+  ".svelte-kit/output/server/nodes/10.js"() {
+    index11 = 10;
+    component11 = async () => component_cache11 ?? (component_cache11 = (await Promise.resolve().then(() => (init_page_svelte9(), page_svelte_exports9))).default);
+    imports11 = ["_app/immutable/nodes/10.xNjwYpxF.js", "_app/immutable/chunks/scheduler.QZSgJ5Dp.js", "_app/immutable/chunks/index.lCWGoTYW.js", "_app/immutable/chunks/navigation.2TzIb17z.js", "_app/immutable/chunks/singletons.h2LHnNSw.js", "_app/immutable/chunks/index.CsFU67jq.js", "_app/immutable/chunks/backbtn.ovB9PlmV.js", "_app/immutable/chunks/spread.rEx3vLA9.js"];
+    stylesheets11 = [];
+    fonts11 = [];
+  }
+});
+
+// .svelte-kit/output/server/entries/pages/product/_product_name_/_page.ts.js
+var page_ts_exports4 = {};
+var init_page_ts4 = __esm({
+  ".svelte-kit/output/server/entries/pages/product/_product_name_/_page.ts.js"() {
+  }
+});
+
+// .svelte-kit/output/server/entries/pages/product/_product_name_/_page.server.ts.js
+var page_server_ts_exports5 = {};
+__export(page_server_ts_exports5, {
+  load: () => load7
+});
+var load7;
+var init_page_server_ts5 = __esm({
+  ".svelte-kit/output/server/entries/pages/product/_product_name_/_page.server.ts.js"() {
     init_supabaseClient();
-    load4 = async ({ params }) => {
+    load7 = async ({ params }) => {
       const { product_name: productSlug } = params;
       const { data: productReviewData, error: productDataError } = await supabase.from("product_review").select(`
       *,
@@ -18210,7 +23318,7 @@ var init_page_server_ts2 = __esm({
       const { data: allProductsData, error: allProductsError } = await supabase.from("product_review").select(`
       product_name, product_slug, product_rating, product_review_image, product_review_alt, 
       tag_array, product_video, product_pro, product_con, product_pricing, 
-      product_input_price, product_output_price,product_description,product_url
+      product_input_price, product_output_price,product_highlight,product_url
     `);
       let relatedProducts = [];
       if (!allProductsError && allProductsData) {
@@ -18224,7 +23332,8 @@ var init_page_server_ts2 = __esm({
       return {
         props: {
           productReviewData: typedProductReviewData,
-          relatedProducts
+          relatedProducts,
+          productSlug
         }
       };
     };
@@ -18276,10 +23385,10 @@ function edit(regex2, opt) {
   let source = typeof regex2 === "string" ? regex2 : regex2.source;
   opt = opt || "";
   const obj = {
-    replace: (name, val) => {
+    replace: (name2, val) => {
       let valSource = typeof val === "string" ? val : val.source;
       valSource = valSource.replace(caret, "$1");
-      source = source.replace(name, valSource);
+      source = source.replace(name2, valSource);
       return obj;
     },
     getRegex: () => {
@@ -20248,23 +25357,26 @@ ${content}</tr>
   }
 });
 
-// .svelte-kit/output/server/entries/pages/_product_name_/_page.svelte.js
-var page_svelte_exports3 = {};
-__export(page_svelte_exports3, {
-  default: () => Page3
+// .svelte-kit/output/server/entries/pages/product/_product_name_/_page.svelte.js
+var page_svelte_exports10 = {};
+__export(page_svelte_exports10, {
+  default: () => Page10
 });
-var Cardgallery, Backbtn, Relatedcardlist, css4, Page3;
-var init_page_svelte3 = __esm({
-  ".svelte-kit/output/server/entries/pages/_product_name_/_page.svelte.js"() {
+var Cardgallery, Relatedcardlist, css4, Page10;
+var init_page_svelte10 = __esm({
+  ".svelte-kit/output/server/entries/pages/product/_product_name_/_page.svelte.js"() {
     init_ssr();
     init_marked_esm();
-    init_imagecard();
+    init_linkicon();
     init_dist3();
-    init_store();
+    init_ProgressBar_svelte_svelte_type_style_lang();
     init_productStore();
-    init_chunks();
+    init_backbtn();
     init_cardlist();
+    init_chunks();
+    init_store();
     init_Icon();
+    init_imagecard();
     init_stores();
     init_supabaseClient();
     Cardgallery = create_ssr_component(($$result, $$props, $$bindings, slots) => {
@@ -20277,6 +25389,7 @@ var init_page_svelte3 = __esm({
         return `<div class="parent-element">${validate_component(Cardlist, "Cardlist").$$render(
           $$result,
           {
+            category,
             tag: i,
             product_data,
             outer_height: "300px",
@@ -20287,18 +25400,6 @@ var init_page_svelte3 = __esm({
           {}
         )} </div>`;
       })}</section>` : ``}`;
-    });
-    Backbtn = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-      return `<svg${spread(
-        [
-          { xmlns: "http://www.w3.org/2000/svg" },
-          { width: "20" },
-          { height: "20" },
-          { viewBox: "0 0 48 48" },
-          escape_object($$props)
-        ],
-        {}
-      )}><path fill="currentColor" fill-rule="evenodd" stroke="currentColor" stroke-linejoin="round" stroke-width="4.6" d="M44 40.836c-4.893-5.973-9.238-9.362-13.036-10.168c-3.797-.805-7.412-.927-10.846-.365V41L4 23.545L20.118 7v10.167c6.349.05 11.746 2.328 16.192 6.833c4.445 4.505 7.009 10.117 7.69 16.836Z" clip-rule="evenodd"></path></svg>`;
     });
     Relatedcardlist = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       let lightswitch;
@@ -20357,14 +25458,14 @@ var init_page_svelte3 = __esm({
           }
         )}</div> <p class="p-1 text-sm opacity-80 text-ellipsis overflow-hidden h-16"> ${product_data[i].product_description ? `${escape(product_data[i].product_description)}` : ``}</p> ${`  <a${add_attribute("href", product_data[i].product_name.replace(/\s/g, ""), 0)}><div class="flex justify-center" data-svelte-h="svelte-1f6z1o6"><button class="btn btn-sm w-[50%] bg-warning-500 border-2 border-black h-6 absolute bottom-2 left-0 right-0 mx-auto">Learn More
 														</button></div> </a>`} <div class="arrow variant-filled-secondary"></div></div>  ${` <ol class="flex justify-between"><button class="[&>*]:pointer-events-none min-w-[80%] group/item"><div class="flex w-full min-w-[66%]"><div class="mt-1"> ${escape(i + 1)}.</div> <div class="px-3"> ${product_data[i].product_logo ? `<img class="rounded-full h-8 w-8 object-cover"${add_attribute("src", product_data[i].product_logo, 0)} alt="AI FLUENTLY logo">` : `<img class="rounded-full h-8 w-8 object-cover" src="/assets/logo/logomark-black-circle.svg" alt="AI FLUENTLY logo">`}</div> <div class="pt-1 group-hover/item:underline group-active/item:underline"> ${escape(product_data[i].product_name)}</div> </div></button> <a${add_attribute("href", product_data[i].product_url, 0)} target="_blank" class="flex opacity-50 hover:opacity-100 text-3xl p-1">${validate_component(Icon, "Icon").$$render($$result, { icon: "system-uicons:jump-up" }, {}, {})}</a>  </ol>`}`;
-      })}</ol></section></div></div>`}</div> ${lightswitch ? `<div class="pointer-events-none h-16 absolute w-full bottom-10 bg-gradient-to-t from-surface-800 to-surface-800/0"></div>` : `<div class="pointer-events-none h-16 absolute w-full bottom-10 bg-gradient-to-t from-surface-50 to-white/0"></div>`} <div class="btn btn-sm w-full h-8 opacity-0 bg-warning-500 border-2 border-black z-[5]"></div> <button class="btn btn-sm w-[85%] h-8 bg-warning-500 border-2 border-black z-[0] absolute bottom-2 left-0 right-0 mx-auto" data-svelte-h="svelte-1i73027">More</button></div></div>` : `<div class="card grid grid-cols-1 relative card-hover"${add_attribute("style", `height: ${outer_height};`, 0)}></div>`}`;
+      })}</ol></section></div></div>`}</div> ${lightswitch ? `<div class="pointer-events-none h-16 absolute w-full bottom-10 bg-gradient-to-t from-surface-800 to-surface-800/0"></div>` : `<div class="pointer-events-none h-16 absolute w-full bottom-10 bg-gradient-to-t from-surface-50 to-white/0"></div>`} <div class="btn btn-sm w-full h-8 opacity-0 bg-warning-500 border-2 border-black z-[5]"></div> ${escape(tagToCategory(tag2))} <button class="btn btn-sm w-[85%] h-8 bg-warning-500 border-2 border-black z-20 absolute bottom-2 left-0 right-0 mx-auto" data-svelte-h="svelte-okdnhn">More</button></div></div>` : `<div class="card grid grid-cols-1 relative card-hover"${add_attribute("style", `height: ${outer_height};`, 0)}></div>`}`;
     });
     css4 = {
       code: ".fade-in.svelte-p4xbsw{opacity:0;animation:svelte-p4xbsw-fadeInAnimation ease 1s;animation-fill-mode:forwards}@keyframes svelte-p4xbsw-fadeInAnimation{0%{opacity:0}100%{opacity:1}}",
       map: null
     };
-    Page3 = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-      let name;
+    Page10 = create_ssr_component(($$result, $$props, $$bindings, slots) => {
+      let name2;
       let rating;
       let reviewMarkdown;
       let image;
@@ -20397,7 +25498,7 @@ var init_page_svelte3 = __esm({
       {
         $page.params.product_name, relatedProductsData = get_store_value(productReviewCache).props?.relatedProducts;
       }
-      name = productReviewData?.product_name ?? "No name";
+      name2 = productReviewData?.product_name ?? "No name";
       rating = productReviewData?.product_rating ?? "No rating";
       reviewMarkdown = productReviewData?.product_review ?? "No review";
       image = productReviewData?.product_review_image ?? "No image";
@@ -20409,7 +25510,7 @@ var init_page_svelte3 = __esm({
       productReviewData?.product_input_price ?? "No input price";
       productReviewData?.product_output_price ?? "No output price";
       productReviewData?.product_quality ?? "No quality";
-      description = productReviewData?.product_description ?? "No description";
+      description = productReviewData?.product_highlight ?? "No description";
       pro = productReviewData?.product_pro ?? [];
       con = productReviewData?.product_con ?? [];
       lightswitch = $lighttoggle;
@@ -20418,7 +25519,7 @@ var init_page_svelte3 = __esm({
       }
       $$unsubscribe_page();
       $$unsubscribe_lighttoggle();
-      return `${productReviewData && image ? `<section class="grid grid-col-1 md:grid-col-1 lg:grid-cols- xl:grid-cols-2 md:mx-10 xl:mx-32"><div id="hero" class="h-full flex flex-col"><div id="product-image" class="flex-grow grid card mb-4"><div id="images" class="flex justify-center relative fade-in svelte-p4xbsw">${validate_component(Image, "Image").$$render(
+      return ` ${productReviewData && image ? `<section class="grid grid-col-1 md:grid-col-1 lg:grid-cols- xl:grid-cols-2 md:mx-10 xl:mx-32"><div id="hero" class="h-full flex flex-col"><div id="product-image" class="flex-grow grid card mb-4"><div id="images" class="flex justify-center relative fade-in svelte-p4xbsw">${validate_component(Image, "Image").$$render(
         $$result,
         {
           class: "fade-in rounded-t-md rounded-b-sm ",
@@ -20432,7 +25533,7 @@ var init_page_svelte3 = __esm({
         },
         {},
         {}
-      )} <button class="absolute top-3 left-3 z-20">${validate_component(Backbtn, "Backbtn").$$render($$result, {}, {}, {})}</button> <div id="overlay" class="w-full absolute h-52 rounded-t-lg top-0 z-10 bg-gradient-to-b from-surface-500 to-surface-500/0"></div> <div class="w-full absolute h-40 rounded-t-md pt-4 z-10"><h1 class="text-2xl text-center sm:text-center"><div class="flex justify-center">${escape(name)} ${logo !== "No logo" ? `${validate_component(Image, "Image").$$render(
+      )} <button class="absolute top-3 left-3 z-20">${validate_component(Backbtn, "Backbtn").$$render($$result, {}, {}, {})}</button> <div id="overlay" class="w-full absolute h-52 rounded-t-lg top-0 z-10 bg-gradient-to-b from-surface-500 to-surface-500/0"></div> <div class="w-full absolute h-40 rounded-t-md pt-4 z-10"><h1 class="text-2xl text-center sm:text-center"><div class="flex justify-center">${escape(name2)} ${logo !== "No logo" ? `${validate_component(Image, "Image").$$render(
         $$result,
         {
           class: "ml-4 fade-in  rounded-full",
@@ -20474,7 +25575,7 @@ var init_page_svelte3 = __esm({
         },
         {},
         {}
-      )}</div></div> <div id="overview" class="card mt-4 lg:mt-0 lg:ml-4"><div id="pros and cons" class="grid grid-cols-1 md:grid-cols-2"><div><h2 class="text-2xl text-center p-8" data-svelte-h="svelte-3vzi5p">Strenghts</h2> <ol class="h-46 overflow-y-auto">${each(pro || [], (_, i) => {
+      )}</div></div> <div id="overview" class="card mt-4 lg:mt-0 lg:ml-4"><div id="pros and cons" class="grid grid-cols-1 md:grid-cols-2"><div><h2 class="text-2xl text-center p-8" data-svelte-h="svelte-v91q99">Strengths</h2> <ol class="h-46 overflow-y-auto">${each(pro || [], (_, i) => {
         return `<div class="flex px-10 pb-2"><span data-svelte-h="svelte-1s4sarz">-</span> <li class="pl-4">${escape(pro[i])}</li> </div>`;
       })}</ol></div> <div><h2 class="text-2xl text-center p-8" data-svelte-h="svelte-1jpssfm">Weaknesses</h2> <ol class="h-46 overflow-y-auto">${each(con || [], (_, i) => {
         return `<div class="flex px-10 pb-2"><span data-svelte-h="svelte-1s4sarz">-</span> <li class="pl-4">${escape(con[i])}</li> </div>`;
@@ -20483,27 +25584,31 @@ var init_page_svelte3 = __esm({
   }
 });
 
-// .svelte-kit/output/server/nodes/4.js
-var __exports5 = {};
-__export(__exports5, {
-  component: () => component5,
-  fonts: () => fonts5,
-  imports: () => imports5,
-  index: () => index5,
-  server: () => page_server_ts_exports2,
-  server_id: () => server_id3,
-  stylesheets: () => stylesheets5
+// .svelte-kit/output/server/nodes/11.js
+var __exports12 = {};
+__export(__exports12, {
+  component: () => component12,
+  fonts: () => fonts12,
+  imports: () => imports12,
+  index: () => index12,
+  server: () => page_server_ts_exports5,
+  server_id: () => server_id6,
+  stylesheets: () => stylesheets12,
+  universal: () => page_ts_exports4,
+  universal_id: () => universal_id5
 });
-var index5, component_cache5, component5, server_id3, imports5, stylesheets5, fonts5;
-var init__5 = __esm({
-  ".svelte-kit/output/server/nodes/4.js"() {
-    init_page_server_ts2();
-    index5 = 4;
-    component5 = async () => component_cache5 ?? (component_cache5 = (await Promise.resolve().then(() => (init_page_svelte3(), page_svelte_exports3))).default);
-    server_id3 = "src/routes/[product_name]/+page.server.ts";
-    imports5 = ["_app/immutable/nodes/4.EyjGPRLJ.js", "_app/immutable/chunks/scheduler.qoUjChkd.js", "_app/immutable/chunks/index.HRC4UyyR.js", "_app/immutable/chunks/productStore.1ET5QMgR.js", "_app/immutable/chunks/store.xV9Yk6LI.js", "_app/immutable/chunks/index.xMhwf18p.js", "_app/immutable/chunks/imagecard.jaoHzBT9.js", "_app/immutable/chunks/navigation.FSAbujlm.js", "_app/immutable/chunks/singletons.ikxw4e4w.js", "_app/immutable/chunks/cardlist.mMBOxlWg.js", "_app/immutable/chunks/popup.ApYA23B2.js", "_app/immutable/chunks/Icon.m_HsgSM1.js", "_app/immutable/chunks/stores.yr-DxOwW.js", "_app/immutable/chunks/supabaseClient.V3wEEveg.js", "_app/immutable/chunks/public.03yuBydq.js"];
-    stylesheets5 = ["_app/immutable/assets/4.UzcHbuZU.css", "_app/immutable/assets/store.oq5aOWfL.css"];
-    fonts5 = [];
+var index12, component_cache12, component12, universal_id5, server_id6, imports12, stylesheets12, fonts12;
+var init__12 = __esm({
+  ".svelte-kit/output/server/nodes/11.js"() {
+    init_page_ts4();
+    init_page_server_ts5();
+    index12 = 11;
+    component12 = async () => component_cache12 ?? (component_cache12 = (await Promise.resolve().then(() => (init_page_svelte10(), page_svelte_exports10))).default);
+    universal_id5 = "src/routes/product/[product_name]/+page.ts";
+    server_id6 = "src/routes/product/[product_name]/+page.server.ts";
+    imports12 = ["_app/immutable/nodes/11.nS2iCjUA.js", "_app/immutable/chunks/scheduler.QZSgJ5Dp.js", "_app/immutable/chunks/index.lCWGoTYW.js", "_app/immutable/chunks/each.-oqiv04n.js", "_app/immutable/chunks/linkicon.0J3LsioI.js", "_app/immutable/chunks/spread.rEx3vLA9.js", "_app/immutable/chunks/ProgressBar.svelte_svelte_type_style_lang.Pju_nDia.js", "_app/immutable/chunks/index.CsFU67jq.js", "_app/immutable/chunks/productStore.DYc5Lv1C.js", "_app/immutable/chunks/backbtn.ovB9PlmV.js", "_app/immutable/chunks/sluglify.yqzTTa5I.js", "_app/immutable/chunks/tagToTagName.L90_iJjR.js", "_app/immutable/chunks/index.RhRIcdz5.js", "_app/immutable/chunks/popup.6phc2dhV.js", "_app/immutable/chunks/cardlist.eyGsbhGw.js", "_app/immutable/chunks/supabaseClient.4znO2Jyt.js", "_app/immutable/chunks/navigation.2TzIb17z.js", "_app/immutable/chunks/singletons.h2LHnNSw.js", "_app/immutable/chunks/store.Jk9-US9L.js", "_app/immutable/chunks/Icon.AEPHH59z.js", "_app/immutable/chunks/imagecard.Mrw1BRdF.js", "_app/immutable/chunks/stores.9ia0fE76.js"];
+    stylesheets12 = ["_app/immutable/assets/11.UzcHbuZU.css", "_app/immutable/assets/ProgressBar.oq5aOWfL.css"];
+    fonts12 = [];
   }
 });
 
@@ -20620,7 +25725,7 @@ var options = {
   root: Root,
   service_worker: false,
   templates: {
-    app: ({ head, body: body2, assets: assets2, nonce, env }) => '<!doctype html>\n<html lang="en" class="light">\n	<head>\n		<meta charset="utf-8" />\n		<link rel="icon" href="' + assets2 + '/favicon.png" />\n		<meta name="viewport" content="width=device-width" />\n		' + head + '\n	</head>\n	<body data-sveltekit-preload-data="hover" data-theme="neobrutalist">\n		<div style="display: contents" class="h-full overflow-hidden">' + body2 + "</div>\n	</body>\n</html>\n",
+    app: ({ head, body: body2, assets: assets2, nonce, env }) => '<!doctype html>\r\n<html lang="en" class="light">\r\n	<head>\r\n		<meta charset="utf-8" />\r\n		<link rel="icon" href="' + assets2 + '/favicon.png" />\r\n		<meta name="viewport" content="width=device-width" />\r\n		' + head + '\r\n	</head>\r\n	<body data-sveltekit-preload-data="hover" data-theme="neobrutalist">\r\n		<div style="display: contents" class="h-full overflow-hidden">' + body2 + "</div>\r\n	</body>\r\n</html>\r\n",
     error: ({ status, message }) => '<!doctype html>\n<html lang="en">\n	<head>\n		<meta charset="utf-8" />\n		<title>' + message + `</title>
 
 		<style>
@@ -20692,7 +25797,7 @@ var options = {
 		<div class="error">
 			<span class="status">` + status + '</span>\n			<div class="message">\n				<h1>' + message + "</h1>\n			</div>\n		</div>\n	</body>\n</html>\n"
   },
-  version_hash: "d5o721"
+  version_hash: "okavob"
 };
 function get_hooks() {
   return Promise.resolve().then(() => (init_hooks_server(), hooks_server_exports));
@@ -21317,8 +26422,8 @@ function uneval(value, replacer) {
     const params = [];
     const statements = [];
     const values = [];
-    names.forEach((name, thing) => {
-      params.push(name);
+    names.forEach((name2, thing) => {
+      params.push(name2);
       if (custom.has(thing)) {
         values.push(
           /** @type {string} */
@@ -21346,19 +26451,19 @@ function uneval(value, replacer) {
         case "Array":
           values.push(`Array(${thing.length})`);
           thing.forEach((v, i) => {
-            statements.push(`${name}[${i}]=${stringify2(v)}`);
+            statements.push(`${name2}[${i}]=${stringify2(v)}`);
           });
           break;
         case "Set":
           values.push(`new Set`);
           statements.push(
-            `${name}.${Array.from(thing).map((v) => `add(${stringify2(v)})`).join(".")}`
+            `${name2}.${Array.from(thing).map((v) => `add(${stringify2(v)})`).join(".")}`
           );
           break;
         case "Map":
           values.push(`new Map`);
           statements.push(
-            `${name}.${Array.from(thing).map(([k, v]) => `set(${stringify2(k)}, ${stringify2(v)})`).join(".")}`
+            `${name2}.${Array.from(thing).map(([k, v]) => `set(${stringify2(k)}, ${stringify2(v)})`).join(".")}`
           );
           break;
         default:
@@ -21367,7 +26472,7 @@ function uneval(value, replacer) {
           );
           Object.keys(thing).forEach((key2) => {
             statements.push(
-              `${name}${safe_prop(key2)}=${stringify2(thing[key2])}`
+              `${name2}${safe_prop(key2)}=${stringify2(thing[key2])}`
             );
           });
       }
@@ -21381,12 +26486,12 @@ function uneval(value, replacer) {
   }
 }
 function get_name(num) {
-  let name = "";
+  let name2 = "";
   do {
-    name = chars$1[num % chars$1.length] + name;
+    name2 = chars$1[num % chars$1.length] + name2;
     num = ~~(num / chars$1.length) - 1;
   } while (num >= 0);
-  return reserved.test(name) ? `${name}0` : name;
+  return reserved.test(name2) ? `${name2}0` : name2;
 }
 function escape_unsafe_char(c2) {
   return escaped[c2] || c2;
@@ -21546,9 +26651,9 @@ function stringify(value, reducers) {
     stringified[index22] = str;
     return index22;
   }
-  const index6 = flatten(value);
-  if (index6 < 0)
-    return `${index6}`;
+  const index13 = flatten(value);
+  if (index13 < 0)
+    return `${index13}`;
   return `[${stringified.join(",")}]`;
 }
 function stringify_primitive(thing) {
@@ -21717,19 +26822,19 @@ function check_named_default_separate(actions) {
 }
 async function call_action(event, actions) {
   const url = new URL(event.request.url);
-  let name = "default";
+  let name2 = "default";
   for (const param of url.searchParams) {
     if (param[0].startsWith("/")) {
-      name = param[0].slice(1);
-      if (name === "default") {
+      name2 = param[0].slice(1);
+      if (name2 === "default") {
         throw new Error('Cannot use reserved action name "default"');
       }
       break;
     }
   }
-  const action = actions[name];
+  const action = actions[name2];
   if (!action) {
-    throw new SvelteKitError(404, "Not Found", `No action with name '${name}' found`);
+    throw new SvelteKitError(404, "Not Found", `No action with name '${name2}' found`);
   }
   if (!is_form_content_type(event.request)) {
     throw new SvelteKitError(
@@ -22476,9 +27581,9 @@ var Csp = class {
 function defer() {
   let fulfil;
   let reject;
-  const promise = new Promise((f2, r2) => {
+  const promise = new Promise((f2, r3) => {
     fulfil = f2;
-    reject = r2;
+    reject = r3;
   });
   return { promise, fulfil, reject };
 }
@@ -22537,8 +27642,8 @@ async function render_response({
   }
   const { client } = manifest2._;
   const modulepreloads = new Set(client.imports);
-  const stylesheets6 = new Set(client.stylesheets);
-  const fonts6 = new Set(client.fonts);
+  const stylesheets13 = new Set(client.stylesheets);
+  const fonts13 = new Set(client.fonts);
   const link_header_preloads = /* @__PURE__ */ new Set();
   const inline_styles = /* @__PURE__ */ new Map();
   let rendered;
@@ -22594,9 +27699,9 @@ async function render_response({
       for (const url of node.imports)
         modulepreloads.add(url);
       for (const url of node.stylesheets)
-        stylesheets6.add(url);
+        stylesheets13.add(url);
       for (const url of node.fonts)
-        fonts6.add(url);
+        fonts13.add(url);
       if (node.inline_styles) {
         Object.entries(await node.inline_styles()).forEach(([k, v]) => inline_styles.set(k, v));
       }
@@ -22624,7 +27729,7 @@ async function render_response({
     head += `
 	<style${attributes.join("")}>${content}</style>`;
   }
-  for (const dep of stylesheets6) {
+  for (const dep of stylesheets13) {
     const path = prefixed(dep);
     const attributes = ['rel="stylesheet"'];
     if (inline_styles.has(dep)) {
@@ -22638,7 +27743,7 @@ async function render_response({
     head += `
 		<link href="${path}" ${attributes.join(" ")}>`;
   }
-  for (const dep of fonts6) {
+  for (const dep of fonts13) {
     const path = prefixed(dep);
     if (resolve_opts.preload({ type: "font", path })) {
       const ext = dep.slice(dep.lastIndexOf(".") + 1);
@@ -23354,11 +28459,11 @@ async function render_page(event, page2, options22, manifest2, state, resolve_op
           const error = await handle_error_and_jsonify(event, options22, err);
           while (i--) {
             if (page2.errors[i]) {
-              const index6 = (
+              const index13 = (
                 /** @type {number} */
                 page2.errors[i]
               );
-              const node2 = await manifest2._.nodes[index6]();
+              const node2 = await manifest2._.nodes[index13]();
               let j2 = i;
               while (!branch[j2])
                 j2 -= 1;
@@ -23481,20 +28586,20 @@ function parse$1(str, options22) {
   var obj = {};
   var opt = options22 || {};
   var dec = opt.decode || decode3;
-  var index6 = 0;
-  while (index6 < str.length) {
-    var eqIdx = str.indexOf("=", index6);
+  var index13 = 0;
+  while (index13 < str.length) {
+    var eqIdx = str.indexOf("=", index13);
     if (eqIdx === -1) {
       break;
     }
-    var endIdx = str.indexOf(";", index6);
+    var endIdx = str.indexOf(";", index13);
     if (endIdx === -1) {
       endIdx = str.length;
     } else if (endIdx < eqIdx) {
-      index6 = str.lastIndexOf(";", eqIdx - 1) + 1;
+      index13 = str.lastIndexOf(";", eqIdx - 1) + 1;
       continue;
     }
-    var key2 = str.slice(index6, eqIdx).trim();
+    var key2 = str.slice(index13, eqIdx).trim();
     if (void 0 === obj[key2]) {
       var val = str.slice(eqIdx + 1, endIdx).trim();
       if (val.charCodeAt(0) === 34) {
@@ -23502,24 +28607,24 @@ function parse$1(str, options22) {
       }
       obj[key2] = tryDecode(val, dec);
     }
-    index6 = endIdx + 1;
+    index13 = endIdx + 1;
   }
   return obj;
 }
-function serialize(name, val, options22) {
+function serialize(name2, val, options22) {
   var opt = options22 || {};
   var enc = opt.encode || encode3;
   if (typeof enc !== "function") {
     throw new TypeError("option encode is invalid");
   }
-  if (!fieldContentRegExp.test(name)) {
+  if (!fieldContentRegExp.test(name2)) {
     throw new TypeError("argument name is invalid");
   }
   var value = enc(val);
   if (value && !fieldContentRegExp.test(value)) {
     throw new TypeError("argument val is invalid");
   }
-  var str = name + "=" + value;
+  var str = name2 + "=" + value;
   if (null != opt.maxAge) {
     var maxAge = opt.maxAge - 0;
     if (isNaN(maxAge) || !isFinite(maxAge)) {
@@ -23618,7 +28723,7 @@ function get_cookies(request, url, trailing_slash) {
   const initial_cookies = parse_1(header, { decode: (value) => value });
   const normalized_url = normalize_path(url.pathname, trailing_slash);
   const new_cookies = {};
-  const defaults = {
+  const defaults2 = {
     httpOnly: true,
     sameSite: "lax",
     secure: url.hostname === "localhost" && url.protocol === "http:" ? false : true
@@ -23632,14 +28737,14 @@ function get_cookies(request, url, trailing_slash) {
      * @param {string} name
      * @param {import('cookie').CookieParseOptions} opts
      */
-    get(name, opts) {
-      const c2 = new_cookies[name];
+    get(name2, opts) {
+      const c2 = new_cookies[name2];
       if (c2 && domain_matches(url.hostname, c2.options.domain) && path_matches(url.pathname, c2.options.path)) {
         return c2.value;
       }
       const decoder2 = opts?.decode || decodeURIComponent;
       const req_cookies = parse_1(header, { decode: decoder2 });
-      const cookie = req_cookies[name];
+      const cookie = req_cookies[name2];
       return cookie;
     },
     /**
@@ -23653,37 +28758,37 @@ function get_cookies(request, url, trailing_slash) {
           cookies2[c2.name] = c2.value;
         }
       }
-      return Object.entries(cookies2).map(([name, value]) => ({ name, value }));
+      return Object.entries(cookies2).map(([name2, value]) => ({ name: name2, value }));
     },
     /**
      * @param {string} name
      * @param {string} value
      * @param {import('./page/types.js').Cookie['options']} options
      */
-    set(name, value, options22) {
+    set(name2, value, options22) {
       validate_options(options22);
-      set_internal(name, value, { ...defaults, ...options22 });
+      set_internal(name2, value, { ...defaults2, ...options22 });
     },
     /**
      * @param {string} name
      *  @param {import('./page/types.js').Cookie['options']} options
      */
-    delete(name, options22) {
+    delete(name2, options22) {
       validate_options(options22);
-      cookies.set(name, "", { ...options22, maxAge: 0 });
+      cookies.set(name2, "", { ...options22, maxAge: 0 });
     },
     /**
      * @param {string} name
      * @param {string} value
      *  @param {import('./page/types.js').Cookie['options']} options
      */
-    serialize(name, value, options22) {
+    serialize(name2, value, options22) {
       validate_options(options22);
       let path = options22.path;
       if (!options22.domain || options22.domain === url.hostname) {
         path = resolve(normalized_url, path);
       }
-      return serialize_1(name, value, { ...defaults, ...options22, path });
+      return serialize_1(name2, value, { ...defaults2, ...options22, path });
     }
   };
   function get_cookie_header(destination, header2) {
@@ -23702,18 +28807,18 @@ function get_cookies(request, url, trailing_slash) {
     }
     if (header2) {
       const parsed = parse_1(header2, { decode: (value) => value });
-      for (const name in parsed) {
-        combined_cookies[name] = parsed[name];
+      for (const name2 in parsed) {
+        combined_cookies[name2] = parsed[name2];
       }
     }
-    return Object.entries(combined_cookies).map(([name, value]) => `${name}=${value}`).join("; ");
+    return Object.entries(combined_cookies).map(([name2, value]) => `${name2}=${value}`).join("; ");
   }
-  function set_internal(name, value, options22) {
+  function set_internal(name2, value, options22) {
     let path = options22.path;
     if (!options22.domain || options22.domain === url.hostname) {
       path = resolve(normalized_url, path);
     }
-    new_cookies[name] = { name, value, options: { ...options22, path } };
+    new_cookies[name2] = { name: name2, value, options: { ...options22, path } };
   }
   return { cookies, new_cookies, get_cookie_header, set_internal };
 }
@@ -23735,11 +28840,11 @@ function path_matches(path, constraint) {
 }
 function add_cookies_to_headers(headers2, cookies) {
   for (const new_cookie of cookies) {
-    const { name, value, options: options22 } = new_cookie;
-    headers2.append("set-cookie", serialize_1(name, value, options22));
+    const { name: name2, value, options: options22 } = new_cookie;
+    headers2.append("set-cookie", serialize_1(name2, value, options22));
     if (options22.path.endsWith(".html")) {
       const path = add_data_suffix(options22.path);
-      headers2.append("set-cookie", serialize_1(name, value, { ...options22, path }));
+      headers2.append("set-cookie", serialize_1(name2, value, { ...options22, path }));
     }
   }
 }
@@ -23756,7 +28861,7 @@ function parseString(setCookieValue, options22) {
   var parts = setCookieValue.split(";").filter(isNonEmptyString);
   var nameValuePairStr = parts.shift();
   var parsed = parseNameValuePair(nameValuePairStr);
-  var name = parsed.name;
+  var name2 = parsed.name;
   var value = parsed.value;
   options22 = options22 ? Object.assign({}, defaultParseOptions, options22) : defaultParseOptions;
   try {
@@ -23768,7 +28873,7 @@ function parseString(setCookieValue, options22) {
     );
   }
   var cookie = {
-    name,
+    name: name2,
     value
   };
   parts.forEach(function(part) {
@@ -23792,16 +28897,16 @@ function parseString(setCookieValue, options22) {
   return cookie;
 }
 function parseNameValuePair(nameValuePairStr) {
-  var name = "";
+  var name2 = "";
   var value = "";
   var nameValueArr = nameValuePairStr.split("=");
   if (nameValueArr.length > 1) {
-    name = nameValueArr.shift();
+    name2 = nameValueArr.shift();
     value = nameValueArr.join("=");
   } else {
     value = nameValuePairStr;
   }
-  return { name, value };
+  return { name: name2, value };
 }
 function parse(input, options22) {
   options22 = options22 ? Object.assign({}, defaultParseOptions, options22) : defaultParseOptions;
@@ -23977,9 +29082,9 @@ function create_fetch({ event, options: options22, manifest: manifest2, state, g
         const set_cookie = response.headers.get("set-cookie");
         if (set_cookie) {
           for (const str of splitCookiesString_1(set_cookie)) {
-            const { name, value, ...options3 } = parseString_1(str);
+            const { name: name2, value, ...options3 } = parseString_1(str);
             const path = options3.path ?? (url.pathname.split("/").slice(0, -1).join("/") || "/");
-            set_internal(name, value, {
+            set_internal(name2, value, {
               path,
               .../** @type {import('cookie').CookieSerializeOptions} */
               options3
@@ -24524,13 +29629,20 @@ var manifest = (() => {
     assets: /* @__PURE__ */ new Set(["assets/logo/horizontal-black.svg", "assets/logo/horizontal-gradient.svg", "assets/logo/horizontal-white.svg", "assets/logo/logomark-black-circle.svg", "assets/logo/logomark-black.svg", "assets/logo/logomark-white-circle.svg", "assets/logo/logomark-white.svg", "assets/logo/vertical-black.svg", "assets/logo/vertical-gradient.svg", "assets/logo/vertical-white.svg", "favicon.png", "fonts/SpaceGrotesk.ttf"]),
     mimeTypes: { ".svg": "image/svg+xml", ".png": "image/png", ".ttf": "font/ttf" },
     _: {
-      client: { "start": "_app/immutable/entry/start.1tKQFdQY.js", "app": "_app/immutable/entry/app.EhWjz22b.js", "imports": ["_app/immutable/entry/start.1tKQFdQY.js", "_app/immutable/chunks/scheduler.qoUjChkd.js", "_app/immutable/chunks/singletons.ikxw4e4w.js", "_app/immutable/chunks/index.xMhwf18p.js", "_app/immutable/entry/app.EhWjz22b.js", "_app/immutable/chunks/public.03yuBydq.js", "_app/immutable/chunks/supabaseClient.V3wEEveg.js", "_app/immutable/chunks/scheduler.qoUjChkd.js", "_app/immutable/chunks/index.HRC4UyyR.js"], "stylesheets": [], "fonts": [], "uses_env_dynamic_public": false },
+      client: { "start": "_app/immutable/entry/start.idTy5EyF.js", "app": "_app/immutable/entry/app.au0nOX2E.js", "imports": ["_app/immutable/entry/start.idTy5EyF.js", "_app/immutable/chunks/scheduler.QZSgJ5Dp.js", "_app/immutable/chunks/singletons.h2LHnNSw.js", "_app/immutable/chunks/index.CsFU67jq.js", "_app/immutable/entry/app.au0nOX2E.js", "_app/immutable/chunks/supabaseClient.4znO2Jyt.js", "_app/immutable/chunks/scheduler.QZSgJ5Dp.js", "_app/immutable/chunks/index.lCWGoTYW.js"], "stylesheets": [], "fonts": [], "uses_env_dynamic_public": false },
       nodes: [
         __memo(() => Promise.resolve().then(() => (init__(), __exports))),
         __memo(() => Promise.resolve().then(() => (init__2(), __exports2))),
         __memo(() => Promise.resolve().then(() => (init__3(), __exports3))),
         __memo(() => Promise.resolve().then(() => (init__4(), __exports4))),
-        __memo(() => Promise.resolve().then(() => (init__5(), __exports5)))
+        __memo(() => Promise.resolve().then(() => (init__5(), __exports5))),
+        __memo(() => Promise.resolve().then(() => (init__6(), __exports6))),
+        __memo(() => Promise.resolve().then(() => (init__7(), __exports7))),
+        __memo(() => Promise.resolve().then(() => (init__8(), __exports8))),
+        __memo(() => Promise.resolve().then(() => (init__9(), __exports9))),
+        __memo(() => Promise.resolve().then(() => (init__10(), __exports10))),
+        __memo(() => Promise.resolve().then(() => (init__11(), __exports11))),
+        __memo(() => Promise.resolve().then(() => (init__12(), __exports12)))
       ],
       routes: [
         {
@@ -24541,17 +29653,66 @@ var manifest = (() => {
           endpoint: null
         },
         {
-          id: "/debug",
-          pattern: /^\/debug\/?$/,
+          id: "/articles",
+          pattern: /^\/articles\/?$/,
           params: [],
           page: { layouts: [0], errors: [1], leaf: 3 },
           endpoint: null
         },
         {
-          id: "/[product_name]",
-          pattern: /^\/([^/]+?)\/?$/,
-          params: [{ "name": "product_name", "optional": false, "rest": false, "chained": false }],
+          id: "/articles/[article_name]",
+          pattern: /^\/articles\/([^/]+?)\/?$/,
+          params: [{ "name": "article_name", "optional": false, "rest": false, "chained": false }],
           page: { layouts: [0], errors: [1], leaf: 4 },
+          endpoint: null
+        },
+        {
+          id: "/category/[category_id]/[tag_slug]",
+          pattern: /^\/category\/([^/]+?)\/([^/]+?)\/?$/,
+          params: [{ "name": "category_id", "optional": false, "rest": false, "chained": false }, { "name": "tag_slug", "optional": false, "rest": false, "chained": false }],
+          page: { layouts: [0], errors: [1], leaf: 5 },
+          endpoint: null
+        },
+        {
+          id: "/company/contact-us",
+          pattern: /^\/company\/contact-us\/?$/,
+          params: [],
+          page: { layouts: [0], errors: [1], leaf: 6 },
+          endpoint: null
+        },
+        {
+          id: "/company/our-mission",
+          pattern: /^\/company\/our-mission\/?$/,
+          params: [],
+          page: { layouts: [0], errors: [1], leaf: 7 },
+          endpoint: null
+        },
+        {
+          id: "/debug",
+          pattern: /^\/debug\/?$/,
+          params: [],
+          page: { layouts: [0], errors: [1], leaf: 8 },
+          endpoint: null
+        },
+        {
+          id: "/legal/privacy-policy",
+          pattern: /^\/legal\/privacy-policy\/?$/,
+          params: [],
+          page: { layouts: [0], errors: [1], leaf: 9 },
+          endpoint: null
+        },
+        {
+          id: "/legal/terms-and-conditions",
+          pattern: /^\/legal\/terms-and-conditions\/?$/,
+          params: [],
+          page: { layouts: [0], errors: [1], leaf: 10 },
+          endpoint: null
+        },
+        {
+          id: "/product/[product_name]",
+          pattern: /^\/product\/([^/]+?)\/?$/,
+          params: [{ "name": "product_name", "optional": false, "rest": false, "chained": false }],
+          page: { layouts: [0], errors: [1], leaf: 11 },
           endpoint: null
         }
       ],
