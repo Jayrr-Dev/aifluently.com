@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Icon from '@iconify/svelte';
+	import { goto } from '$app/navigation';
 	import { lighttoggle } from '../../stores/store';
 	// Function to toggle the lightswitch
 	function toggleLightswitch() {
@@ -36,10 +37,10 @@
 					</h2>
 					<ul class="font-medium text-gray-500 dark:text-gray-400">
 						<li class="mb-4">
-							<a href="company/our-mission" class="hover:underline">Our Mission</a>
+							<a href="/company/our-mission" class="hover:underline">Our Mission</a>
 						</li>
 						<li class="mb-4">
-							<a href="company/contact-us" class="hover:underline">Contact Us</a>
+							<a href="/company/contact-us" class="hover:underline">Contact Us</a>
 						</li>
 					</ul>
 				</div>
@@ -70,10 +71,11 @@
 					<h2 class="mb-6 text-sm font-semibold uppercase text-gray-900 dark:text-white">Legal</h2>
 					<ul class="font-medium text-gray-500 dark:text-gray-400">
 						<li class="mb-4">
-							<a href="legal/privacy-policy" class="hover:underline">Privacy Policy</a>
+							<a href="/legal/privacy-policy" class="hover:underline">Privacy Policy</a>
 						</li>
 						<li>
-							<a href="legal/terms-and-conditions" class="hover:underline">Terms &amp; Conditions</a
+							<a href="/legal/terms-and-conditions" class="hover:underline"
+								>Terms &amp; Conditions</a
 							>
 						</li>
 					</ul>
