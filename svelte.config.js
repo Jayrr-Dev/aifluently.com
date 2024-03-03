@@ -17,7 +17,9 @@ const config = {
 		// See https://kit.svelte.dev/docs/adapters for more information about adapters.
 		adapter: adapter({  
 			precompress: true,  
-		})  
+		}),  alias: {
+			"@/*": "./path/to/lib/*",
+		  },
 	}
 };
 export default config;

@@ -1,11 +1,14 @@
 import { supabase } from '$lib/supabaseClient';
 
-export async function load() {
-    // Fetch the latest article
+export async function load({params}) {
+    //get params
+    const { article_name } = params;
+    // Fetch the user associated with the article
+
     const { data: article, error: articleError } = await supabase
         .from('articles')
         .select('*')
-        .order('published_date', { ascending: false })
+        .match({ slug: article_name })
         .limit(1)
         .single();
 
@@ -15,7 +18,7 @@ export async function load() {
         return { status: 500, error: new Error('Failed to fetch the article') };
     }
 
-    // Fetch the user associated with the article
+
     const { data: user, error: userError } = await supabase
         .from('user_profiles')
         .select('*')
@@ -32,6 +35,7 @@ export async function load() {
     // Return the article and user data
     return {
         article,
-        user
+        user,
+        article_name
     };
 }
