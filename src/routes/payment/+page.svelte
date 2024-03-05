@@ -24,7 +24,7 @@
         // with an item ID. Then use the item ID to get the amount and description from the
         // database. For now, we'll just hardcode the amount and description.
         // --> this way we can use the same payment page for all purchases
-        const intentData = await createPaymentIntent(1000, 'usd', '100 Fluently Tokens');
+        const intentData = await createPaymentIntent(2);
         clientSecret = intentData.clientSecret; // Extract the clientSecret
         // Assuming you have defined amount and description in your Svelte component's script
         amount = intentData.amount;
@@ -32,15 +32,14 @@
         description = intentData.description;
     });
 
-    async function createPaymentIntent(amount=1000, currency='usd', description) {
+    async function createPaymentIntent(id=1) {
         const response = await fetch('/payment/payment-intent', {
             method: 'POST',
             headers: {
                 'content-type': 'application/json'
             },
-            body: JSON.stringify({ amount, currency, description})
+            body: JSON.stringify({ id })
         })
-        // const { clientSecret } = await response.json()
         const intentData = await response.json()
         return intentData;
     }
@@ -49,7 +48,6 @@
         if (processing) return
         processing = true
         const result = await stripe.confirmPayment({elements, redirect: 'if_required'})
-        console.log({ result })
         if (result.error) {
             error = result.error
             processing = false
@@ -103,10 +101,6 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-}
-.error {
-    color: tomato;
-    margin: 2rem 0 0;
 }
 
 form {
